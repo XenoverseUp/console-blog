@@ -1,0 +1,113 @@
+@media screen and (max-width: 970px) {
+  .register.dark,
+  .register.light,
+  .login.light,
+  .login.dark,
+  .promote.light,
+  .promote.dark {
+    .banner,
+    .stripe {
+      display: none;
+    }
+
+    .content {
+      width: 90%;
+      max-width: 700px;
+      min-width: unset;
+
+      main {
+        max-width: 500px;
+        width: 100%;
+
+        form {
+          width: 100%;
+        }
+        footer {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: auto;
+          margin-top: 3rem;
+
+          .link {
+            margin-left: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 970px) and (max-height: 500px) {
+  .register.dark,
+  .register.light,
+  .login.dark,
+  .login.light,
+  .promote.dark,
+  .promote.light {
+    .banner,
+    .stripe {
+      display: none;
+    }
+
+    .content {
+      width: 90%;
+      max-width: 700px;
+      min-width: unset;
+
+      main {
+        max-width: 500px;
+        width: 100%;
+
+        header {
+          display: none;
+        }
+
+        form {
+          width: 100%;
+        }
+
+        footer {
+          width: 100%;
+          display: flex;
+          margin: auto;
+          margin-top: 3rem;
+
+          .link {
+            margin-left: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .register.dark,
+  .register.light,
+  .login.dark,
+  .login.light,
+  .promote.dark,
+  .promote.light {
+    .banner,
+    .stripe {
+      display: none;
+    }
+
+    .content {
+      width: 90%;
+      max-width: 700px;
+      min-width: unset;
+
+      main {
+        max-width: 500px;
+        width: 100%;
+
+        form {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

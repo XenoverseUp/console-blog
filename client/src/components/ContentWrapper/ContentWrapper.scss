@@ -1,0 +1,20 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+article.acontent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0 1rem;
+  max-width: 750px;
+}
+
+@media screen and (max-width: 600px) {
+  article.acontent {
+    flex-direction: column;
+    padding: 0;
+    margin-top: 1rem;
+  }
+}

@@ -1,0 +1,99 @@
+@media screen and (max-width: 900px) {
+  .add-blog.light,
+  .add-blog.dark {
+    form {
+      .general {
+        .content {
+          width: 100%;
+          min-width: unset;
+
+          .content-main {
+            height: 100%;
+
+            img {
+              margin: 1rem auto;
+            }
+          }
+        }
+
+        .stripe,
+        .banner {
+          display: none;
+        }
+      }
+
+      .upload-image {
+        .content,
+        .preview {
+          width: 50%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 870px) {
+  .add-blog.light,
+  .add-blog.dark {
+    form {
+      .review {
+        padding: 2rem 0;
+
+        main {
+          .form-header {
+            padding: 0 2rem;
+          }
+
+          .review-content {
+            article {
+              flex-direction: column;
+              align-items: center;
+
+              .toolbar {
+                position: static;
+                flex-direction: row;
+                width: 100%;
+                margin: 0;
+                margin-bottom: 1.5rem;
+
+                .separator {
+                  min-height: 2rem;
+                  height: 100%;
+                  width: 0.1rem;
+                  margin: 0 0.8rem;
+                }
+
+                .date,
+                .actions,
+                .share {
+                  flex-direction: row;
+
+                  .day,
+                  .year,
+                  .month {
+                    font-weight: 400;
+                    font-size: 1rem;
+                    margin: auto 0.2rem;
+                  }
+
+                  div {
+                    margin: 0 0.1rem;
+                  }
+
+                  .like {
+                    flex-direction: row;
+
+                    p {
+                      margin: 0;
+                      margin-left: 0.3rem;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

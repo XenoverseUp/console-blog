@@ -1,0 +1,133 @@
+@media screen and (max-width: 650px) {
+  .editor-dashboard.light,
+  .editor-dashboard.dark {
+    padding: 2rem 1rem;
+
+    .container {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto auto;
+
+      .most-viewed {
+        grid-column: 1 / 5;
+        grid-row: 3;
+
+        main {
+          .info {
+            padding-left: 0.5rem;
+          }
+        }
+      }
+
+      .box {
+        min-height: 16rem;
+      }
+
+      .welcome {
+        grid-row: 1;
+        grid-column: 1 / 5;
+        min-height: 18rem;
+      }
+
+      .add {
+        grid-row: 2;
+        grid-column: 1 / 5;
+        flex-direction: row !important;
+        max-height: 10rem !important;
+        min-height: fit-content;
+
+        img {
+          width: 60%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        p {
+          width: 40%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .editor-dashboard.light,
+  .editor-dashboard.dark {
+    padding: 2rem 1rem;
+
+    .container {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto 1fr 1fr;
+
+      .most-viewed {
+        grid-column: 1 / 5;
+        grid-row: 3;
+        min-height: 30rem !important;
+        padding: 0;
+
+        main {
+          grid-template-columns: auto;
+          grid-template-rows: 4fr 6fr !important;
+
+          .cover {
+            grid-column: 1;
+            grid-row: 1 /2;
+
+            .stats {
+              left: unset;
+              left: 5%;
+              top: 100%;
+              transform: translateY(-50%);
+              flex-direction: row;
+              z-index: 5;
+
+              .likes,
+              .comments,
+              .views {
+                flex-direction: row;
+                margin: 0 2%;
+              }
+            }
+          }
+
+          .info {
+            grid-column: 1;
+            grid-row: 2/3;
+            padding: unset;
+
+            padding: 1rem;
+
+            .separator {
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      .box {
+        min-height: 16rem;
+
+        &:nth-last-child(-n + 4) {
+          grid-column: span 2;
+        }
+      }
+
+      .add {
+        grid-row: 2;
+        grid-column: 1 / 5;
+        flex-direction: row !important;
+        max-height: 10rem !important;
+        min-height: fit-content;
+
+        img {
+          width: 60%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        p {
+          width: 40%;
+        }
+      }
+    }
+  }
+}

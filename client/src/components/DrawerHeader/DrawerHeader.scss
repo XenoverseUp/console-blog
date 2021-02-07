@@ -1,0 +1,56 @@
+@import "../../scss/Variables.scss";
+
+header.drawer-header.light {
+  width: 100%;
+
+  h1 {
+    font-family: "PlayFair Display";
+    font-weight: 500;
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    span {
+      background-color: $dark-secondary-bg;
+      padding: 0 0.45rem;
+      min-width: 2rem;
+      min-height: 2rem;
+      border-radius: 9999px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $dark-primary-typo;
+      font-family: "Red Hat Display";
+      font-size: 1.2rem;
+      margin-left: 1rem;
+      margin-top: 0.4rem;
+    }
+  }
+}
+
+header.drawer-header.dark {
+  width: 100%;
+
+  h1 {
+    font-family: "PlayFair Display";
+    font-weight: 500;
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    span {
+      background-color: white;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $light-primary-typo;
+      font-family: "Red Hat Display";
+      font-size: 1.2rem;
+      margin-left: 1rem;
+      margin-top: 0.4rem;
+    }
+  }
+}

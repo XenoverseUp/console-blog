@@ -1,0 +1,296 @@
+@import "../../scss/Variables.scss";
+@import "../../scss/Shared.scss";
+
+.login.light {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  .back {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 2rem;
+    left: 2rem;
+    background-color: white;
+    box-sizing: content-box;
+    padding: 0.5em 0.7em;
+    padding-left: 0.2em;
+    border-radius: 0.8rem;
+    transition: ease 0.15s all;
+
+    p {
+      padding-bottom: 0.05em;
+      font-family: "Raleway", sans-serif;
+      font-weight: 500;
+    }
+
+    @include hover-supported() {
+      transform: translateY(-0.1rem);
+    }
+
+    &:active {
+      animation: ease click 0.25s;
+    }
+  }
+
+  .banner {
+    height: 100vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 90%;
+      max-width: 30rem;
+    }
+  }
+
+  .stripe {
+    writing-mode: vertical-lr;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .content {
+    height: 100vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 700px;
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      width: 70%;
+
+      header {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        h1 {
+          font-weight: 600;
+          margin-bottom: 1rem;
+          font-size: 4rem;
+          font-family: "PlayFair Display", serif;
+        }
+
+        p {
+          opacity: 0.7;
+
+          font-family: "Raleway", sans-serif;
+          font-weight: 500;
+          padding-left: 0.2em;
+        }
+      }
+
+      form {
+        width: 80%;
+
+        button {
+          padding: 0.5em 0.7em;
+
+          padding: 0.7em 0.7em 0.8em 0.7em;
+          border-width: 2px;
+          margin-left: 0.5rem;
+          margin-top: 0.5rem;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: ease 0.25s all;
+          box-shadow: 3px 4px 10px rgba($color: $dark-primary-bg, $alpha: 0.1);
+
+          @include hover-supported() {
+            background-color: $dark-primary-bg;
+            color: $dark-primary-typo;
+          }
+        }
+      }
+
+      footer {
+        opacity: 0.7;
+        max-width: 90%;
+        font-family: "Raleway", sans-serif;
+        font-weight: 500;
+        padding-left: 0.2em;
+        margin-top: 2rem;
+        white-space: nowrap;
+
+        .link {
+          color: $light-color;
+          filter: brightness(0.8);
+          transition: ease 0.15s all;
+
+          @include hover-supported() {
+            filter: brightness(1);
+          }
+        }
+      }
+    }
+  }
+}
+
+.login.dark {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  .back {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 1rem;
+    left: 1rem;
+    background-color: $dark-secondary-bg;
+    box-sizing: content-box;
+    padding: 0.5em 0.7em;
+    padding-left: 0.2em;
+    border-radius: 0.8rem;
+    transition: ease 0.15s all;
+
+    p {
+      padding-bottom: 0.05em;
+      font-family: Raleway, sans-serif;
+      font-weight: 500;
+    }
+
+    @include hover-supported() {
+      transform: translateY(-0.1rem);
+    }
+
+    &:active {
+      animation: ease click 0.25s;
+    }
+  }
+
+  .banner {
+    height: 100vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 90%;
+      max-width: 30rem;
+    }
+  }
+
+  .stripe {
+    writing-mode: vertical-lr;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .content {
+    height: 100vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 700px;
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      width: 70%;
+
+      header {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        h1 {
+          font-weight: 600;
+          margin-bottom: 1rem;
+          font-size: 4rem;
+          font-family: "PlayFair Display", serif;
+        }
+
+        p {
+          opacity: 0.7;
+
+          font-family: "Raleway", sans-serif;
+          font-weight: 500;
+          padding-left: 0.2em;
+        }
+      }
+
+      form {
+        width: 80%;
+
+        button {
+          padding: 0.5em 0.7em;
+          border: none;
+          outline: none;
+          background: none;
+          cursor: pointer;
+          border: 2px solid $light-primary-bg;
+          font-family: "Raleway", sans-serif;
+          padding: 0.7em 0.7em 0.8em 0.7em;
+          border-radius: 0.5rem;
+          margin-left: 0.5rem;
+          margin-top: 0.5rem;
+          font-weight: 600;
+          font-size: 0.9rem;
+          color: $dark-primary-typo;
+          transition: ease 0.25s all;
+          box-shadow: 3px 4px 10px rgba($color: $light-primary-bg, $alpha: 0.1);
+
+          @include hover-supported() {
+            background-color: $light-primary-bg;
+            color: $light-primary-typo;
+          }
+        }
+      }
+
+      footer {
+        opacity: 0.7;
+        max-width: 90%;
+        font-family: "Raleway", sans-serif;
+        font-weight: 500;
+        padding-left: 0.2em;
+        white-space: nowrap;
+        margin-top: 2rem;
+
+        .link {
+          color: $light-color;
+          filter: brightness(0.8);
+          transition: ease 0.15s all;
+
+          @include hover-supported() {
+            filter: brightness(1);
+          }
+        }
+      }
+    }
+  }
+}
+
+@import "../Register/MediaQueries.scss";

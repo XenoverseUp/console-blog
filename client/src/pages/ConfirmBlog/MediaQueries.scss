@@ -1,0 +1,33 @@
+@import "../../scss/Variables.scss";
+
+@media screen and (max-width: 1230px) {
+  .confirm-blog.light {
+    background-color: white;
+    padding-top: 0;
+
+    .back {
+      display: none;
+    }
+
+    .controllers {
+      button {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .confirm-blog.dark {
+    padding-top: 0;
+    background-color: $dark-primary-bg;
+
+    .back {
+      display: none;
+    }
+
+    .controllers {
+      button {
+        font-size: 1rem;
+      }
+    }
+  }
+}

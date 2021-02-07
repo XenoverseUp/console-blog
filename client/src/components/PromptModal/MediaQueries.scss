@@ -1,0 +1,32 @@
+@media screen and (max-width: 500px) {
+  .modal.light,
+  .modal.dark {
+    grid-template-columns: none;
+    grid-template-rows: 0.5fr auto;
+    top: 30%;
+    padding: 2rem;
+    width: 70%;
+
+    section {
+      &:first-child {
+        width: 100%;
+        height: auto;
+
+        svg {
+          width: 50%;
+          height: auto;
+        }
+      }
+
+      &:last-child {
+        .content {
+          text-align: center;
+        }
+
+        .action-buttons {
+          margin-top: 2rem;
+        }
+      }
+    }
+  }
+}

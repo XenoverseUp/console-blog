@@ -1,0 +1,268 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.toolbar.light {
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 6rem;
+  font-family: "Raleway", sans-serif;
+  user-select: none;
+
+  .separator {
+    width: 90%;
+    height: 0.1rem;
+    background-color: $light-primary-typo;
+    margin: 0.8rem 0;
+    border-radius: 9999px;
+    opacity: 0.2;
+  }
+
+  .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .day {
+      font-weight: 700;
+      font-size: 2.3rem;
+    }
+
+    .month {
+      font-weight: 400;
+    }
+
+    .year {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0.1rem 0;
+      cursor: pointer;
+      border-radius: 9999px;
+      padding: 0.4em;
+      transition: ease 0.15s background-color;
+
+      &:first-child {
+        margin-top: 0;
+
+        p {
+          font-family: "Red Hat Display";
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.025);
+      }
+
+      &:active svg {
+        animation: click ease-out 0.25s;
+      }
+
+      svg {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .share {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0.1rem 0;
+      cursor: pointer;
+      border-radius: 50%;
+      padding: 0.4em;
+      transition: ease 0.15s background-color;
+
+      &:first-child {
+        margin-top: 0;
+        &:hover svg {
+          color: #fb3958;
+        }
+      }
+
+      &:nth-child(2) {
+        &:hover svg {
+          color: #1da1f2;
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+
+        &:hover svg {
+          color: #3b5998;
+        }
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.025);
+      }
+
+      svg {
+        font-size: 1.5rem;
+        transition: ease 0.15s all;
+      }
+    }
+  }
+}
+
+.toolbar.dark {
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 6rem;
+  font-family: "Raleway", sans-serif;
+  user-select: none;
+
+  .separator {
+    width: 90%;
+    height: 0.1rem;
+    background-color: $dark-primary-typo;
+    margin: 0.8rem 0;
+    border-radius: 9999px;
+    opacity: 0.2;
+  }
+
+  .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .day {
+      font-weight: 700;
+      font-size: 2.3rem;
+    }
+
+    .month {
+      font-weight: 400;
+    }
+
+    .year {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0.1rem 0;
+      cursor: pointer;
+      border-radius: 9999px;
+      padding: 0.4em;
+      transition: ease 0.15s background-color;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.025);
+      }
+
+      &:active svg {
+        animation: click ease-out 0.25s;
+      }
+
+      svg {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .share {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0.1rem 0;
+      cursor: pointer;
+      border-radius: 50%;
+      padding: 0.4em;
+      transition: ease 0.15s background-color;
+
+      &:first-child {
+        margin-top: 0;
+        &:hover svg {
+          color: #fb3958;
+        }
+      }
+
+      &:nth-child(2) {
+        &:hover svg {
+          color: #1da1f2;
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+
+        &:hover svg {
+          color: #3b5998;
+        }
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.025);
+      }
+
+      svg {
+        font-size: 1.5rem;
+        transition: ease 0.15s all;
+      }
+    }
+  }
+}
+
+@import "./MediaQueries.scss";

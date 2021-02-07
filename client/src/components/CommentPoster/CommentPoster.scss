@@ -1,0 +1,121 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.comment-poster.not-authenticated {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 7rem;
+  min-height: 7rem;
+  border-radius: 1rem;
+  width: 100%;
+  border: 1px dashed $light-color;
+
+  margin: 1rem 0;
+
+  p {
+    font-weight: 300;
+  }
+
+  .link {
+    text-decoration: none;
+    color: $light-color;
+    font-family: "Red Hat Display";
+    margin-top: 0.5rem;
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    transition: ease 0.15s filter;
+
+    @include hover-supported() {
+      filter: brightness(1.1);
+    }
+  }
+}
+
+.comment-poster.authenticated {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 1.5rem 0;
+
+  form {
+    width: 100%;
+    display: flex;
+
+    .avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 2.4rem;
+    }
+
+    .content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 1rem;
+
+      textarea {
+        resize: none;
+        outline: none;
+        border: none;
+        border: 1px dashed $light-color;
+        border-radius: 0.8rem;
+        font-family: "Red Hat Display", sans-serif;
+        padding: 0.7rem;
+        position: relative;
+        font-size: 0.9rem;
+
+        &:focus::-webkit-input-placeholder {
+          overflow: hidden;
+          transition: all 0.4s 0.5s ease;
+          text-indent: -50%;
+          opacity: 0;
+        }
+      }
+
+      .controllers {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+
+        button {
+          margin-top: 1rem;
+          margin-right: 0.3rem;
+          padding: 0.7rem;
+
+          background-color: $light-primary-bg;
+          box-shadow: none;
+          border: none;
+          font-size: 0.9rem;
+
+          svg {
+            font-size: 1rem;
+            margin-left: 0.3em;
+          }
+
+          @include hover-supported() {
+            color: unset;
+            transform: scale(1.05);
+          }
+        }
+      }
+
+      &.dark {
+        textarea {
+          background-color: $dark-primary-bg;
+          color: $dark-primary-typo;
+        }
+
+        .controllers {
+          button {
+            background-color: $dark-secondary-bg;
+          }
+        }
+      }
+    }
+  }
+}

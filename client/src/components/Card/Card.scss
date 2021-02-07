@@ -1,0 +1,90 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.card.light {
+  width: 100%;
+  height: auto;
+  min-height: 5rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  font-size: 1rem;
+  background-color: white;
+  margin: 0.4em auto;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: ease-out 0.15s transform;
+
+  @include hover-supported() {
+    transform: scale(1.02);
+  }
+
+  button {
+    margin: 0.5rem;
+  }
+
+  .cover {
+    min-width: 6rem;
+  }
+
+  .title {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-family: "PlayFair Display", serif;
+
+    span {
+      margin-top: 0.4rem;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      font-family: "Raleway", sans-serif;
+    }
+  }
+}
+
+.card.dark {
+  width: 100%;
+  height: auto;
+  min-height: 5rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  font-size: 1rem;
+  background-color: $dark-secondary-bg;
+  margin: 0.4em auto;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: ease-out 0.15s transform;
+
+  @include hover-supported() {
+    transform: scale(1.02);
+  }
+
+  button {
+    margin: 0.5rem;
+  }
+
+  .cover {
+    min-width: 6rem;
+  }
+
+  .title {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-family: "PlayFair Display", serif;
+
+    span {
+      margin-top: 0.4rem;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      font-family: "Raleway", sans-serif;
+    }
+  }
+}

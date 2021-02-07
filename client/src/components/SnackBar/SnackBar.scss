@@ -1,0 +1,110 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.snackbar {
+  position: fixed;
+  bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $light-primary-bg;
+  font-family: "Raleway", sans-serif;
+  padding: 0.5rem 1rem;
+  padding-right: 0.55rem;
+  z-index: 150;
+  border-radius: 0.5rem;
+  animation: enter 0.25s cubic-bezier(0.75, -0.5, 0, 1.75);
+
+  &.success {
+    background-color: $success-color;
+    box-shadow: 0 7px 15px rgba($color: $success-color, $alpha: 0.25);
+    transition: ease 0.15s box-shadow;
+
+    &.dark {
+      box-shadow: 0 7px 15px rgba($color: $success-color, $alpha: 0);
+    }
+  }
+
+  &.warning {
+    background-color: $warning-color;
+    box-shadow: 0 7px 15px rgba($color: $warning-color, $alpha: 0.25);
+
+    &.dark {
+      box-shadow: 0 7px 15px rgba($color: $warning-color, $alpha: 0);
+    }
+  }
+
+  &.error {
+    background-color: $error-color;
+    box-shadow: 0 7px 15px rgba($color: $error-color, $alpha: 0.25);
+
+    &.dark {
+      box-shadow: 0 7px 15px rgba($color: $error-color, $alpha: 0);
+    }
+  }
+
+  p,
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+  }
+
+  .icon {
+    margin-right: 1rem;
+
+    svg {
+      font-size: 2.2rem;
+    }
+  }
+
+  .close {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: ease 0.15s background-color;
+
+    @include hover-supported() {
+      background-color: rgba(0, 0, 0, 0.055);
+
+      & svg {
+        transform: scale(1.2);
+      }
+    }
+
+    &:active {
+      animation: click ease 0.25s;
+    }
+
+    svg {
+      padding: 0.7rem;
+      box-sizing: content-box;
+      transition: ease 0.15s transform;
+    }
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: scale(0.75) translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.75) translateY(2rem);
+  }
+}
+
+@import "./MediaQueries.scss";

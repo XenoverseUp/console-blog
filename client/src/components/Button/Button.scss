@@ -1,0 +1,57 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.button {
+  padding: 0.5em;
+  box-sizing: content-box;
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  font-family: "Raleway", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: ease 0.25s all;
+
+  &.light {
+    border: 1px solid $dark-primary-bg;
+    box-shadow: 3px 4px 10px rgba($color: $dark-primary-bg, $alpha: 0.1);
+
+    @include hover-supported() {
+      background-color: $dark-primary-bg;
+      color: $dark-primary-typo;
+    }
+  }
+  &.dark {
+    border: 1px solid $light-primary-bg;
+    color: $dark-primary-typo;
+
+    @include hover-supported() {
+      background-color: $light-primary-bg;
+      color: $light-primary-typo;
+    }
+  }
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.left-icon {
+      margin-right: 0.3em;
+    }
+    &.right-icon {
+      margin-left: 0.3em;
+    }
+
+    svg {
+      padding-top: 0.05em;
+      box-sizing: content-box;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@import "../../scss/Variables.scss";
+
+.MuiPaper-root {
+  border-radius: 1rem;
+  background-color: $dark-secondary-bg;
+  ul {
+    background-color: $dark-secondary-bg;
+    color: $dark-primary-typo;
+    p {
+      padding-left: 1rem;
+    }
+  }
+}

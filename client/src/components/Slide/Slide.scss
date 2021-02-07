@@ -1,0 +1,93 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.slide {
+  width: 100%;
+  min-height: 30rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  overflow: hidden;
+  border-radius: 1rem;
+
+  &.light {
+    background-color: white;
+  }
+
+  &.dark {
+    background-color: $dark-secondary-bg;
+  }
+
+  .content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    main {
+      height: auto;
+      box-sizing: content-box;
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      header {
+        .legend {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+
+          h2 {
+            font-family: "Red Hat Display", sans-serif;
+            font-weight: 500;
+            font-size: 2rem;
+            overflow: hidden;
+          }
+
+          p {
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-weight: 300;
+          }
+        }
+
+        h1 {
+          font-family: "PlayFair Display", serif;
+          font-weight: 500;
+          font-size: 2.1rem;
+          line-height: 2.5rem;
+          max-width: 330px;
+        }
+      }
+
+      & > p {
+        opacity: 0.9;
+        @include paragraphSettings;
+        margin-top: 0.7rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.8rem;
+      }
+
+      .link {
+        cursor: pointer;
+        width: auto;
+        color: $light-color;
+        font-family: "Red Hat Display", sans-serif;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .cover {
+    display: flex;
+    justify-content: flex-end;
+
+    .bg-container {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.8rem;
+    }
+  }
+}

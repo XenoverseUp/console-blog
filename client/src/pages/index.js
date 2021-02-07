@@ -1,0 +1,11 @@
+export { default as AddBlog } from "./AddBlog/AddBlog";
+export { default as AdminDashboard } from "./AdminDashboard/AdminDashboard";
+export { default as Blog } from "./Blog/Blog";
+export { default as Bookmarked } from "./Bookmarked/Bookmarked";
+export { default as EditorDashboard } from "./EditorDashboard/EditorDashboard";
+export { default as Home } from "./Home/Home";
+export { default as Login } from "./Login/Login";
+export { default as Promote } from "./Promote/Promote";
+export { default as Register } from "./Register/Register";
+export { default as Contact } from "./Contact/Contact";
+export { default as ConfirmBlog } from "./ConfirmBlog/ConfirmBlog";

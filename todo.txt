@@ -1,0 +1,9 @@
+1. Fix conditional import issue with "require()" => May download "require()" module externally
+
+2. Add draft for editor panel
+
+3. Planned publishing
+
+4. Day.js implementation
+
+5. "onWheel" event for creating carousel

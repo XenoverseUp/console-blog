@@ -1,0 +1,25 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.blog.light {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+
+  main {
+    margin: 2rem auto;
+  }
+}
+
+.blog.dark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  main {
+    margin: 2rem auto;
+  }
+}

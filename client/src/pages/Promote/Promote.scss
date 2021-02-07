@@ -1,0 +1,342 @@
+@import "../../scss//Variables.scss";
+@import "../../scss//Shared.scss";
+
+.promote.light {
+  user-select: none;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+
+  .back {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 2rem;
+    left: 2rem;
+    background-color: white;
+    box-sizing: content-box;
+    padding: 0.5em 0.7em;
+    padding-left: 0.2em;
+    border-radius: 0.8rem;
+    transition: ease 0.15s all;
+
+    p {
+      padding-bottom: 0.05em;
+      font-family: "Raleway", sans-serif;
+      font-weight: 500;
+    }
+
+    @include hover-supported() {
+      transform: translateY(-0.1rem);
+    }
+
+    &:active {
+      animation: ease click 0.25s;
+    }
+  }
+
+  .banner {
+    height: 85vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 90%;
+      transform: rotateY(180deg);
+      max-width: 30rem;
+    }
+  }
+
+  .stripe {
+    writing-mode: vertical-lr;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .content {
+    height: 85vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 700px;
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      width: 70%;
+
+      header {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        h1 {
+          font-weight: 600;
+          margin-bottom: 1rem;
+          font-size: 4rem;
+          font-family: "Raleway", sans-serif;
+        }
+      }
+
+      form {
+        width: 100%;
+        max-width: 450px;
+
+        section {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+
+          .MuiOutlinedInput-root {
+            border-radius: 9999px !important;
+            border: none !important;
+
+            &:hover .MuiOutlinedInput-notchedOutline {
+              border: none;
+            }
+            & .MuiOutlinedInput-notchedOutline {
+              border: none;
+            }
+
+            svg {
+              color: $light-primary-typo;
+            }
+
+            .MuiSelect-root {
+              border-radius: 9999px !important;
+              padding: 0.9em 2.5rem 0.9em 1rem !important;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              &:focus {
+                background-color: white !important;
+                outline: none !important;
+              }
+
+              p {
+                margin-left: 0.8em;
+                padding-top: 0.1em;
+              }
+            }
+          }
+        }
+
+        button {
+          padding: 0.5em 0.7em;
+          border: none;
+          outline: none;
+          background: none;
+          cursor: pointer;
+          border: 2px solid $dark-primary-bg;
+          font-family: "Raleway", sans-serif;
+          padding: 0.7em 0.7em 0.8em 0.7em;
+          border-radius: 0.5rem;
+          margin-left: 0.5rem;
+          margin-top: 2rem;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: ease 0.25s all;
+          box-shadow: 3px 4px 10px rgba($color: $dark-primary-bg, $alpha: 0.1);
+
+          @include hover-supported() {
+            background-color: $dark-primary-bg;
+            color: $dark-primary-typo;
+          }
+
+          &:active {
+            animation: ease 0.25s click;
+          }
+        }
+      }
+    }
+  }
+}
+
+.promote.dark {
+  user-select: none;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+
+  .back {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 2rem;
+    left: 2rem;
+    background-color: $dark-secondary-bg;
+    box-sizing: content-box;
+    padding: 0.5em 0.7em;
+    padding-left: 0.2em;
+    border-radius: 0.8rem;
+    transition: ease 0.15s all;
+
+    p {
+      padding-bottom: 0.05em;
+      font-family: "Raleway", sans-serif;
+      font-weight: 500;
+    }
+
+    @include hover-supported() {
+      transform: translateY(-0.1rem);
+    }
+
+    &:active {
+      animation: ease click 0.25s;
+    }
+  }
+
+  .banner {
+    height: 85vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 90%;
+      max-width: 30rem;
+      transform: rotateY(180deg);
+    }
+  }
+
+  .stripe {
+    writing-mode: vertical-lr;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .content {
+    height: 85vh;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 700px;
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      width: 70%;
+
+      header {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        h1 {
+          font-weight: 600;
+          margin-bottom: 1rem;
+          font-size: 4rem;
+          font-family: "Raleway", sans-serif;
+        }
+      }
+
+      form {
+        width: 100%;
+
+        section {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+
+          .MuiOutlinedInput-root {
+            border-radius: 9999px !important;
+            border: none !important;
+
+            &:hover .MuiOutlinedInput-notchedOutline {
+              border: none;
+            }
+            & .MuiOutlinedInput-notchedOutline {
+              border: none;
+            }
+
+            svg {
+              color: $dark-primary-typo;
+            }
+
+            .MuiSelect-root {
+              border-radius: 9999px !important;
+              padding: 0.9em 2.5rem 0.9em 1rem !important;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              &:focus {
+                background-color: $dark-secondary-bg !important;
+                outline: none !important;
+              }
+
+              p {
+                margin-left: 0.8em;
+                padding-top: 0.1em;
+              }
+            }
+          }
+        }
+
+        button {
+          padding: 0.5em 0.7em;
+          border: none;
+          outline: none;
+          background: none;
+          cursor: pointer;
+          border: 2px solid $light-primary-bg;
+          font-family: "Raleway", sans-serif;
+          padding: 0.7em 0.7em 0.8em 0.7em;
+          color: $dark-primary-typo;
+          border-radius: 0.5rem;
+          margin-left: 0.5rem;
+          margin-top: 2rem;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: ease 0.25s all;
+          box-shadow: 3px 4px 10px rgba($color: $light-primary-bg, $alpha: 0.1);
+
+          @include hover-supported() {
+            background-color: $light-primary-bg;
+            color: $light-primary-typo;
+          }
+
+          &:active {
+            animation: ease 0.25s click;
+          }
+        }
+      }
+    }
+  }
+}
+
+@import "../Register/MediaQueries.scss";

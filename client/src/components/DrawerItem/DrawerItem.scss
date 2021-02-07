@@ -1,0 +1,93 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.drawer-item.light {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 1rem;
+  margin-bottom: 0.7rem;
+  background-color: $light-primary-bg;
+  padding: 1rem;
+
+  header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+
+    svg {
+      font-size: 2rem;
+    }
+
+    .comment-info {
+      margin-left: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h4 {
+        font-family: "Red Hat Display", sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      p {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  main {
+    font-family: "Red Hat Display", sans-serif;
+    letter-spacing: 0.01em;
+    font-size: 0.9rem;
+  }
+}
+
+.drawer-item.dark {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 1rem;
+  margin-bottom: 0.7rem;
+  background-color: $dark-secondary-bg;
+  padding: 1rem;
+
+  header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+
+    svg {
+      font-size: 2rem;
+    }
+
+    .comment-info {
+      margin-left: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h4 {
+        font-family: "Red Hat Display", sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      p {
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  main {
+    font-family: "Red Hat Display", sans-serif;
+    letter-spacing: 0.02em;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.2rem;
+  }
+}

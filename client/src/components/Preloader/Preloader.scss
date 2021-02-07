@@ -1,0 +1,87 @@
+@import "../../scss/Variables.scss";
+
+.preloader.dark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $dark-primary-bg;
+  z-index: 50;
+  transition: ease 0.25s all;
+  flex-direction: column;
+  color: $dark-primary-typo;
+
+  h1 {
+    font-weight: 900;
+    font-family: "Raleway", sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 1rem;
+    padding-left: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  svg {
+    width: 70%;
+    max-width: 35em;
+    border-radius: 3px;
+    fill: none;
+    stroke: rgb(54, 54, 54);
+    stroke-linecap: round;
+    stroke-width: 8%;
+  }
+
+  use {
+    stroke: #fff;
+    animation: a 2s linear infinite;
+  }
+}
+
+.preloader.light {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $light-primary-bg;
+  z-index: 50;
+  transition: ease 0.25s all;
+  flex-direction: column;
+  color: $light-primary-typo;
+
+  h1 {
+    font-weight: 900;
+    font-family: "Raleway", sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 1rem;
+    padding-left: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  svg {
+    width: 70%;
+    max-width: 35em;
+    border-radius: 3px;
+    fill: none;
+    stroke: rgb(221, 221, 221);
+    stroke-linecap: round;
+    stroke-width: 8%;
+  }
+
+  use {
+    stroke: rgb(37, 37, 37);
+    animation: a 2s linear infinite;
+  }
+}
+
+@keyframes a {
+  to {
+    stroke-dashoffset: 0px;
+  }
+}

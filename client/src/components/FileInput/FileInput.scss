@@ -1,0 +1,97 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.file-input {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 2rem;
+  border-radius: 1rem;
+  transition: ease 0.25s all;
+
+  svg {
+    font-size: 10rem;
+    transition: ease 0.15s color;
+  }
+
+  &.light {
+    background-color: white;
+
+    &.error-input {
+      border: 2px dashed $error-color;
+
+      svg {
+        color: $error-color;
+      }
+    }
+
+    .error {
+      color: $error-color;
+    }
+  }
+
+  &.dark {
+    background-color: $dark-secondary-bg;
+
+    &.error-input {
+      border: 2px dashed $dark-error-color;
+
+      svg {
+        color: $dark-error-color;
+      }
+    }
+
+    .error {
+      color: $dark-error-color;
+      font-weight: 500;
+    }
+  }
+
+  p:not(.error) {
+    opacity: 0.7;
+    font-family: "Raleway", sans-serif;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .file-name {
+    font-family: "Raleway", sans-serif;
+    max-width: 400px;
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 3%;
+    opacity: 0.5 !important;
+  }
+
+  .error {
+    text-align: center;
+    display: flex;
+    font-family: "Raleway", sans-serif;
+
+    svg {
+      font-size: 1rem;
+    }
+  }
+
+  input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    border: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
