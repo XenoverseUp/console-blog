@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 import { ReactComponent as General } from "../assets/img/categoryIcons/general.svg";
 import { ReactComponent as Science } from "../assets/img/categoryIcons/science.svg";
 import { ReactComponent as Tech } from "../assets/img/categoryIcons/tech.svg";
@@ -12,8 +12,7 @@ import { ReactComponent as Music } from "../assets/img/categoryIcons/music.svg";
 import { ReactComponent as CurrentEvents } from "../assets/img/categoryIcons/current-events.svg";
 
 export const CategoryContext = createContext();
-
-export default ({ children }) => {
+const CategoryProvider = ({ children }) => {
   const [categories] = useState([
     {
       name: "Genel",
@@ -89,3 +88,5 @@ export default ({ children }) => {
     </CategoryContext.Provider>
   );
 };
+
+export default CategoryProvider;

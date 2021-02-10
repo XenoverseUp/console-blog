@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { SwipeableDrawer } from "@material-ui/core";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AnimateSharedLayout, motion } from "framer-motion";

@@ -8,7 +8,7 @@ import tapping from "../../animations/tapping";
 import buttonVariants from "../../animations/buttonVariants";
 import { CommentOutlined, SendRounded } from "@material-ui/icons";
 import { TextareaAutosize } from "@material-ui/core";
-import BlogServices from "../../services/BlogServices.js";
+// import BlogServices from "../../services/BlogServices.js";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Form = ({ id, setNewComments, newComments }) => {

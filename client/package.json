@@ -23,6 +23,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
     "react-transition-group": "^4.4.1",
+    "simplebar-react": "^2.3.0",
     "yup": "^0.29.3"
   },
   "scripts": {

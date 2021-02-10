@@ -1,4 +1,4 @@
-export default {
+const fadeOut = {
   initial: {
     opacity: 0,
   },
@@ -9,3 +9,5 @@ export default {
     opacity: 0,
   },
 };
+
+export default fadeOut;

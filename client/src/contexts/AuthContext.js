@@ -1,11 +1,11 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, Fragment } from "react";
 import AuthServices from "../services/AuthServices";
 import { Preloader } from "../components";
 import { AnimatePresence } from "framer-motion";
 
 export const AuthContext = createContext();
 
-export default ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -22,7 +22,7 @@ export default ({ children }) => {
   }, []);
 
   return (
-    <React.Fragment>
+    <Fragment>
       <AnimatePresence exitBeforeEnter>
         {!isLoaded ? (
           <Preloader />
@@ -34,6 +34,8 @@ export default ({ children }) => {
           </AuthContext.Provider>
         )}
       </AnimatePresence>
-    </React.Fragment>
+    </Fragment>
   );
 };
+
+export default AuthProvider;

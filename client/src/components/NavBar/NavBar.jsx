@@ -319,46 +319,11 @@ const DropDownMenu = (props) => {
               <DropDownMenuItem
                 to={`/category/${category.path}`}
                 leftIcon={category.icon}
+                key={category.path}
               >
                 {category.name}
               </DropDownMenuItem>
             ))}
-            {/* <DropDownMenuItem to="/category/bilim" leftIcon={<Category />}>
-              Bilim
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/teknoloji" leftIcon={<Category />}>
-              Teknoloji
-            </DropDownMenuItem>
-            <DropDownMenuItem
-              to="/category/sinema-dizi"
-              leftIcon={<Category />}
-            >
-              Sinema & Dizi
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/oyun" leftIcon={<Category />}>
-              Oyun
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/yasam" leftIcon={<Category />}>
-              Yaşam
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/tarih" leftIcon={<Category />}>
-              Tarih
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/eglence" leftIcon={<Category />}>
-              Eğlence
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/edebiyat" leftIcon={<Category />}>
-              Edebiyat
-            </DropDownMenuItem>
-            <DropDownMenuItem to="/category/muzik" leftIcon={<Category />}>
-              Müzik
-            </DropDownMenuItem>
-            <DropDownMenuItem
-              to="/category/guncel-olaylar"
-              leftIcon={<Category />}
-            >
-              Güncel Olaylar
-            </DropDownMenuItem> */}
           </div>
         </CSSTransition>
       </div>

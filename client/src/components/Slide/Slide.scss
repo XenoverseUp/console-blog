@@ -57,14 +57,15 @@
           font-family: "PlayFair Display", serif;
           font-weight: 500;
           font-size: 2.1rem;
-          line-height: 2.5rem;
           max-width: 330px;
+          @include clamp(3, 2.5rem);
         }
       }
 
       & > p {
-        opacity: 0.9;
         @include paragraphSettings;
+        @include clamp(3, 1.5rem);
+        opacity: 0.9;
         margin-top: 0.7rem;
         margin-bottom: 1.5rem;
         font-size: 0.8rem;
@@ -91,3 +92,5 @@
     }
   }
 }
+
+@import "./MediaQueries.scss";

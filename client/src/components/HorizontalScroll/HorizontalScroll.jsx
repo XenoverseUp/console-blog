@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { useState, useRef, useEffect, useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import { useCurrentWidth } from "../../hooks";
 import "./HorizontalScroll.scss";
 
 const HorizontalScroll = ({ children }) => {
@@ -18,6 +19,8 @@ const HorizontalScroll = ({ children }) => {
   const [sliderWidth, setSliderWidth] = useState(0);
   const [sliderChildrenWidth, setSliderChildrenWidth] = useState(0);
   const [sliderConstraints, setSliderConstraints] = useState(0);
+
+  const [width] = useCurrentWidth();
 
   const x = useMotionValue(0);
   const leftTransform = useTransform(x, [-40, 0, sliderWidth], [1, 0, 0]);
@@ -55,6 +58,11 @@ const HorizontalScroll = ({ children }) => {
 
     calcSliderConstraints();
     window.addEventListener("resize", calcSliderConstraints);
+
+    return () => {
+      window.removeEventListener("resize", calcSliderWidth);
+      window.removeEventListener("resize", calcSliderConstraints);
+    };
   }, [ref, sliderChildrenWidth, sliderWidth]);
 
   const goToStart = () =>
@@ -87,21 +95,25 @@ const HorizontalScroll = ({ children }) => {
           {children}
         </motion.div>
       </div>
-      <motion.button
-        style={{ scale: leftTransform }}
-        className={`category-controllers start ${theme}`}
-        onClick={goToStart}
-      >
-        <KeyboardArrowLeftRounded />
-      </motion.button>
+      {width > 600 && (
+        <>
+          <motion.button
+            style={{ scale: leftTransform }}
+            className={`category-controllers start ${theme}`}
+            onClick={goToStart}
+          >
+            <KeyboardArrowLeftRounded />
+          </motion.button>
 
-      <motion.button
-        style={{ scale: rightTransform }}
-        className={`category-controllers end ${theme}`}
-        onClick={goToEnd}
-      >
-        <KeyboardArrowRightRounded />
-      </motion.button>
+          <motion.button
+            style={{ scale: rightTransform }}
+            className={`category-controllers end ${theme}`}
+            onClick={goToEnd}
+          >
+            <KeyboardArrowRightRounded />
+          </motion.button>
+        </>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-export default {
+const idVariants = {
   initial: {
     width: 0,
   },
@@ -16,3 +16,5 @@ export default {
     },
   },
 };
+
+export default idVariants;

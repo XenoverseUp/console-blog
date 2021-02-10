@@ -1,4 +1,4 @@
-export default {
+const splitText = {
   initial: {
     y: "100%",
   },
@@ -21,3 +21,5 @@ export default {
     },
   }),
 };
+
+export default splitText;

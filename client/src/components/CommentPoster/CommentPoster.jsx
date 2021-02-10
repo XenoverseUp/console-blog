@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import { useContext, lazy, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
 import "./CommentPoster.scss";
 
-const Form = React.lazy(() => import("./Form"));
+const Form = lazy(() => import("./Form"));
 
 const CommentPoster = ({ setNewComments, setDrawerState, newComments, id }) => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -23,9 +23,9 @@ const CommentPoster = ({ setNewComments, setDrawerState, newComments, id }) => {
       </Link>
     </div>
   ) : (
-    <React.Suspense fallback={"Loading..."}>
+    <Suspense fallback={"Loading..."}>
       <Form id={id} setNewComments={setNewComments} newComments={newComments} />
-    </React.Suspense>
+    </Suspense>
   );
 };
 

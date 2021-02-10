@@ -9,7 +9,7 @@ const StyledSelect = ({ children, register, ...rest }) => {
   const { theme } = useContext(ThemeContext);
 
   const selectStyles = {
-    background: theme === "dark" ? "#353535" : "white",
+    background: theme === "dark" ? "#1f1f1f" : "white",
     color: theme === "dark" ? "#f5f5f5" : "#252525",
     fontFamily: "Raleway",
     fontWeight: 400,

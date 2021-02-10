@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { motion } from "framer-motion";
-import "./Button.scss";
 import tapping from "../../animations/tapping";
+
+import "./Button.scss";
 
 const Button = ({ children, leftIcon, rightIcon, to, ...rest }) => {
   const { theme } = useContext(ThemeContext);

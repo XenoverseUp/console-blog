@@ -1,4 +1,4 @@
-export default {
+const modalVariants = {
   initial: {
     opacity: 0,
     scale: 1.5,
@@ -19,3 +19,5 @@ export default {
     },
   },
 };
+
+export default modalVariants;

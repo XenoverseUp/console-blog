@@ -1,4 +1,4 @@
-export default {
+const translateDownAndFadeOut = {
   initial: {
     opacity: 0,
     y: 10,
@@ -14,3 +14,5 @@ export default {
     opacity: 0,
   },
 };
+
+export default translateDownAndFadeOut;

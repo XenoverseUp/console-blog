@@ -8,7 +8,7 @@
   flex-direction: column;
   background-color: white;
 
-  main {
+  & > main {
     margin: 2rem auto;
   }
 }
@@ -19,7 +19,7 @@
   align-items: center;
   flex-direction: column;
 
-  main {
+  & > main {
     margin: 2rem auto;
   }
 }

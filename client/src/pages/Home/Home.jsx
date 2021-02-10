@@ -38,8 +38,7 @@ const Home = () => {
       initial="initial"
       animate="visible"
       exit="exit"
-      onAnimationStart={() => (document.body.style.overflow = "hidden")}
-      onAnimationComplete={() => (document.body.style.overflow = "auto")}
+      className="scroller"
     >
       <NavBar />
       <AuthModal setIsOpen={setAuthModal} isOpen={authModal} />

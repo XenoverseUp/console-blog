@@ -1,4 +1,4 @@
-export default {
+const fromRight = {
   initial: {
     x: 200,
     opacity: 0,
@@ -21,3 +21,5 @@ export default {
     },
   },
 };
+
+export default fromRight;

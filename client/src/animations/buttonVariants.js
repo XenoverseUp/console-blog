@@ -1,4 +1,4 @@
-export default (i = 1) => ({
+const buttonVariants = (i = 1) => ({
   initial: {
     opacity: 0,
     scale: 0,
@@ -21,3 +21,5 @@ export default (i = 1) => ({
     },
   },
 });
+
+export default buttonVariants;

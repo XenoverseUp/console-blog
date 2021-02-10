@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import BlogServices from "../../services/BlogServices";
+// import BlogServices from "../../services/BlogServices";
 import { Bookmark, BookmarkBorder } from "@material-ui/icons";
 import { Button } from "@material-ui/core";
 import "./Card.scss";

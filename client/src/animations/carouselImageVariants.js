@@ -1,19 +1,21 @@
-export default {
+const carouselImageVariants = (direction) => ({
   initial: {
-    width: "50%",
+    ...(direction ? { height: "50%" } : { width: "50%" }),
   },
   visible: {
-    width: "100%",
+    ...(direction ? { height: "100%" } : { width: "100%" }),
 
     transition: {
       stiffness: 500,
     },
   },
   exit: {
-    width: "50%",
+    ...(direction ? { height: "50%" } : { width: "50%" }),
 
     transition: {
       stiffness: 30,
     },
   },
-};
+});
+
+export default carouselImageVariants;

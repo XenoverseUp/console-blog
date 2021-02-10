@@ -1,8 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import LinesEllipsis from "react-lines-ellipsis";
-import responsiveHOC from "react-lines-ellipsis/lib/responsiveHOC";
+
 import "./TopCard.scss";
 import {
   BookmarkBorderRounded,
@@ -22,7 +21,6 @@ const TopCard = ({
 }) => {
   const { theme } = useContext(ThemeContext);
   const { isAuthenticated } = useContext(AuthContext);
-  const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -41,7 +39,7 @@ const TopCard = ({
         ></div>
         <div className="info">
           <h3>{title}</h3>
-          <ResponsiveEllipsis text={subtitle} maxLine={2} />
+          <p>{subtitle}</p>
         </div>
       </Link>
       <div className="bottom">

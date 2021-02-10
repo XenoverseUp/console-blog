@@ -1,0 +1,16 @@
+@media screen and (max-width: 600px) {
+  .slide {
+    grid-template-columns: 2fr;
+    grid-template-rows: 15rem 24rem;
+
+    .content {
+      main {
+        padding: 0;
+      }
+    }
+
+    .cover {
+      grid-row: 1;
+    }
+  }
+}

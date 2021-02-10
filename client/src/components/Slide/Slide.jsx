@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
 import "./Slide.scss";
-import { getCategory } from "../../hooks";
+import { getCategory, useCurrentWidth } from "../../hooks";
 import { CategoryContext } from "../../contexts/CategoryContext";
 import carouselImageVariants from "../../animations/carouselImageVariants";
 import carouselContentVariants from "../../animations/carouselContentVariants";
@@ -23,6 +23,7 @@ const Slide = ({
 }) => {
   const location = useLocation();
   const history = useHistory();
+  const [width] = useCurrentWidth();
 
   const { theme } = useContext(ThemeContext);
   const categories = useContext(CategoryContext);
@@ -60,9 +61,7 @@ const Slide = ({
               exit="exit"
               variants={carouselContentVariants(2, 0)}
             >
-              {title.split(" ").length > 6
-                ? title.split(" ").slice(0, 6).join(" ") + "..."
-                : title}
+              {title}
             </motion.h1>
           </header>
           <motion.p
@@ -71,9 +70,7 @@ const Slide = ({
             exit="exit"
             variants={carouselContentVariants()}
           >
-            {subtitle.split(" ").length > 17
-              ? subtitle.split(" ").slice(0, 17).join(" ") + "..."
-              : subtitle}
+            {subtitle}
           </motion.p>
           <motion.div
             initial="initial"
@@ -107,7 +104,11 @@ const Slide = ({
           initial="initial"
           animate="visible"
           exit="exit"
-          variants={carouselImageVariants}
+          variants={
+            width < 600
+              ? carouselImageVariants("height")
+              : carouselImageVariants()
+          }
           className="bg-container"
           style={{
             background: `url("${coverImagePath}") no-repeat center / cover`,

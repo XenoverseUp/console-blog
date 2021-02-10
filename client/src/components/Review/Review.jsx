@@ -66,7 +66,7 @@ const Review = ({
                 {getCategory(formData.category, categories)[0]}
               </p>
             </div>
-            <img src={coverURL} className="coverImage"></img>
+            <img src={coverURL} className="coverImage" alt="cover"></img>
           </header>
 
           <article>

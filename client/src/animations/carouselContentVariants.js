@@ -1,4 +1,4 @@
-export default (i = 5, o = 0.5) => ({
+const carouselContentVariants = (i = 5, o = 0.5) => ({
   initial: {
     y: i,
     opacity: o,
@@ -20,3 +20,5 @@ export default (i = 5, o = 0.5) => ({
     },
   },
 });
+
+export default carouselContentVariants;

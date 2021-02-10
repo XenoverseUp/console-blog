@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, lazy, Suspense } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { getDuration } from "../../hooks";
 import { ThemeContext } from "../../contexts/ThemeContext";
@@ -22,6 +22,8 @@ import { AuthContext } from "../../contexts/AuthContext";
 import fakeData2 from "../../fakeData2";
 import BlogServices from "../../services/BlogServices";
 
+const AuthModal = lazy(() => import("../../components/AuthModal/AuthModal"));
+
 const Blog = () => {
   const { theme } = useContext(ThemeContext);
   const { isAuthenticated } = useContext(AuthContext);
@@ -30,10 +32,8 @@ const Blog = () => {
   const [newComments, setNewComments] = useState([]);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [authModal, setAuthModal] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-
-  const history = useHistory();
-  const location = useLocation();
 
   useEffect(() => setBlog(fakeData2), []); // Fetch data, set states, update views
 
@@ -59,12 +59,6 @@ const Blog = () => {
     }
   };
 
-  const redirectToLogin = () =>
-    history.push({
-      pathname: "/login",
-      state: { from: location.pathname },
-    });
-
   return (
     <motion.div
       className={`blog ${theme}`}
@@ -74,6 +68,12 @@ const Blog = () => {
       exit="exit"
     >
       <NavBar />
+
+      {!isAuthenticated && (
+        <Suspense fallback="Loading...">
+          <AuthModal isOpen={authModal} setIsOpen={setAuthModal} />
+        </Suspense>
+      )}
 
       <Drawer open={isCommentOpen} setOpen={setIsCommentOpen}>
         <DrawerHeader
@@ -136,10 +136,10 @@ const Blog = () => {
             isBookmarked={isBookmarked}
             callbacks={{
               onLikeClick: () =>
-                isAuthenticated ? likeClick() : redirectToLogin(),
+                isAuthenticated ? likeClick() : setAuthModal(true),
               onCommentClick: () => setIsCommentOpen(true),
               onBookmarkClick: () =>
-                isAuthenticated ? bookmarkClick() : redirectToLogin(),
+                isAuthenticated ? bookmarkClick() : setAuthModal(true),
             }}
           />
           <SanitizedContent content={blog.content} />

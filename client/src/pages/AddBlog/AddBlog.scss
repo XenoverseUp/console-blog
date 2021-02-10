@@ -1578,6 +1578,9 @@
 
               pre {
                 border: none;
+                color: $dark-primary-typo;
+                font-weight: 100;
+                background-color: rgba(255, 255, 255, 0.1);
               }
 
               h2,
@@ -1588,7 +1591,7 @@
               blockquote,
               figure {
                 margin: 1rem auto;
-                line-height: 145%;
+                line-height: 1.5rem;
               }
             }
 

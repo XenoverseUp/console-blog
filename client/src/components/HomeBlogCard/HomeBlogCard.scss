@@ -30,7 +30,7 @@
     }
 
     .right {
-      background-color: rgba(255, 255, 255, 0.568);
+      background-color: rgba(255, 255, 255, 1);
     }
   }
 
@@ -45,7 +45,7 @@
     }
 
     .right {
-      background-color: rgba($color: $dark-secondary-bg, $alpha: 0.468);
+      background-color: rgba($color: $dark-secondary-bg, $alpha: 1);
     }
   }
 
@@ -93,93 +93,118 @@
 
   .right {
     border-radius: 1rem;
-    display: grid;
-    grid-template-columns: 30% 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
 
-    .cover {
-      padding: 0.7rem;
-
-      .img {
-        width: 100%;
-        height: 100%;
-        border-radius: 0.9rem;
-      }
-    }
-
-    .content {
-      padding: 0.7rem;
+    .main-content {
+      width: 100%;
       height: 100%;
-      display: flex;
-      align-items: center;
-      position: relative;
+      display: grid;
+      grid-template-columns: 30% 70%;
 
-      section {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+      .cover {
+        padding: 0.7rem;
+        padding-bottom: 0.5rem;
 
-        width: 100%;
-        height: 80%;
-        padding-right: 1rem;
-
-        header {
+        .img {
           width: 100%;
-          margin-bottom: 1rem;
-
-          h4 {
-            font-family: "PlayFair Display", serif;
-            font-size: 1.5rem;
-            font-weight: 500;
-            padding-right: 1rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 0.5rem;
-          }
-
-          & > div {
-            @include paragraphSettings;
-            font-size: 0.9rem;
-          }
+          height: 100%;
+          border-radius: 0.9rem;
         }
+      }
 
-        main {
+      .content {
+        padding: 0.7rem;
+        padding-bottom: 0.5rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        section {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
+          flex-direction: column;
+          justify-content: space-around;
 
-          .statistics {
-            display: flex;
-            flex-direction: column;
+          width: 100%;
+          height: 80%;
+          padding-right: 1rem;
+
+          header {
+            width: 100%;
+            margin-bottom: 1rem;
+
+            h4 {
+              font-family: "PlayFair Display", serif;
+              font-size: 1.5rem;
+              font-weight: 500;
+              padding-right: 1rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              margin-bottom: 0.5rem;
+            }
 
             p {
-              font-family: "Red Hat Display", sans-serif;
-              font-weight: 400;
+              @include paragraphSettings;
+              @include clamp(2, 1.5rem);
               font-size: 0.9rem;
-
-              display: flex;
-              align-items: center;
-
-              span {
-                margin-right: 0.5rem;
-
-                svg {
-                  box-sizing: content-box;
-                  width: 1rem;
-                  padding-top: 0.2rem;
-                  fill: $light-color !important;
-                }
-              }
             }
           }
 
-          .bookmark {
-            position: absolute;
-            right: 0.8rem;
-            bottom: 0.8rem;
-            cursor: pointer;
+          main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .statistics {
+              display: flex;
+              flex-direction: column;
+
+              p {
+                font-family: "Red Hat Display", sans-serif;
+                font-weight: 400;
+                font-size: 0.9rem;
+
+                display: flex;
+                align-items: center;
+
+                span {
+                  margin-right: 0.5rem;
+
+                  svg {
+                    box-sizing: content-box;
+                    width: 1rem;
+                    padding-top: 0.2rem;
+                    fill: $light-color !important;
+                  }
+                }
+              }
+            }
+
+            .bookmark {
+              position: absolute;
+              right: 0.8rem;
+              bottom: 0.8rem;
+              cursor: pointer;
+            }
           }
         }
+      }
+    }
+
+    .date {
+      display: none;
+      padding-left: 1rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+      font-family: "Red Hat Display", sans-serif;
+      opacity: 0.8;
+
+      svg {
+        margin-right: 0.3rem;
+        font-size: 1rem;
       }
     }
   }

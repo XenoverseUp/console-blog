@@ -20,6 +20,7 @@ const Carousel = ({
   const [direction, setDirection] = useState("");
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const touchPrecision = 75;
 
   const { theme } = useContext(ThemeContext);
 
@@ -64,9 +65,9 @@ const Carousel = ({
     setTouchEnd(event.targetTouches[0].clientX);
   };
 
-  const handleTouchEnd = (event) => {
-    if (touchStart - touchEnd > 150) setSlides();
-    else if (touchStart - touchEnd < -150) setSlides("backwards");
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > touchPrecision) setSlides();
+    else if (touchStart - touchEnd < -touchPrecision) setSlides("backwards");
   };
 
   for (let i = 0; i < length; i++) {
@@ -83,21 +84,23 @@ const Carousel = ({
   }
 
   return (
-    <div
-      className={`carousel`}
-      onWheel={wheelable && handleWheel}
-      onTouchStart={swipeable && handleTouchStart}
-      onTouchMove={swipeable && handleTouchMove}
-      onTouchEnd={swipeable && handleTouchEnd}
-    >
-      <main>
-        <AnimatePresence exitBeforeEnter>
-          {updatedElements.map(
-            (element, i) =>
-              activeSlide === updatedElements[i].props.slideId && element
-          )}
-        </AnimatePresence>
-      </main>
+    <div className="outer">
+      <div
+        className={`carousel`}
+        onWheel={wheelable && handleWheel}
+        onTouchStart={swipeable && handleTouchStart}
+        onTouchMove={swipeable && handleTouchMove}
+        onTouchEnd={swipeable && handleTouchEnd}
+      >
+        <main>
+          <AnimatePresence exitBeforeEnter>
+            {updatedElements.map(
+              (element, i) =>
+                activeSlide === updatedElements[i].props.slideId && element
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
       <div className={`controllers ${theme}`}>
         <motion.button
           whileTap={tapping}
