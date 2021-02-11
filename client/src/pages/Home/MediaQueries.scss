@@ -127,12 +127,38 @@
   }
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
   .home {
     padding: 0.5rem;
 
     & > section {
       .grid-container {
+        .categories {
+          grid-row: 1;
+          height: auto;
+          margin-bottom: 1.4rem;
+
+          header {
+            h4 {
+              background-color: unset !important;
+              padding: 0.5rem;
+
+              &::after,
+              &::before {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .carousel-wrapper {
+          grid-row: 2;
+        }
+
+        .top-blogs {
+          grid-row: 3;
+        }
+
         .casual-blogs {
           .blogs-container {
             .home-blog-card {

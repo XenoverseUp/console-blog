@@ -8,6 +8,7 @@ import {
   SnackBar,
   SplitText,
   Button,
+  ConditionalSimpleBar,
 } from "../../components";
 import { useForm } from "react-hook-form";
 import { registerValidationSchema } from "../../validation";
@@ -67,128 +68,130 @@ const Register = () => {
   };
 
   return (
-    <motion.div
-      className={`register ${theme}`}
-      variants={translateDownAndFadeOut}
-      initial="initial"
-      animate="visible"
-      exit="exit"
-      onAnimationStart={() => (document.body.style.overflow = "hidden")}
-      onAnimationComplete={() => (document.body.style.overflow = "auto")}
-    >
+    <ConditionalSimpleBar>
       <motion.div
-        onClick={() =>
-          history.push({ pathname: "/", state: { from: location.pathname } })
-        }
-        whileTap={tapping}
-        style={{ cursor: "pointer" }}
-        className="back"
+        className={`register ${theme}`}
+        variants={translateDownAndFadeOut}
+        initial="initial"
+        animate="visible"
+        exit="exit"
+        onAnimationStart={() => (document.body.style.overflow = "hidden")}
+        onAnimationComplete={() => (document.body.style.overflow = "auto")}
       >
-        <KeyboardArrowLeft /> <p>Ana sayfa</p>
+        <motion.div
+          onClick={() =>
+            history.push({ pathname: "/", state: { from: location.pathname } })
+          }
+          whileTap={tapping}
+          style={{ cursor: "pointer" }}
+          className="back"
+        >
+          <KeyboardArrowLeft /> <p>Ana sayfa</p>
+        </motion.div>
+
+        <SnackBar
+          open={alreadyRegistered}
+          setOpen={setAlreadyRegistered}
+          severity="error"
+        >
+          Bu email için zaten hesap var.
+        </SnackBar>
+        <div className="banner">
+          {isImgLoaded ? (
+            <motion.img
+              initial={{ x: "-20%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "-20%", opacity: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+              }}
+              src={RegistreImg}
+              alt="Console"
+            />
+          ) : (
+            "Loading..."
+          )}
+        </div>
+        <div className="stripe">{"CONSOLE".repeat(6)}</div>
+        <div className="content">
+          <main>
+            <header>
+              <h1>
+                {" "}
+                <SplitText
+                  initial="initial"
+                  animate="visible"
+                  exit="exit"
+                  variants={splitText}
+                >
+                  Hesap Oluştur
+                </SplitText>
+              </h1>
+              <p>
+                Ücretsiz bir hesap açarak "CONSOLE"un birçok özelliğine
+                ulaşabilirsin.
+              </p>
+            </header>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <RegisterFormInput
+                name="userName"
+                register={register}
+                errors={errors}
+                theme={theme}
+                leftIcon={<Face />}
+                autoComplete="off"
+                visible={visible}
+                setVisible={setVisible}
+                alreadyRegistered={alreadyRegistered}
+              />
+              <RegisterFormInput
+                name="email"
+                register={register}
+                errors={errors}
+                theme={theme}
+                leftIcon={<AlternateEmail />}
+                autoComplete="off"
+                visible={visible}
+                setVisible={setVisible}
+                alreadyRegistered={alreadyRegistered}
+              />
+              <RegisterFormInput
+                name="password"
+                register={register}
+                errors={errors}
+                theme={theme}
+                leftIcon={<LockOutlined />}
+                autoComplete="off"
+                visible={visible}
+                setVisible={setVisible}
+                alreadyRegistered={alreadyRegistered}
+              />
+              <RegisterFormInput
+                name="confirmPassword"
+                register={register}
+                errors={errors}
+                theme={theme}
+                leftIcon={<ConfirmationNumberOutlined />}
+                autoComplete="off"
+                visible={visible}
+                setVisible={setVisible}
+                alreadyRegistered={alreadyRegistered}
+              />
+
+              <Button type="submit">Hesap Oluştur</Button>
+            </form>
+            <footer>
+              Zaten bir hesabın var mı? O zaman{" "}
+              <Link to="/login" className="link">
+                Giriş Yap
+              </Link>
+              .
+            </footer>
+          </main>
+        </div>
       </motion.div>
-
-      <SnackBar
-        open={alreadyRegistered}
-        setOpen={setAlreadyRegistered}
-        severity="error"
-      >
-        Bu email için zaten hesap var.
-      </SnackBar>
-      <div className="banner">
-        {isImgLoaded ? (
-          <motion.img
-            initial={{ x: "-20%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "-20%", opacity: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 200,
-            }}
-            src={RegistreImg}
-            alt="Console"
-          />
-        ) : (
-          "Loading..."
-        )}
-      </div>
-      <div className="stripe">{"CONSOLE".repeat(6)}</div>
-      <div className="content">
-        <main>
-          <header>
-            <h1>
-              {" "}
-              <SplitText
-                initial="initial"
-                animate="visible"
-                exit="exit"
-                variants={splitText}
-              >
-                Hesap Oluştur
-              </SplitText>
-            </h1>
-            <p>
-              Ücretsiz bir hesap açarak "CONSOLE"un birçok özelliğine
-              ulaşabilirsin.
-            </p>
-          </header>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <RegisterFormInput
-              name="userName"
-              register={register}
-              errors={errors}
-              theme={theme}
-              leftIcon={<Face />}
-              autoComplete="off"
-              visible={visible}
-              setVisible={setVisible}
-              alreadyRegistered={alreadyRegistered}
-            />
-            <RegisterFormInput
-              name="email"
-              register={register}
-              errors={errors}
-              theme={theme}
-              leftIcon={<AlternateEmail />}
-              autoComplete="off"
-              visible={visible}
-              setVisible={setVisible}
-              alreadyRegistered={alreadyRegistered}
-            />
-            <RegisterFormInput
-              name="password"
-              register={register}
-              errors={errors}
-              theme={theme}
-              leftIcon={<LockOutlined />}
-              autoComplete="off"
-              visible={visible}
-              setVisible={setVisible}
-              alreadyRegistered={alreadyRegistered}
-            />
-            <RegisterFormInput
-              name="confirmPassword"
-              register={register}
-              errors={errors}
-              theme={theme}
-              leftIcon={<ConfirmationNumberOutlined />}
-              autoComplete="off"
-              visible={visible}
-              setVisible={setVisible}
-              alreadyRegistered={alreadyRegistered}
-            />
-
-            <Button type="submit">Hesap Oluştur</Button>
-          </form>
-          <footer>
-            Zaten bir hesabın var mı? O zaman{" "}
-            <Link to="/login" className="link">
-              Giriş Yap
-            </Link>
-            .
-          </footer>
-        </main>
-      </div>
-    </motion.div>
+    </ConditionalSimpleBar>
   );
 };
 

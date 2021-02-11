@@ -9,6 +9,8 @@
   padding: 1rem;
 
   &.light {
+    background-color: $light-primary-bg;
+
     section {
       .grid-container {
         .categories {
@@ -30,6 +32,7 @@
   }
 
   &.dark {
+    background-color: $dark-primary-bg;
     section {
       .grid-container {
         .categories {

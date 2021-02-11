@@ -4,7 +4,6 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { CategoryContext } from "../../contexts/CategoryContext";
 import { useCurrentWidth } from "../../hooks";
-import { MobileMenu } from "../../components";
 import {
   AllInclusive,
   Brightness4,
@@ -21,7 +20,6 @@ import {
   MeetingRoom,
   Edit,
   Dashboard,
-  MenuRounded,
 } from "@material-ui/icons";
 
 import "./NavBar.scss";
@@ -36,7 +34,6 @@ const NavBar = () => {
   const { pathname } = useLocation();
 
   const [open, setOpen] = useState(false);
-  const [openMobile, setOpenMobile] = useState(false);
 
   let [currentWidth] = useCurrentWidth();
 
@@ -100,36 +97,20 @@ const NavBar = () => {
           />
         </Button>
 
-        {currentWidth > 700 ? (
-          <DropDownNavItem
-            name={
-              !isAuthenticated || !user
-                ? "Bize Katıl"
-                : isAuthenticated && user
-                ? `${user.userName}`
-                : null
-            }
-            open={open}
-            setOpen={setOpen}
-            isAuthenticated={isAuthenticated}
-          >
-            <DropDownMenu />
-          </DropDownNavItem>
-        ) : (
-          <React.Fragment>
-            <button
-              className="mobile-menu"
-              onClick={() => setOpenMobile(!openMobile)}
-            >
-              <MenuRounded
-                style={
-                  theme === "dark" ? { fill: "#f9f9f9" } : { fill: "#252525" }
-                }
-              />
-            </button>
-            <MobileMenu open={openMobile} setOpen={setOpenMobile} />
-          </React.Fragment>
-        )}
+        <DropDownNavItem
+          name={
+            !isAuthenticated || !user
+              ? "Bize Katıl"
+              : isAuthenticated && user
+              ? `${user.userName}`
+              : null
+          }
+          open={open}
+          setOpen={setOpen}
+          isAuthenticated={isAuthenticated}
+        >
+          <DropDownMenu />
+        </DropDownNavItem>
       </div>
     </nav>
   );

@@ -12,6 +12,7 @@ import {
   Button,
   PromptModal,
   BlogContainer,
+  ConditionalSimpleBar,
 } from "../../components";
 import { motion } from "framer-motion";
 import TranslateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
@@ -66,90 +67,92 @@ const ConfirmBlog = () => {
   }, []);
 
   return (
-    <motion.div
-      variants={TranslateDownAndFadeOut}
-      initial="initial"
-      animate="visible"
-      exit="exit"
-      className={`confirm-blog ${theme}`}
-    >
+    <ConditionalSimpleBar>
       <motion.div
-        onClick={() =>
-          history.push({
-            pathname: "/admin",
-            state: { from: location.pathname },
-          })
-        }
-        whileTap={tapping}
-        style={{ cursor: "pointer" }}
-        className="back"
+        variants={TranslateDownAndFadeOut}
+        initial="initial"
+        animate="visible"
+        exit="exit"
+        className={`confirm-blog ${theme}`}
       >
-        <KeyboardArrowLeft /> <p>Ana sayfa</p>
+        <motion.div
+          onClick={() =>
+            history.push({
+              pathname: "/admin",
+              state: { from: location.pathname },
+            })
+          }
+          whileTap={tapping}
+          style={{ cursor: "pointer" }}
+          className="back"
+        >
+          <KeyboardArrowLeft /> <p>Ana sayfa</p>
+        </motion.div>
+
+        <PromptModal
+          isOpen={isPublishModalOpen}
+          setIsOpen={setIsPublishModalOpen}
+          severity="success"
+          icon={<PublishRounded />}
+          title="Yayınlamak istediğine emin misin?"
+          action={
+            () => console.log("Published!")
+            // , blogActions(blog.id)
+          }
+          choices={{ positive: "Yayınla", negative: "Vazgeç" }}
+        >
+          Yazıyı yayınladığında binlerce insana ulaşacaksın.
+        </PromptModal>
+
+        <PromptModal
+          isOpen={isDeleteModalOpen}
+          setIsOpen={setIsDeleteModalOpen}
+          severity="error"
+          icon={<Delete />}
+          title="Silmek istediğine emin misin?"
+          action={
+            () => console.log("Deleted!")
+            // , blogActions(id, "delete")
+          }
+          choices={{ positive: "Sil" }}
+        >
+          Eğer bu yazıyı silersen, ona bir daha ulaşamayacaksın.
+        </PromptModal>
+
+        <BlogContainer>
+          <BlogHeader
+            title={blog.title}
+            subtitle={blog.subtitle}
+            authorName={blog.author}
+            duration={duration}
+            category={blog.category}
+            coverImagePath={blog.coverImagePath}
+          />
+          <ContentWrapper>
+            <Sidebar likes={blog.likes} date={new Date()} />
+            <SanitizedContent content={blog.content} />
+          </ContentWrapper>
+        </BlogContainer>
+
+        <div className="controllers">
+          <Button
+            type="button"
+            leftIcon={<Delete />}
+            onClick={() => setIsDeleteModalOpen(true)}
+          >
+            Sil
+          </Button>
+          <div className="separator"></div>
+          <Button
+            type="button"
+            rightIcon={<PublishRounded />}
+            onClick={() => setIsPublishModalOpen(true)}
+          >
+            Yayınla
+          </Button>
+        </div>
       </motion.div>
-
-      <PromptModal
-        isOpen={isPublishModalOpen}
-        setIsOpen={setIsPublishModalOpen}
-        severity="success"
-        icon={<PublishRounded />}
-        title="Yayınlamak istediğine emin misin?"
-        action={
-          () => console.log("Published!")
-          // , blogActions(blog.id)
-        }
-        choices={{ positive: "Yayınla", negative: "Vazgeç" }}
-      >
-        Yazıyı yayınladığında binlerce insana ulaşacaksın.
-      </PromptModal>
-
-      <PromptModal
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setIsDeleteModalOpen}
-        severity="error"
-        icon={<Delete />}
-        title="Silmek istediğine emin misin?"
-        action={
-          () => console.log("Deleted!")
-          // , blogActions(id, "delete")
-        }
-        choices={{ positive: "Sil" }}
-      >
-        Eğer bu yazıyı silersen, ona bir daha ulaşamayacaksın.
-      </PromptModal>
-
-      <BlogContainer>
-        <BlogHeader
-          title={blog.title}
-          subtitle={blog.subtitle}
-          authorName={blog.author}
-          duration={duration}
-          category={blog.category}
-          coverImagePath={blog.coverImagePath}
-        />
-        <ContentWrapper>
-          <Sidebar likes={blog.likes} date={new Date()} />
-          <SanitizedContent content={blog.content} />
-        </ContentWrapper>
-      </BlogContainer>
-
-      <div className="controllers">
-        <Button
-          type="button"
-          leftIcon={<Delete />}
-          onClick={() => setIsDeleteModalOpen(true)}
-        >
-          Sil
-        </Button>
-        <div className="separator"></div>
-        <Button
-          type="button"
-          rightIcon={<PublishRounded />}
-          onClick={() => setIsPublishModalOpen(true)}
-        >
-          Yayınla
-        </Button>
-      </div>
-    </motion.div>
+    </ConditionalSimpleBar>
   );
 };
 

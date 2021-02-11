@@ -11,6 +11,7 @@ import {
 import { AuthContext } from "../../contexts/AuthContext";
 
 const TopCard = ({
+  casual,
   title,
   subtitle,
   coverImagePath,
@@ -29,7 +30,10 @@ const TopCard = ({
   };
 
   return (
-    <div className={`top-card ${theme}`}>
+    <div
+      className={`top-card ${theme}`}
+      style={casual && { margin: ".7rem 0" }}
+    >
       <Link to={{ pathname: `/blog/${id}` }} className="top">
         <div
           className="cover"

@@ -10,6 +10,7 @@ import {
   ScrollIndicator,
   SnackBar,
   Review,
+  ConditionalSimpleBar,
 } from "../../components";
 import { useCurrentWidth } from "../../hooks";
 import { useForm } from "react-hook-form";
@@ -101,138 +102,282 @@ const AddBlog = () => {
   };
 
   return (
-    <motion.div
-      className={`add-blog ${theme}`}
-      variants={fromRight}
-      initial="initial"
-      animate="visible"
-      exit="exit"
-      onAnimationStart={() => (document.body.style.overflow = "hidden")}
-      onAnimationComplete={() => (document.body.style.overflow = "auto")}
-      style={{ willChange: "transform" }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CSSTransition
-          in={activeMenu === "general"}
-          timeout={500}
-          classNames="form-menu"
-        >
-          <main className="general" ref={general}>
-            <div className="content">
-              <div className="content-main">
-                <div className="indicator">
-                  <Link to="/editor" className="close">
-                    <CloseRounded />
-                  </Link>
-                  <p>
-                    Yazı Oluşturun <span>(Adım 1/4)</span>
-                  </p>
-                </div>
-                {currentWidth < 450 && currentHeight > 650 ? (
-                  <img src={AddIllustration} alt="CONSOLE" />
-                ) : null}
-                <section>
-                  <h1>Yazının genel bilgilerini dolduralım</h1>
-                  <div className="inputs">
-                    <EditorFormInput
-                      name="title"
-                      theme={theme}
-                      register={register}
-                      errors={errors}
-                      leftIcon={<TitleRounded />}
-                      autoComplete="off"
-                      defaultValue={formData.title}
-                    />
-                    <EditorFormInput
-                      name="subtitle"
-                      register={register}
-                      theme={theme}
-                      errors={errors}
-                      leftIcon={<SubtitlesRounded />}
-                      autoComplete="off"
-                      defaultValue={formData.subtitle}
-                    />
-                    <CategoryPicker
-                      theme={theme}
-                      register={register}
-                      inputName="category"
-                      control={control}
-                      defaultValue={formData.category}
-                    />
+    <ConditionalSimpleBar>
+      <motion.div
+        className={`add-blog ${theme}`}
+        variants={fromRight}
+        initial="initial"
+        animate="visible"
+        exit="exit"
+        onAnimationStart={() => (document.body.style.overflow = "hidden")}
+        onAnimationComplete={() => (document.body.style.overflow = "auto")}
+        style={{ willChange: "transform" }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CSSTransition
+            in={activeMenu === "general"}
+            timeout={500}
+            classNames="form-menu"
+          >
+            <main className="general" ref={general}>
+              <div className="content">
+                <div className="content-main">
+                  <div className="indicator">
+                    <Link to="/editor" className="close">
+                      <CloseRounded />
+                    </Link>
+                    <p>
+                      Yazı Oluşturun <span>(Adım 1/4)</span>
+                    </p>
                   </div>
-                  <Button
-                    type="button"
-                    rightIcon={<KeyboardArrowRightRounded />}
-                    onClick={() => {
-                      setFormData({
-                        ...formData,
-                        title: getValues("title"),
-                        subtitle: getValues("subtitle"),
-                        category: getValues("category"),
-                      });
-                      trigger(["title", "subtitle"]);
-                      setTimeout(() => {
-                        if (isEmpty(errors.title) && isEmpty(errors.subtitle))
-                          setActiveMenu("upload-image");
-                      }, 0);
-                    }}
-                  >
-                    <p>Sonraki Adım</p>
-                  </Button>
-                </section>
-              </div>
-            </div>
-            <div className="stripe">{"CONSOLE".repeat(6)}</div>
-            <div className="banner">
-              <img src={AddIllustration} alt="CONSOLE" />
-            </div>
-          </main>
-        </CSSTransition>
-
-        <CSSTransition
-          in={activeMenu === "upload-image"}
-          timeout={500}
-          classNames="form-menu"
-          onEnter={() => {
-            uploadMenu.current.style.display = "flex";
-          }}
-        >
-          <main className="upload-image" ref={uploadMenu}>
-            <div className="content">
-              <div className="content-main">
-                <div className="indicator">
-                  <Link to="/editor" className="close">
-                    <CloseRounded />
-                  </Link>
-                  <p>
-                    Yazı Oluşturun <span>(Adım 2/4)</span>
-                  </p>
-                </div>
-                <section>
-                  <h1>Şimdi bir kapak fotoğrafı belirleyelim</h1>
-                  <div className="input-wrapper">
-                    <FileInput
-                      register={register}
-                      theme={theme}
-                      errors={errors}
-                      name="coverImage"
-                      defaultValue={formData.coverImage}
-                      onInput={(e) => {
-                        trigger("coverImage");
+                  {currentWidth < 450 && currentHeight > 650 ? (
+                    <img src={AddIllustration} alt="CONSOLE" />
+                  ) : null}
+                  <section>
+                    <h1>Yazının genel bilgilerini dolduralım</h1>
+                    <div className="inputs">
+                      <EditorFormInput
+                        name="title"
+                        theme={theme}
+                        register={register}
+                        errors={errors}
+                        leftIcon={<TitleRounded />}
+                        autoComplete="off"
+                        defaultValue={formData.title}
+                      />
+                      <EditorFormInput
+                        name="subtitle"
+                        register={register}
+                        theme={theme}
+                        errors={errors}
+                        leftIcon={<SubtitlesRounded />}
+                        autoComplete="off"
+                        defaultValue={formData.subtitle}
+                      />
+                      <CategoryPicker
+                        theme={theme}
+                        register={register}
+                        inputName="category"
+                        control={control}
+                        defaultValue={formData.category}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      rightIcon={<KeyboardArrowRightRounded />}
+                      onClick={() => {
                         setFormData({
                           ...formData,
-                          coverImage: getValues("coverImage"),
+                          title: getValues("title"),
+                          subtitle: getValues("subtitle"),
+                          category: getValues("category"),
                         });
+                        trigger(["title", "subtitle"]);
+                        setTimeout(() => {
+                          if (isEmpty(errors.title) && isEmpty(errors.subtitle))
+                            setActiveMenu("upload-image");
+                        }, 0);
+                      }}
+                    >
+                      <p>Sonraki Adım</p>
+                    </Button>
+                  </section>
+                </div>
+              </div>
+              <div className="stripe">{"CONSOLE".repeat(6)}</div>
+              <div className="banner">
+                <img src={AddIllustration} alt="CONSOLE" />
+              </div>
+            </main>
+          </CSSTransition>
 
-                        getImagePath(e);
+          <CSSTransition
+            in={activeMenu === "upload-image"}
+            timeout={500}
+            classNames="form-menu"
+            onEnter={() => {
+              uploadMenu.current.style.display = "flex";
+            }}
+          >
+            <main className="upload-image" ref={uploadMenu}>
+              <div className="content">
+                <div className="content-main">
+                  <div className="indicator">
+                    <Link to="/editor" className="close">
+                      <CloseRounded />
+                    </Link>
+                    <p>
+                      Yazı Oluşturun <span>(Adım 2/4)</span>
+                    </p>
+                  </div>
+                  <section>
+                    <h1>Şimdi bir kapak fotoğrafı belirleyelim</h1>
+                    <div className="input-wrapper">
+                      <FileInput
+                        register={register}
+                        theme={theme}
+                        errors={errors}
+                        name="coverImage"
+                        defaultValue={formData.coverImage}
+                        onInput={(e) => {
+                          trigger("coverImage");
+                          setFormData({
+                            ...formData,
+                            coverImage: getValues("coverImage"),
+                          });
+
+                          getImagePath(e);
+                        }}
+                      />
+                    </div>
+                    <div className="controllers">
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setActiveMenu("general");
+                        }}
+                        leftIcon={<KeyboardArrowLeftRounded />}
+                      >
+                        Önceki Adım
+                      </Button>
+
+                      <div className="seperator"></div>
+
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          trigger("coverImage");
+                          setTimeout(() => {
+                            if (
+                              isEmpty(errors.coverImage) &&
+                              formData.coverImage?.length > 0
+                            )
+                              setActiveMenu("content");
+                          }, 0);
+                        }}
+                        rightIcon={<KeyboardArrowRightRounded />}
+                      >
+                        Sonraki Adım
+                      </Button>
+                    </div>
+                  </section>
+                </div>
+              </div>
+              <div
+                className="preview"
+                style={
+                  !errors.coverImage &&
+                  !isEmpty(coverURL) &&
+                  !isEmpty(formData.coverImage?.length > 0)
+                    ? {
+                        background: `url(${coverURL}) no-repeat center / cover`,
+                      }
+                    : {
+                        background: `url(${waveImg}) no-repeat center / cover`,
+                      }
+                }
+              ></div>
+            </main>
+          </CSSTransition>
+          <CSSTransition
+            in={activeMenu === "content"}
+            timeout={250}
+            classNames="form-menu"
+            onEnter={() => {
+              content.current.style.display = "flex";
+            }}
+          >
+            <main className="content" ref={content}>
+              <SnackBar
+                open={contentError}
+                setOpen={setContentError}
+                severity="error"
+              >
+                {errors?.content?.message}
+              </SnackBar>
+              <div className="content-main">
+                <header>
+                  <div className="info">
+                    <aside>
+                      <div className="indicator">
+                        <Link to="/editor" className="close">
+                          <CloseRounded />
+                        </Link>
+                        <p>
+                          Yazı Oluşturun <span>(Adım 3/4)</span>
+                        </p>
+                      </div>
+                      <h1>Şimdi içeriği oluşturma zamanı!</h1>
+                      <ul>
+                        <li>
+                          Başlığı daha önceden belirlediğin için başlığı tekrar
+                          editör içinde yazmana gerek yok.
+                        </li>
+                        <li>Yazının uzunluğu en az 350 kelime olmalı.</li>
+                        <li>
+                          Yazını resimler ekleyerek zenginleştirebilirsin.
+                        </li>
+                        <li>
+                          Yazıyı yazarken "<span>H1, H2, P</span>" gibi türleri
+                          doğru şekilde kullanmaya dikkat et.
+                        </li>
+                      </ul>
+                      <div className="scroller">
+                        <ScrollIndicator
+                          onClick={() =>
+                            textEditor.current.scrollIntoView({
+                              behavior: "smooth",
+                              block: "start",
+                              inline: "nearest",
+                            })
+                          }
+                        />
+                      </div>
+                    </aside>
+                  </div>
+                  <div className="stripe">{"CONSOLE".repeat(6)}</div>
+                  <div className="banner">
+                    <img src={EditorIllustration} alt="CONSOLE" />
+                  </div>
+                </header>
+
+                <div className="how-to" ref={textEditor}>
+                  <p>
+                    Yazı yazarken nelere dikkat etmen gerektiğini merak
+                    ediyorsan
+                    <Link to="/editor/how-to" className="how-to-link">
+                      {" "}
+                      buraya
+                    </Link>{" "}
+                    tıkla.
+                  </p>
+                </div>
+
+                <section>
+                  <div className="editor-wrapper">
+                    <CKEditor
+                      editor={ClassicEditor}
+                      onChange={(e, editor) =>
+                        setValue("content", editor.getData())
+                      }
+                      onBlur={(e, editor) => {
+                        setFormData({ ...formData, content: editor.getData() });
+                        trigger("content");
+                      }}
+                      config={{
+                        ckfinder: {
+                          uploadUrl: "/services/upload",
+                        },
                       }}
                     />
                   </div>
+
                   <div className="controllers">
                     <Button
                       type="button"
                       onClick={() => {
-                        setActiveMenu("general");
+                        content.current.style.display = "none";
+                        setActiveMenu("upload-image");
                       }}
                       leftIcon={<KeyboardArrowLeftRounded />}
                     >
@@ -244,13 +389,29 @@ const AddBlog = () => {
                     <Button
                       type="button"
                       onClick={() => {
-                        trigger("coverImage");
+                        trigger("content");
+                        setFormData({
+                          ...formData,
+                          content: getValues("content"),
+                        });
+                        if (
+                          errors?.content?.type === "min" ||
+                          !formData.content
+                        )
+                          setContentError(true);
                         setTimeout(() => {
-                          if (
-                            isEmpty(errors.coverImage) &&
-                            formData.coverImage?.length > 0
-                          )
-                            setActiveMenu("content");
+                          if (isEmpty(errors.content)) {
+                            setActiveMenu("review");
+                            setTimeout(
+                              () =>
+                                window.scroll({
+                                  top: 0,
+                                  left: 0,
+                                  behavior: "smooth",
+                                }),
+                              0
+                            );
+                          }
                         }, 0);
                       }}
                       rightIcon={<KeyboardArrowRightRounded />}
@@ -260,180 +421,28 @@ const AddBlog = () => {
                   </div>
                 </section>
               </div>
-            </div>
-            <div
-              className="preview"
-              style={
-                !errors.coverImage &&
-                !isEmpty(coverURL) &&
-                !isEmpty(formData.coverImage?.length > 0)
-                  ? {
-                      background: `url(${coverURL}) no-repeat center / cover`,
-                    }
-                  : {
-                      background: `url(${waveImg}) no-repeat center / cover`,
-                    }
-              }
-            ></div>
-          </main>
-        </CSSTransition>
-        <CSSTransition
-          in={activeMenu === "content"}
-          timeout={250}
-          classNames="form-menu"
-          onEnter={() => {
-            content.current.style.display = "flex";
-          }}
-        >
-          <main className="content" ref={content}>
-            <SnackBar
-              open={contentError}
-              setOpen={setContentError}
-              severity="error"
-            >
-              {errors?.content?.message}
-            </SnackBar>
-            <div className="content-main">
-              <header>
-                <div className="info">
-                  <aside>
-                    <div className="indicator">
-                      <Link to="/editor" className="close">
-                        <CloseRounded />
-                      </Link>
-                      <p>
-                        Yazı Oluşturun <span>(Adım 3/4)</span>
-                      </p>
-                    </div>
-                    <h1>Şimdi içeriği oluşturma zamanı!</h1>
-                    <ul>
-                      <li>
-                        Başlığı daha önceden belirlediğin için başlığı tekrar
-                        editör içinde yazmana gerek yok.
-                      </li>
-                      <li>Yazının uzunluğu en az 350 kelime olmalı.</li>
-                      <li>Yazını resimler ekleyerek zenginleştirebilirsin.</li>
-                      <li>
-                        Yazıyı yazarken "<span>H1, H2, P</span>" gibi türleri
-                        doğru şekilde kullanmaya dikkat et.
-                      </li>
-                    </ul>
-                    <div className="scroller">
-                      <ScrollIndicator
-                        onClick={() =>
-                          textEditor.current.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                            inline: "nearest",
-                          })
-                        }
-                      />
-                    </div>
-                  </aside>
-                </div>
-                <div className="stripe">{"CONSOLE".repeat(6)}</div>
-                <div className="banner">
-                  <img src={EditorIllustration} alt="CONSOLE" />
-                </div>
-              </header>
-
-              <div className="how-to" ref={textEditor}>
-                <p>
-                  Yazı yazarken nelere dikkat etmen gerektiğini merak ediyorsan
-                  <Link to="/editor/how-to" className="how-to-link">
-                    {" "}
-                    buraya
-                  </Link>{" "}
-                  tıkla.
-                </p>
-              </div>
-
-              <section>
-                <div className="editor-wrapper">
-                  <CKEditor
-                    editor={ClassicEditor}
-                    onChange={(e, editor) =>
-                      setValue("content", editor.getData())
-                    }
-                    onBlur={(e, editor) => {
-                      setFormData({ ...formData, content: editor.getData() });
-                      trigger("content");
-                    }}
-                    config={{
-                      ckfinder: {
-                        uploadUrl: "/services/upload",
-                      },
-                    }}
-                  />
-                </div>
-
-                <div className="controllers">
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      content.current.style.display = "none";
-                      setActiveMenu("upload-image");
-                    }}
-                    leftIcon={<KeyboardArrowLeftRounded />}
-                  >
-                    Önceki Adım
-                  </Button>
-
-                  <div className="seperator"></div>
-
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      trigger("content");
-                      setFormData({
-                        ...formData,
-                        content: getValues("content"),
-                      });
-                      if (errors?.content?.type === "min" || !formData.content)
-                        setContentError(true);
-                      setTimeout(() => {
-                        if (isEmpty(errors.content)) {
-                          setActiveMenu("review");
-                          setTimeout(
-                            () =>
-                              window.scroll({
-                                top: 0,
-                                left: 0,
-                                behavior: "smooth",
-                              }),
-                            0
-                          );
-                        }
-                      }, 0);
-                    }}
-                    rightIcon={<KeyboardArrowRightRounded />}
-                  >
-                    Sonraki Adım
-                  </Button>
-                </div>
-              </section>
-            </div>
-          </main>
-        </CSSTransition>
-        <CSSTransition
-          in={activeMenu === "review"}
-          timeout={250}
-          classNames="form-menu"
-          onEnter={() => {
-            review.current.style.display = "flex";
-          }}
-        >
-          <Review
-            uploadError={uploadError}
-            setUploadError={setUploadError}
-            formData={formData}
-            coverURL={coverURL}
-            review={review}
-            setActiveMenu={setActiveMenu}
-          />
-        </CSSTransition>
-      </form>
-    </motion.div>
+            </main>
+          </CSSTransition>
+          <CSSTransition
+            in={activeMenu === "review"}
+            timeout={250}
+            classNames="form-menu"
+            onEnter={() => {
+              review.current.style.display = "flex";
+            }}
+          >
+            <Review
+              uploadError={uploadError}
+              setUploadError={setUploadError}
+              formData={formData}
+              coverURL={coverURL}
+              review={review}
+              setActiveMenu={setActiveMenu}
+            />
+          </CSSTransition>
+        </form>
+      </motion.div>
+    </ConditionalSimpleBar>
   );
 };
 

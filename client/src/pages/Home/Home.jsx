@@ -1,14 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import {
-  NavBar,
   Carousel,
   Slide,
   TopCard,
   HorizontalScroll,
   CategoryCard,
-  HomeBlogCard,
   AuthModal,
+  ConditionalSimpleBar,
+  Preloader,
+  ResponsiveNavBar,
 } from "../../components";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { ThemeContext } from "../../contexts/ThemeContext";
@@ -17,116 +18,160 @@ import "./Home.scss";
 
 import fakeData from "../../fakeData";
 import { CategoryContext } from "../../contexts/CategoryContext";
+import { useCurrentWidth } from "../../hooks";
+
+const MobileSearch = lazy(() =>
+  import("../../components/MobileSearch/MobileSearch")
+);
+
+const HomeBlogCard = lazy(() =>
+  import("../../components/HomeBlogCard/HomeBlogCard")
+);
 
 const Home = () => {
   const { theme } = useContext(ThemeContext);
   const categories = useContext(CategoryContext);
 
-  const [authModal, setAuthModal] = useState(false);
+  const [width] = useCurrentWidth();
 
+  const [authModal, setAuthModal] = useState(false);
   const [data, setData] = useState([]);
   const [topBlogs, setTopBlogs] = useState([]);
 
   useEffect(() => {
     setData(fakeData);
     setTopBlogs(fakeData.slice(0, 3));
-  }, []); // FetchData and setTopBlogs
+  }, []); // Fetch data and set topBlogs
 
   return (
-    <motion.div
-      variants={translateDownAndFadeOut}
-      initial="initial"
-      animate="visible"
-      exit="exit"
-      className="scroller"
-    >
-      <NavBar />
-      <AuthModal setIsOpen={setAuthModal} isOpen={authModal} />
-      <div className={`home ${theme}`}>
-        <section>
-          <div className="grid-container">
-            <div className="carousel-wrapper">
-              <Carousel swipeable>
-                {data.slice(0, 4).map((blog, i) => (
-                  <Slide
-                    key={i}
-                    coverImagePath={blog.coverImagePath}
-                    category={blog.category}
-                    title={blog.title}
-                    subtitle={blog.subtitle}
-                    id={blog.id}
-                  />
-                ))}
-              </Carousel>
-            </div>
-            <div className="top-blogs">
-              <header>
-                <h1 className={theme}>
-                  <span>En çok okunanlar</span>
-                </h1>
-              </header>
-              <div className="top-blog-grid">
-                {topBlogs.map(
-                  ({ title, subtitle, coverImagePath, author, id, views }) => (
-                    <TopCard
-                      title={title}
-                      subtitle={subtitle}
-                      coverImagePath={coverImagePath}
-                      author={author}
-                      views={views}
-                      id={id}
-                      key={id}
-                      setAuthModal={setAuthModal}
+    <ConditionalSimpleBar>
+      <motion.div
+        variants={translateDownAndFadeOut}
+        initial="initial"
+        animate="visible"
+        exit="exit"
+        className="main-home-container"
+      >
+        <ResponsiveNavBar />
+        <AuthModal setIsOpen={setAuthModal} isOpen={authModal} />
+
+        <div className={`home ${theme}`}>
+          <section>
+            <Suspense fallback={<Preloader />}>
+              {width < 600 && <MobileSearch />}
+            </Suspense>
+
+            <div className="grid-container">
+              <div className="carousel-wrapper">
+                <Carousel swipeable>
+                  {data.slice(0, 4).map((blog, i) => (
+                    <Slide
+                      key={i}
+                      coverImagePath={blog.coverImagePath}
+                      category={blog.category}
+                      title={blog.title}
+                      subtitle={blog.subtitle}
+                      id={blog.id}
                     />
-                  )
-                )}
+                  ))}
+                </Carousel>
               </div>
-            </div>
-            <div className="categories">
-              <header>
-                <h4>Kategoriler</h4>
-              </header>
-              <HorizontalScroll>
-                {categories.map((category, i) => (
-                  <CategoryCard key={i} index={i} category={category} />
-                ))}
-              </HorizontalScroll>
-            </div>
-            <div className="casual-blogs">
-              <div className="blogs-container">
-                {data.map(
-                  ({
-                    title,
-                    subtitle,
-                    coverImagePath,
-                    category,
-                    views,
-                    id,
-                    author,
-                    createdAt,
-                  }) => (
-                    <HomeBlogCard
-                      key={id}
-                      title={title}
-                      subtitle={subtitle}
-                      coverImagePath={coverImagePath}
+              <div className="top-blogs">
+                <header>
+                  <h1 className={theme}>
+                    <span>En çok okunanlar</span>
+                  </h1>
+                </header>
+                <div className="top-blog-grid">
+                  {topBlogs.map(
+                    ({
+                      title,
+                      subtitle,
+                      coverImagePath,
+                      author,
+                      id,
+                      views,
+                    }) => (
+                      <TopCard
+                        title={title}
+                        subtitle={subtitle}
+                        coverImagePath={coverImagePath}
+                        author={author}
+                        views={views}
+                        id={id}
+                        key={id}
+                        setAuthModal={setAuthModal}
+                      />
+                    )
+                  )}
+                </div>
+              </div>
+              <div className="categories">
+                <header>
+                  <h4>Kategoriler</h4>
+                </header>
+                <HorizontalScroll>
+                  {categories.map((category, i) => (
+                    <CategoryCard
+                      width={width}
+                      key={i}
+                      index={i}
                       category={category}
-                      views={views}
-                      id={id}
-                      author={author}
-                      createdAt={createdAt}
-                      setAuthModal={setAuthModal}
                     />
-                  )
-                )}
+                  ))}
+                </HorizontalScroll>
               </div>
-              <div className="posibly-ads"></div>
+              <div className="casual-blogs">
+                <div className="blogs-container">
+                  <Suspense fallback={<Preloader />}>
+                    {data.map(
+                      ({
+                        title,
+                        subtitle,
+                        coverImagePath,
+                        category,
+                        views,
+                        id,
+                        author,
+                        createdAt,
+                      }) =>
+                        width > 600 ? (
+                          <HomeBlogCard
+                            key={id}
+                            title={title}
+                            subtitle={subtitle}
+                            coverImagePath={coverImagePath}
+                            category={category}
+                            views={views}
+                            id={id}
+                            author={author}
+                            createdAt={createdAt}
+                            setAuthModal={setAuthModal}
+                          />
+                        ) : (
+                          <TopCard
+                            casual
+                            key={id}
+                            title={title}
+                            subtitle={subtitle}
+                            coverImagePath={coverImagePath}
+                            views={views}
+                            id={id}
+                            author={author}
+                            setAuthModal={setAuthModal}
+                          />
+                        )
+                    )}
+                  </Suspense>
+                </div>
+                <div className="posibly-ads"></div>
+              </div>
             </div>
-          </div>
-          <footer></footer>
-        </section>
-      </div>
-    </motion.div>
+            <footer></footer>
+          </section>
+        </div>
+      </motion.div>
+    </ConditionalSimpleBar>
   );
 };
 

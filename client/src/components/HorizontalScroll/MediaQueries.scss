@@ -1,0 +1,9 @@
+@media screen and (max-width: 600px) {
+  .horizontal-scroll {
+    background-color: unset !important;
+
+    .main-horizontal-container {
+      padding: 0;
+    }
+  }
+}

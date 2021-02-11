@@ -1,18 +1,21 @@
 import "./CategoryCard.scss";
 import { motion } from "framer-motion";
 import { useHistory } from "react-router-dom";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
-const CategoryCard = ({ category: { name, path, icon, gradient } }) => {
+const CategoryCard = ({ category: { name, path, icon, gradient }, width }) => {
   const history = useHistory();
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <div className={`category-card`}>
+    <div className={`category-card ${theme}`}>
       <motion.div
         className="main-category-content"
         onClick={() => history.push({ pathname: `/category/${path}` })}
       >
         <motion.div
-          whileHover={{ y: -5 }}
+          whileHover={width > 600 && { y: -5 }}
           className="icon"
           style={{ background: gradient }}
         >

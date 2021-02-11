@@ -1,0 +1,51 @@
+@import "../../scss/Variables.scss";
+
+@media screen and (max-width: 600px) {
+  .category-card {
+    min-width: unset !important;
+    padding: 0 0.5rem;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.light {
+      .main-category-content {
+        background-color: white;
+      }
+    }
+
+    &.dark {
+      .main-category-content {
+        background-color: $dark-secondary-bg;
+      }
+    }
+
+    .main-category-content {
+      flex-direction: row;
+      box-sizing: content-box;
+      padding: 0.5rem;
+      padding-right: 1rem;
+      border-radius: 0.7rem;
+
+      .icon {
+        min-width: 2.5rem;
+        height: 2.5rem;
+        width: 2.5rem;
+        min-height: 2.5rem;
+        border-radius: 0.5rem;
+
+        .icon-holder {
+          width: 55% !important;
+          height: 55% !important;
+        }
+      }
+
+      p {
+        margin: 0;
+        white-space: nowrap;
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
