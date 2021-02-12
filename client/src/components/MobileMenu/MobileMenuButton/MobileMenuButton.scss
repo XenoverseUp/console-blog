@@ -1,0 +1,40 @@
+.mobile-menu-button {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  padding-right: 1rem;
+
+  main {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      svg {
+        margin-right: 2rem;
+        font-size: 2.5rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    p {
+      font-size: 1.3rem;
+      font-family: "Red Hat Display", sans-serif;
+    }
+  }
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      font-size: 2rem;
+    }
+  }
+}

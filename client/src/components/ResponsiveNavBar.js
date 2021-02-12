@@ -5,12 +5,16 @@ import Preloader from "./Preloader/Preloader";
 const MobileNavBar = lazy(() => import("./MobileNavBar/MobileNavBar"));
 const NavBar = lazy(() => import("./NavBar/NavBar"));
 
-const ResponsiveNavBar = () => {
+const ResponsiveNavBar = ({ blogCover, blogTitle }) => {
   const [width] = useCurrentWidth();
 
   return (
-    <Suspense fallback={<Preloader />}>
-      {width > 600 ? <NavBar /> : <MobileNavBar />}
+    <Suspense fallback="">
+      {width > 600 ? (
+        <NavBar />
+      ) : (
+        <MobileNavBar blogCover={blogCover} blogTitle={blogTitle} />
+      )}
     </Suspense>
   );
 };

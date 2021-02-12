@@ -3,7 +3,13 @@ import { SwipeableDrawer } from "@material-ui/core";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AnimateSharedLayout, motion } from "framer-motion";
 
-const Drawer = ({ children, open, setOpen }) => {
+const Drawer = ({
+  children,
+  open,
+  setOpen,
+  anchor = "right",
+  padding = true,
+}) => {
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const { theme } = useContext(ThemeContext);
 
@@ -16,21 +22,19 @@ const Drawer = ({ children, open, setOpen }) => {
       }}
       disableBackdropTransition={!iOS}
       disableDiscovery={iOS}
-      anchor="right"
+      anchor={anchor}
       className={`custom-drawer ${theme}`}
     >
       <main>
         <AnimateSharedLayout>
-          <motion.div
+          <div
             className="paddingProvider"
             style={{
-              padding: "1rem",
+              padding: padding ? "1rem" : 0,
             }}
-            layout
-            layoutId="comments"
           >
             {children}
-          </motion.div>
+          </div>
         </AnimateSharedLayout>
       </main>
     </SwipeableDrawer>

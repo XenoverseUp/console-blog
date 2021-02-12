@@ -14,10 +14,26 @@
 
   &.light {
     background-color: $light-primary-bg;
+
+    .menu-toggle {
+      .line,
+      .line::after,
+      .line::before {
+        background-color: $light-primary-typo;
+      }
+    }
   }
 
   &.dark {
     background-color: $dark-primary-bg;
+
+    .menu-toggle {
+      .line,
+      .line::after,
+      .line::before {
+        background-color: $dark-primary-typo;
+      }
+    }
   }
 
   .info {
@@ -32,47 +48,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
       img {
         width: 2rem;
+        height: 2rem;
+        object-fit: cover;
         border-radius: 0.5rem;
         margin-right: 0.5rem;
-      }
-    }
-  }
-
-  .menu-toggle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 4rem;
-
-    .line {
-      background-color: $light-primary-typo;
-      height: 0.2rem;
-      width: 1.5rem;
-      margin: 2px 0;
-      position: relative;
-
-      &::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        height: 0.2rem;
-        width: 80%;
-        background-color: $light-primary-typo;
-        bottom: -0.5rem;
-      }
-
-      &::before {
-        content: "";
-        position: absolute;
-        right: 0;
-        height: 0.2rem;
-        width: 125%;
-        background-color: $light-primary-typo;
-        top: -0.5rem;
       }
     }
   }

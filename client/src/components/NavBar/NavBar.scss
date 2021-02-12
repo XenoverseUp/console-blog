@@ -92,25 +92,6 @@ nav.light {
       z-index: 80;
     }
 
-    button.mobile-menu {
-      z-index: 30;
-      outline: none;
-      border: none;
-      background-color: transparent;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-
-      svg {
-        font-size: 2.2rem;
-      }
-
-      &:active {
-        animation: click ease 0.25s;
-      }
-    }
-
     .nav-item {
       display: flex;
       justify-content: center;
@@ -337,25 +318,6 @@ nav.dark {
     button {
       margin-right: 1em;
       z-index: 80;
-    }
-
-    button.mobile-menu {
-      z-index: 30;
-      outline: none;
-      border: none;
-      background-color: transparent;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-
-      svg {
-        font-size: 2.2rem;
-      }
-
-      &:active {
-        animation: click ease 0.25s;
-      }
     }
 
     .nav-item {

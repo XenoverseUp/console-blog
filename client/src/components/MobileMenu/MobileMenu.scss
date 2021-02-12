@@ -1,0 +1,81 @@
+@import "../../scss/Shared.scss";
+@import "../../scss/Variables.scss";
+
+.mobile-menu {
+  overflow-x: hidden;
+  height: 100vh;
+  position: relative;
+
+  .separator {
+    width: 93%;
+    height: 0.01rem;
+    background-color: $light-primary-typo;
+  }
+
+  header {
+    height: 5rem;
+    padding: 1rem;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+
+    svg {
+      font-size: 3rem;
+      margin-right: 0.7rem;
+    }
+
+    h2 {
+      font-weight: 800;
+      letter-spacing: 0.07em;
+    }
+  }
+
+  .user-info {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+
+    .avatar {
+      width: 5rem;
+      height: 5rem;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 100%;
+        border-radius: 1rem;
+      }
+    }
+
+    .user {
+      margin-left: 1rem;
+
+      p {
+        font-family: "Red Hat Display", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  & > main {
+    padding-left: 2rem;
+    width: 100%;
+    max-height: calc(100vh - 14rem);
+    overflow: auto;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

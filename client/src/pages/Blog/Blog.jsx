@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, lazy, Suspense } from "react";
-import { getDuration } from "../../hooks";
+import { getDuration, useCurrentWidth } from "../../hooks";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { motion } from "framer-motion";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut.js";
@@ -27,6 +27,7 @@ const AuthModal = lazy(() => import("../../components/AuthModal/AuthModal"));
 const Blog = () => {
   const { theme } = useContext(ThemeContext);
   const { isAuthenticated } = useContext(AuthContext);
+  const [width] = useCurrentWidth();
 
   const [blog, setBlog] = useState({});
   const [newComments, setNewComments] = useState([]);
@@ -68,7 +69,10 @@ const Blog = () => {
         animate="visible"
         exit="exit"
       >
-        <ResponsiveNavBar />
+        <ResponsiveNavBar
+          blogCover={blog.coverImagePath}
+          blogTitle={blog.title}
+        />
 
         {!isAuthenticated && (
           <Suspense fallback="Loading...">
@@ -76,7 +80,11 @@ const Blog = () => {
           </Suspense>
         )}
 
-        <Drawer open={isCommentOpen} setOpen={setIsCommentOpen}>
+        <Drawer
+          anchor={width > 600 ? "right" : "left"}
+          open={isCommentOpen}
+          setOpen={setIsCommentOpen}
+        >
           <DrawerHeader
             commentLength={blog.comments?.length + newComments.length}
           />
