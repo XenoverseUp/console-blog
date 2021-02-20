@@ -1,32 +1,40 @@
 const router = require("express").Router();
 const passport = require("passport");
-const saveCover = require("../utils/saveCover");
+const multiparty = require("connect-multiparty");
+const { join, extname } = require("path");
+const { rename } = require("fs");
 const validateBlogInput = require("../validation/validateBlogInput");
 
 const Blog = require("../models/Blog");
+
+const multiPartyMiddleWare = multiparty({ uploadDir: "./temp/cover" });
 
 // Send Blog to confirmation
 
 router.post(
   "/addblog",
   passport.authenticate("jwt", { session: false }),
-  (req, res) => {
+  multiPartyMiddleWare,
+  async (req, res) => {
     if (
       req.user.role === "editor" ||
       req.user.role === "admin" ||
       req.user.role === "super-admin"
     ) {
-      let {
-        title,
-        content,
-        category,
-        readingDuration,
-        coverImage,
-        subtitle,
-      } = req.body;
+      let tempFile = req.files.coverImage;
+      let tempPathFile = tempFile.path;
+      const targetPathUrl = join(
+        __dirname,
+        "../uploads/cover/" + tempPathFile.split("\\")[2]
+      );
 
-      readingDuration = parseInt(readingDuration);
+      let coverImagePath;
 
+      const setCoverImagePath = (path) => {
+        coverImagePath = path;
+      };
+
+      let { title, content, category, subtitle } = req.body;
       let { errors, isValid } = validateBlogInput(req.body);
       if (!isValid) return res.status(400).json({ errors, isValid });
 
@@ -35,28 +43,46 @@ router.post(
         subtitle,
         content,
         category,
-        readingDuration,
+        coverImagePath,
       });
-
       newBlog.author = req.user._id;
 
-      saveCover(newBlog, coverImage, res);
-      newBlog.save((err, blog) => {
-        if (err)
-          return res.status(500).json({
-            errors: {
-              internalError: "Ooops! Something has happened...",
-              msgError: true,
-            },
-          });
+      if (
+        [".png", ".jpg", ".jpeg", ".webp"].includes(
+          extname(tempFile.originalFilename).toLowerCase()
+        )
+      ) {
+        rename(tempPathFile, targetPathUrl, (err) => {
+          if (err) {
+            return res.status(500).json({
+              errors: {
+                internalError: "Ooops! Something has happened...",
+                msgError: true,
+              },
+            });
+          }
 
-        return res.status(200).json({
-          blogCreated: `${blog.title} has been published successfully.`,
-          errors: {
-            msgError: false,
-          },
+          setCoverImagePath("/" + tempPathFile.split("\\")[2]);
+          newBlog.coverImagePath = coverImagePath;
+
+          newBlog.save((err, blog) => {
+            if (err)
+              return res.status(500).json({
+                errors: {
+                  internalError: "Ooops! Something has happened...",
+                  msgError: true,
+                },
+              });
+
+            return res.status(200).json({
+              blogCreated: `${blog.title} has been published successfully.`,
+              errors: {
+                msgError: false,
+              },
+            });
+          });
         });
-      });
+      }
     }
   }
 );

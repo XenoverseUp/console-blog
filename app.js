@@ -15,7 +15,8 @@ app.set("port", process.env.PORT || 5000);
 require("./database/mongoose");
 require("./config/passportConfig");
 
-app.use(express.static("uploads"));
+app.use(express.static("uploads/blog"));
+app.use(express.static("uploads/cover"));
 app.use(express.static("build"));
 
 app.use(express.urlencoded({ extended: true }));

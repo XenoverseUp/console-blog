@@ -36,16 +36,12 @@ import fromRight from "../../animations/fromRight";
 
 import isEmpty from "is-empty";
 import waveImg from "../../assets/img/japan-wave.jpg";
+import axios from "axios";
 
 const AddBlog = () => {
   const { theme } = useContext(ThemeContext);
   const [currentWidth, currentHeight] = useCurrentWidth();
   const [activeMenu, setActiveMenu] = useState("general");
-  /* ["general" {title, subtitle, category}, done (●'◡'●)
-      "upload-image" {coverImage}, done (●'◡'●)
-      "content" {content},  done (●'◡'●)
-      "review" {submission} ]  done (●'◡'●)    */
-
   const [coverURL, setCoverURL] = useState(null);
   const [contentError, setContentError] = useState(false);
   const [uploadError, setUploadError] = useState(false);
@@ -92,12 +88,25 @@ const AddBlog = () => {
     register("content");
   }, []);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async ({
+    title,
+    subtitle,
+    category,
+    coverImage,
+    content,
+  }) => {
+    let formData = new FormData();
+    formData.append("title", title);
+    formData.append("subtitle", subtitle);
+    formData.append("category", category);
+    formData.append("coverImage", coverImage[0]);
+    formData.append("content", content);
 
-    // let res = EditorServices.addBlog(data);
+    EditorServices.addBlog(formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
-    // if (res.errors.msgError) setUploadError(true);
+    // if (msgError) setUploadError(true);
     // else history.push("/editor");
   };
 

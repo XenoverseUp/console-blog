@@ -13,20 +13,8 @@ const BlogSchema = new Schema({
     type: String,
     required: true,
   },
-  coverImage: {
-    type: Buffer,
-    required: true,
-  },
-  coverImageType: {
-    type: String,
-    required: true,
-  },
   category: {
     type: String,
-    required: true,
-  },
-  readingDuration: {
-    type: Number,
     required: true,
   },
   author: {
@@ -36,6 +24,10 @@ const BlogSchema = new Schema({
   isPublished: {
     type: Boolean,
     default: false,
+  },
+  coverImagePath: {
+    type: String,
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -55,15 +47,6 @@ const BlogSchema = new Schema({
       ref: "Comment",
     },
   ],
-});
-
-BlogSchema.virtual("coverImagePath").get(function () {
-  if (this.coverImageType !== null && this.coverImage !== null) {
-    const path = `data:${
-      this.coverImageType
-    };charset=utf-8;base64,${this.coverImage.toString("base64")}`;
-    return path;
-  }
 });
 
 module.exports = new model("Blog", BlogSchema);

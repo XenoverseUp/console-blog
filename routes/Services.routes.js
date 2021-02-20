@@ -4,7 +4,7 @@ const multiparty = require("connect-multiparty");
 const { join, extname } = require("path");
 const { rename } = require("fs");
 
-const multiPartyMiddleWare = multiparty({ uploadDir: "./temp" });
+const multiPartyMiddleWare = multiparty({ uploadDir: "./temp/blog" });
 
 router.post(
   "/upload",
@@ -21,19 +21,18 @@ router.post(
 
       const targetPathUrl = join(
         __dirname,
-        "../uploads/" + TempPathFile.split("\\")[1]
+        "../uploads/blog/" + TempPathFile.split("\\")[2]
       );
 
       if (
-        extname(TempFile.originalFilename).toLowerCase() === ".png" ||
-        extname(TempFile.originalFilename).toLowerCase() === ".jpg" ||
-        extname(TempFile.originalFilename).toLowerCase() === ".jpeg" ||
-        extname(TempFile.originalFilename).toLowerCase() === ".webp"
+        [".png", ".jpg", ".jpeg", ".webp"].includes(
+          extname(TempFile.originalFilename).toLowerCase()
+        )
       ) {
         rename(TempPathFile, targetPathUrl, (err) => {
           res.status(200).json({
             uploaded: true,
-            url: `/${TempPathFile.split("\\")[1]}`,
+            url: `/${TempPathFile.split("\\")[2]}`,
           });
 
           if (err) return console.log(err);

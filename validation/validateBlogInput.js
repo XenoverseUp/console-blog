@@ -34,13 +34,13 @@ module.exports = ({ title, subtitle, category, readingDuration, content }) => {
     errors.msgError = true;
   }
 
-  if (readingDuration === 0) {
-    errors.readingDuration = "Reading duration cannot be 0 minutes.";
-    errors.category = true;
-  } else if (readingDuration === null) {
-    errors.readingDuration = "Reading duration field is required.";
-    errors.category = true;
-  }
+  // if (readingDuration === 0) {
+  //   errors.readingDuration = "Reading duration cannot be 0 minutes.";
+  //   errors.category = true;
+  // } else if (readingDuration === null) {
+  //   errors.readingDuration = "Reading duration field is required.";
+  //   errors.category = true;
+  // }
 
   return {
     errors,
