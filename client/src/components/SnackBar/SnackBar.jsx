@@ -1,58 +1,71 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import PropTypes from "prop-types";
 import { CheckCircle, Error, Warning, CloseRounded } from "@material-ui/icons";
+import { motion, AnimatePresence } from "framer-motion";
 import "./SnackBar.scss";
+
+const transition = {
+  type: "spring",
+  stiffness: 250,
+  damping: 10,
+  mass: 0.5,
+};
+
+const variants = {
+  initial: {
+    opacity: 0,
+    scale: 0,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition,
+  },
+  exit: {
+    opacity: 0,
+    scale: 0,
+    transition,
+  },
+};
 
 const SnackBar = ({ children, severity, open, setOpen, duration = 8000 }) => {
   const { theme } = useContext(ThemeContext);
-  const mainRef = useRef(null);
 
-  const setExitAnimation = () => {
-    if (mainRef && mainRef.current) {
-      mainRef.current.style.animation =
-        "exit 0.25s cubic-bezier(0.75, -0.5, 0, 1.75)";
+  useEffect(() => {
+    if (open) {
+      var timeout = setTimeout(() => setOpen(false), duration);
     }
-  };
 
-  if (open) {
-    setTimeout(() => {
-      setExitAnimation();
-      setTimeout(() => setOpen(false), 250);
-    }, duration);
-  }
-
-  if (!open) return null;
+    return () => clearTimeout(timeout);
+  }, [open]);
 
   return (
-    <div className={`snackbar ${severity} ${theme}`} ref={mainRef}>
-      <div className="icon">
-        {severity === "error" ? (
-          <Error />
-        ) : severity === "warning" ? (
-          <Warning />
-        ) : (
-          <CheckCircle />
-        )}
-      </div>
-      <p>{children}</p>
-      <div
-        className="close"
-        onClick={() => {
-          setExitAnimation();
-          setTimeout(() => setOpen(false), 250);
-        }}
-      >
-        <CloseRounded />
-      </div>
-    </div>
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial="initial"
+          animate="visible"
+          exit="exit"
+          variants={variants}
+          className={`snackbar ${severity} ${theme}`}
+        >
+          <div className="icon">
+            {severity === "error" ? (
+              <Error />
+            ) : severity === "warning" ? (
+              <Warning />
+            ) : (
+              <CheckCircle />
+            )}
+          </div>
+          <p>{children}</p>
+          <div className="close" onClick={() => setOpen(false)}>
+            <CloseRounded />
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
-};
-
-SnackBar.propTypes = {
-  severity: PropTypes.oneOf(["success", "error", "warning"]),
-  duration: PropTypes.number,
-  open: PropTypes.bool,
 };
 
 export default SnackBar;

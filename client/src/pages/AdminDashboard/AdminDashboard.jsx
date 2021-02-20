@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, lazy, Suspense } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { useScroll } from "../../hooks";
+import { useCurrentWidth, useScroll } from "../../hooks";
 import AdminServices from "../../services/AdminServices";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -26,6 +26,9 @@ import avatar from "../../assets/img/admin0.png";
 
 const EmptyLight = lazy(() => import("./Lazies/EmptyLight"));
 const EmptyDark = lazy(() => import("./Lazies/EmptyDark"));
+const HorizontalScroll = lazy(() =>
+  import("../../components/HorizontalScroll/HorizontalScroll")
+);
 
 // BreakPoint : 1050px;
 
@@ -35,6 +38,7 @@ const AdminDashboard = () => {
 
   const history = useHistory();
   const location = useLocation();
+  const [width] = useCurrentWidth();
 
   const [pendingBlogs, setPendingBlogs] = useState([]);
 
@@ -58,88 +62,91 @@ const AdminDashboard = () => {
         <ResponsiveNavBar />
         <div className={`admin-dashboard ${theme}`}>
           <div className="container">
-            <div className="sidebar">
-              <motion.div
-                variants={card(1)}
-                initial="initial"
-                animate="visible"
-                className="box writing"
-              >
-                <article>
-                  <p>Yazı</p>
-                  <h1>103</h1>
-                </article>
-                <div className="icon-container">
-                  <div className="outer">
-                    <MenuBookRounded />
+            {width > 1050 && (
+              <div className="sidebar">
+                <motion.div
+                  variants={card(1)}
+                  initial="initial"
+                  animate="visible"
+                  className="box writing"
+                >
+                  <article>
+                    <p>Yazı</p>
+                    <h1>103</h1>
+                  </article>
+                  <div className="icon-container">
+                    <div className="outer">
+                      <MenuBookRounded />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={card(2)}
-                initial="initial"
-                animate="visible"
-                className="box views"
-              >
-                <article>
-                  <p>Görüntülenme</p>
-                  <h1>6025</h1>
-                </article>
-                <div className="icon-container">
-                  <div className="outer">
-                    <Views />
+                </motion.div>
+                <motion.div
+                  variants={card(2)}
+                  initial="initial"
+                  animate="visible"
+                  className="box views"
+                >
+                  <article>
+                    <p>Görüntülenme</p>
+                    <h1>6025</h1>
+                  </article>
+                  <div className="icon-container">
+                    <div className="outer">
+                      <Views />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={card(3)}
-                initial="initial"
-                animate="visible"
-                className="box likes"
-              >
-                <article>
-                  <p>Beğeni</p>
-                  <h1>1523</h1>
-                </article>
-                <div className="icon-container">
-                  <div className="outer">
-                    <FavoriteRounded />
+                </motion.div>
+                <motion.div
+                  variants={card(3)}
+                  initial="initial"
+                  animate="visible"
+                  className="box likes"
+                >
+                  <article>
+                    <p>Beğeni</p>
+                    <h1>1523</h1>
+                  </article>
+                  <div className="icon-container">
+                    <div className="outer">
+                      <FavoriteRounded />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={card(4)}
-                initial="initial"
-                animate="visible"
-                className="box editors"
-              >
-                <article>
-                  <p>Editör</p>
-                  <h1>773</h1>
-                </article>
-                <div className="icon-container">
-                  <div className="outer">
-                    <EditRounded />
+                </motion.div>
+                <motion.div
+                  variants={card(4)}
+                  initial="initial"
+                  animate="visible"
+                  className="box editors"
+                >
+                  <article>
+                    <p>Editör</p>
+                    <h1>773</h1>
+                  </article>
+                  <div className="icon-container">
+                    <div className="outer">
+                      <EditRounded />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-              <motion.div
-                variants={card(5)}
-                initial="initial"
-                animate="visible"
-                className="box users"
-              >
-                <article>
-                  <p>Kullanıcı</p>
-                  <h1>602</h1>
-                </article>
-                <div className="icon-container">
-                  <div className="outer">
-                    <User />
+                </motion.div>
+                <motion.div
+                  variants={card(5)}
+                  initial="initial"
+                  animate="visible"
+                  className="box users"
+                >
+                  <article>
+                    <p>Kullanıcı</p>
+                    <h1>602</h1>
+                  </article>
+                  <div className="icon-container">
+                    <div className="outer">
+                      <User />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            </div>
+                </motion.div>
+              </div>
+            )}
+
             <div className="main">
               <motion.div
                 variants={card(0)}
@@ -212,6 +219,100 @@ const AdminDashboard = () => {
                 </motion.div>
               )}
 
+              {width <= 1050 && (
+                <HorizontalScroll>
+                  <div
+                    className="sidebar"
+                    style={{
+                      flexDirection: "row",
+                      width: "auto",
+                      paddingRight: 0,
+                    }}
+                  >
+                    <motion.div
+                      variants={card(1)}
+                      initial="initial"
+                      animate="visible"
+                      className="box writing"
+                    >
+                      <article>
+                        <p>Yazı</p>
+                        <h1>103</h1>
+                      </article>
+                      <div className="icon-container">
+                        <div className="outer">
+                          <MenuBookRounded />
+                        </div>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      variants={card(2)}
+                      initial="initial"
+                      animate="visible"
+                      className="box views"
+                    >
+                      <article>
+                        <p>Görüntülenme</p>
+                        <h1>6025</h1>
+                      </article>
+                      <div className="icon-container">
+                        <div className="outer">
+                          <Views />
+                        </div>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      variants={card(3)}
+                      initial="initial"
+                      animate="visible"
+                      className="box likes"
+                    >
+                      <article>
+                        <p>Beğeni</p>
+                        <h1>1523</h1>
+                      </article>
+                      <div className="icon-container">
+                        <div className="outer">
+                          <FavoriteRounded />
+                        </div>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      variants={card(4)}
+                      initial="initial"
+                      animate="visible"
+                      className="box editors"
+                    >
+                      <article>
+                        <p>Editör</p>
+                        <h1>773</h1>
+                      </article>
+                      <div className="icon-container">
+                        <div className="outer">
+                          <EditRounded />
+                        </div>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      variants={card(5)}
+                      initial="initial"
+                      animate="visible"
+                      className="box users"
+                    >
+                      <article>
+                        <p>Kullanıcı</p>
+                        <h1>602</h1>
+                      </article>
+                      <div className="icon-container">
+                        <div className="outer">
+                          <User />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </HorizontalScroll>
+              )}
+
               {pendingBlogs.length === 0 ? (
                 <Suspense fallback="Loading...">
                   <motion.div
@@ -229,10 +330,7 @@ const AdminDashboard = () => {
                   </motion.div>
                 </Suspense>
               ) : (
-                <motion.div
-                  variants={user.role === "super-admin" ? card(7) : card(6)}
-                  className="pending"
-                >
+                <motion.div variants={card(6)} className="pending">
                   <header>
                     <h1>
                       Bekleyen Yazılar <span>{pendingBlogs.length}</span>

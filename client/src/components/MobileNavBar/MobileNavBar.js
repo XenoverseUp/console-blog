@@ -4,7 +4,6 @@ import { useHistory, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import MobileMenu from "../MobileMenu/MobileMenu";
-import Preloader from "../Preloader/Preloader";
 import MenuToggle from "./MenuToggle/MenuToggle";
 import "./MobileNavBar.scss";
 
@@ -20,6 +19,7 @@ const IMG8 = lazy(() => import("./Lazies/IMG8"));
 const IMG9 = lazy(() => import("./Lazies/IMG9"));
 const IMG10 = lazy(() => import("./Lazies/IMG10"));
 const IMG11 = lazy(() => import("./Lazies/IMG11"));
+const IMG12 = lazy(() => import("./Lazies/IMG12"));
 
 const MobileNavBar = ({ blogCover, blogTitle }) => {
   const { user, isAuthenticated } = useContext(AuthContext);
@@ -84,21 +84,31 @@ const MobileNavBar = ({ blogCover, blogTitle }) => {
                 <IMG />
               </Suspense>
             </div>
-            <div className="name">Merhaba, {user.userName.split(" ")[0]}!</div>
+            <div className="name">
+              {location.pathname === "/editor"
+                ? "Editör Paneli"
+                : location.pathname === "/admin"
+                ? "Admin Paneli"
+                : `Merhaba, ${user.userName.split(" ")[0]}!`}
+            </div>
           </>
         ) : (
           <>
             <div className="avatar">
               <Suspense fallback="">
-                <IMG />
+                <IMG12 />
               </Suspense>
             </div>
-            <div className="name">CONSOLE</div>
+            <div className="name">Hey, Merhaba!</div>
           </>
         )}
       </div>
       <MenuToggle isOpen={isOpen} setIsOpen={setIsOpen} />
-      <MobileMenu IMG={IMG} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <MobileMenu
+        IMG={isAuthenticated ? IMG : IMG12}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </div>
   );
 };

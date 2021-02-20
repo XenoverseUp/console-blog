@@ -51,7 +51,7 @@ const Form = ({ id, setNewComments, newComments }) => {
             id="comment"
             placeholder="✎  Bir yorum ekle"
           />
-          <motion.div layout layoutId="controllers" className="controllers">
+          <motion.div layout className="controllers">
             <AnimatePresence exitBeforeEnter>
               {validity.test(content) && (
                 <motion.button

@@ -13,7 +13,6 @@
   padding-right: 0.55rem;
   z-index: 150;
   border-radius: 0.5rem;
-  animation: enter 0.25s cubic-bezier(0.75, -0.5, 0, 1.75);
 
   &.success {
     background-color: $success-color;
@@ -82,28 +81,6 @@
       box-sizing: content-box;
       transition: ease 0.15s transform;
     }
-  }
-}
-
-@keyframes enter {
-  from {
-    opacity: 0;
-    transform: scale(0.75) translateY(2rem);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes exit {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.75) translateY(2rem);
   }
 }
 

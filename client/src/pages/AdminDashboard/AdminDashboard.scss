@@ -29,10 +29,9 @@
 
       .box {
         width: 100%;
+
         height: 7.1rem;
-
         background-color: white;
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -609,3 +608,5 @@
     }
   }
 }
+
+@import "./MediaQueries.scss";

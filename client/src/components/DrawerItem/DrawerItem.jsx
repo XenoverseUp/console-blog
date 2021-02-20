@@ -23,12 +23,7 @@ const DrawerItem = ({ postedBy, createdAt, children, animated }) => {
       <main>{children}</main>
     </div>
   ) : (
-    <motion.div
-      variants={buttonVariants}
-      initial="initial"
-      animate="visible"
-      className={`drawer-item ${theme}`}
-    >
+    <motion.div layout className={`drawer-item ${theme}`}>
       <header>
         <Face />
         <div className="comment-info">

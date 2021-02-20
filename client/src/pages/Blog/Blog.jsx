@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState, lazy, Suspense } from "react";
 import { getDuration, useCurrentWidth } from "../../hooks";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { motion } from "framer-motion";
+import { AnimateSharedLayout, motion } from "framer-motion";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut.js";
 import "./Blog.scss";
 import {
@@ -85,45 +85,48 @@ const Blog = () => {
           open={isCommentOpen}
           setOpen={setIsCommentOpen}
         >
-          <DrawerHeader
-            commentLength={blog.comments?.length + newComments.length}
-          />
-          <CommentPoster
-            setNewComments={setNewComments}
-            newComments={newComments}
-            setDrawerState={setIsCommentOpen}
-            id={blog.id}
-          />
-          <motion.div layout layoutId="container">
-            <motion.div
-              layout
-              layoutId="containerV2"
-              style={{ display: "flex", flexDirection: "column-reverse" }}
-            >
-              {newComments.map((comment, i) => (
-                <DrawerItem
-                  animated
-                  key={blog.title + comment?.postedBy + i + "new"}
-                  postedBy={comment?.postedBy}
-                  createdAt={comment?.createdAt}
-                >
-                  {comment?.content}
-                </DrawerItem>
-              ))}
-            </motion.div>
+          <AnimateSharedLayout>
+            <DrawerHeader
+              commentLength={blog.comments?.length + newComments.length}
+            />
+            <CommentPoster
+              setNewComments={setNewComments}
+              newComments={newComments}
+              setDrawerState={setIsCommentOpen}
+              id={blog.id}
+            />
+            <motion.div>
+              <motion.div
+                style={{ display: "flex", flexDirection: "column-reverse" }}
+              >
+                {newComments.map((comment, i) => (
+                  <DrawerItem
+                    animated
+                    key={blog.title + comment?.postedBy + i + "new"}
+                    postedBy={comment?.postedBy}
+                    createdAt={comment?.createdAt}
+                  >
+                    {comment?.content}
+                  </DrawerItem>
+                ))}
+              </motion.div>
 
-            <div style={{ display: "flex", flexDirection: "column-reverse" }}>
-              {blog.comments?.map((comment, i) => (
-                <DrawerItem
-                  key={blog.title + comment?.postedBy + i}
-                  postedBy={comment?.postedBy}
-                  createdAt={comment?.createdAt}
-                >
-                  {comment?.content}
-                </DrawerItem>
-              ))}
-            </div>
-          </motion.div>
+              <motion.div
+                layout
+                style={{ display: "flex", flexDirection: "column-reverse" }}
+              >
+                {blog.comments?.map((comment, i) => (
+                  <DrawerItem
+                    key={blog.title + comment?.postedBy + i}
+                    postedBy={comment?.postedBy}
+                    createdAt={comment?.createdAt}
+                  >
+                    {comment?.content}
+                  </DrawerItem>
+                ))}
+              </motion.div>
+            </motion.div>
+          </AnimateSharedLayout>
         </Drawer>
 
         <BlogContainer>

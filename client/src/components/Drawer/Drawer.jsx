@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { SwipeableDrawer } from "@material-ui/core";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { AnimateSharedLayout, motion } from "framer-motion";
+import ConditionalSimpleBar from "../ConditionalSimpleBar/ConditionalSimpleBar";
 
 const Drawer = ({
   children,
@@ -25,8 +25,8 @@ const Drawer = ({
       anchor={anchor}
       className={`custom-drawer ${theme}`}
     >
-      <main>
-        <AnimateSharedLayout>
+      <ConditionalSimpleBar>
+        <main>
           <div
             className="paddingProvider"
             style={{
@@ -35,8 +35,8 @@ const Drawer = ({
           >
             {children}
           </div>
-        </AnimateSharedLayout>
-      </main>
+        </main>
+      </ConditionalSimpleBar>
     </SwipeableDrawer>
   );
 };
