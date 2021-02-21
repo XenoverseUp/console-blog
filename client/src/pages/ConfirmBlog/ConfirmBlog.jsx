@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { useScroll } from "../../hooks";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import AdminServices from "../../services/AdminServices";
@@ -26,6 +26,7 @@ const ConfirmBlog = () => {
   const { theme } = useContext(ThemeContext);
   const location = useLocation();
   const history = useHistory();
+  const params = useParams();
 
   const [blog, setBlog] = useState({});
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
@@ -62,8 +63,12 @@ const ConfirmBlog = () => {
   };
 
   useEffect(() => {
-    // fetchBlogData
-    setBlog(fakeData);
+    AdminServices.getSingleUnpublishedBlog(params.id)
+      .then((res) => {
+        const { blog } = res.data;
+        setBlog(blog);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -95,10 +100,7 @@ const ConfirmBlog = () => {
           severity="success"
           icon={<PublishRounded />}
           title="Yayınlamak istediğine emin misin?"
-          action={
-            () => console.log("Published!")
-            // , blogActions(blog.id)
-          }
+          action={() => blogActions(blog._id)}
           choices={{ positive: "Yayınla", negative: "Vazgeç" }}
         >
           Yazıyı yayınladığında binlerce insana ulaşacaksın.
@@ -110,10 +112,7 @@ const ConfirmBlog = () => {
           severity="error"
           icon={<Delete />}
           title="Silmek istediğine emin misin?"
-          action={
-            () => console.log("Deleted!")
-            // , blogActions(id, "delete")
-          }
+          action={() => blogActions(blog._id, "delete")}
           choices={{ positive: "Sil" }}
         >
           Eğer bu yazıyı silersen, ona bir daha ulaşamayacaksın.
@@ -123,7 +122,7 @@ const ConfirmBlog = () => {
           <BlogHeader
             title={blog.title}
             subtitle={blog.subtitle}
-            authorName={blog.author}
+            authorName={blog.author?.userName}
             duration={duration}
             category={blog.category}
             coverImagePath={blog.coverImagePath}

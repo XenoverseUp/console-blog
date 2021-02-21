@@ -5,7 +5,7 @@ const SUPPORTED_FILE_FORMATS = [
   "image/jpg",
   "image/jpeg",
   "image/png",
-  "image/gif",
+  "image/webp",
 ];
 
 export const registerValidationSchema = object().shape({

@@ -1,33 +1,27 @@
-const getAllUnpublishedBlogs = async () => {
-  const res = await fetch("/admin/unconfirmedBlogs");
+import axios from "axios";
 
-  const jsonData = await res.json();
-  return jsonData;
+const getAllUnpublishedBlogs = async () => {
+  const res = await axios.get("/admin/unconfirmed");
+
+  return res;
 };
 
 const getSingleUnpublishedBlog = async (blogID) => {
-  const res = await fetch(`/admin/blogs/${blogID}`);
+  const res = await axios.get(`/admin/blogs/${blogID}`);
 
-  const jsonData = await res.json();
-  return jsonData;
+  return res;
 };
 
 const confirmBlog = async (blogID) => {
-  const res = await fetch(`/admin/${blogID}/confirmBlog`, {
-    method: "PUT",
-  });
+  const res = await axios.put(`/admin/${blogID}/confirmBlog`);
 
-  const jsonData = await res.json();
-  return jsonData;
+  return res;
 };
 
 const deleteBlog = async (blogID) => {
-  const res = await fetch(`/admin/${blogID}/deleteBlog`, {
-    method: "DELETE",
-  });
+  const res = await axios.delete(`/admin/${blogID}/deleteBlog`);
 
-  const jsonData = await res.json();
-  return jsonData;
+  return res;
 };
 
 export default {

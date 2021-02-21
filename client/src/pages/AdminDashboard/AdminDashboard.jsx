@@ -21,7 +21,6 @@ import { ReactComponent as User } from "../../assets/img/user.svg";
 import { ReactComponent as MenuBookRounded } from "../../assets/img/open-book.svg";
 import { ReactComponent as Views } from "../../assets/img/views.svg";
 import tapping from "../../animations/tapping";
-import FakeData from "../../fakeData";
 import avatar from "../../assets/img/admin0.png";
 
 const EmptyLight = lazy(() => import("./Lazies/EmptyLight"));
@@ -45,8 +44,12 @@ const AdminDashboard = () => {
   useScroll({});
 
   useEffect(() => {
-    // fetchData
-    setPendingBlogs(FakeData);
+    AdminServices.getAllUnpublishedBlogs()
+      .then((res) => {
+        const { blogs } = res.data;
+        setPendingBlogs(blogs);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -336,16 +339,18 @@ const AdminDashboard = () => {
                       Bekleyen Yazılar <span>{pendingBlogs.length}</span>
                     </h1>
                   </header>
-                  {pendingBlogs.map(({ title, coverImagePath, author, id }) => (
-                    <AdminCard
-                      theme={theme}
-                      coverImagePath={coverImagePath}
-                      title={title}
-                      author={author}
-                      id={id}
-                      key={id + title}
-                    />
-                  ))}
+                  {pendingBlogs.map(
+                    ({ title, coverImagePath, author, _id }) => (
+                      <AdminCard
+                        theme={theme}
+                        coverImagePath={coverImagePath}
+                        title={title}
+                        author={author.userName}
+                        id={_id}
+                        key={_id + title}
+                      />
+                    )
+                  )}
                 </motion.div>
               )}
             </div>

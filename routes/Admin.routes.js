@@ -6,12 +6,12 @@ const Blog = require("../models/Blog");
 // Get all unpublished Blogs
 
 router.get(
-  "/unconfirmedBlogs",
+  "/unconfirmed",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     if (req.user.role === "admin" || req.user.role === "super-admin") {
       Blog.find({ isPublished: false })
-        .populate("author", "name")
+        .populate("author", "userName")
         .sort({ createdAt: -1 })
         .exec((err, blogs) => {
           if (err)
@@ -36,31 +36,35 @@ router.get(
 
 // Get single unpublished Blogs
 
-router.get("/blogs/:blogID", (req, res) => {
-  if (req.user.role === "admin" || req.user.role === "super-admin")
-    Blog.findOne({
-      _id: req.params.blogID,
-      isPublished: false,
-    })
-      .populate("author", "userName")
-      .exec((err, blog) => {
-        if (err)
-          return res.status(500).json({
-            errors: {
-              internalError: "Ooops! Something has happened...",
-              msgError: true,
-            },
-          });
+router.get(
+  "/blogs/:blogID",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user.role === "admin" || req.user.role === "super-admin")
+      Blog.findOne({
+        _id: req.params.blogID,
+        isPublished: false,
+      })
+        .populate("author", "userName")
+        .exec((err, blog) => {
+          if (err)
+            return res.status(500).json({
+              errors: {
+                internalError: "Ooops! Something has happened...",
+                msgError: true,
+              },
+            });
 
-        if (!blog)
-          return res.status(200).json({
-            message: "The blog cannot be found.",
-            errors: { msgError: false },
-          });
+          if (!blog)
+            return res.status(200).json({
+              message: "The blog cannot be found.",
+              errors: { msgError: false },
+            });
 
-        return res.status(200).json({ blog, errors: { msgError: false } });
-      });
-});
+          return res.status(200).json({ blog, errors: { msgError: false } });
+        });
+  }
+);
 
 // Confirm Blog
 
@@ -81,7 +85,7 @@ router.put(
             },
           });
 
-        return res.status.json({
+        return res.status(200).json({
           message: "The blog has been published.",
           errors: {
             msgError: false,

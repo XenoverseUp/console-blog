@@ -103,11 +103,12 @@ const AddBlog = () => {
     formData.append("content", content);
 
     EditorServices.addBlog(formData)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-
-    // if (msgError) setUploadError(true);
-    // else history.push("/editor");
+      .then((res) => {
+        const { msgError } = res.data.errors;
+        if (msgError) setUploadError(true);
+        else history.push("/editor");
+      })
+      .catch(() => setUploadError(true));
   };
 
   return (

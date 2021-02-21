@@ -5,9 +5,8 @@ const { join, extname } = require("path");
 const { rename } = require("fs");
 const validateBlogInput = require("../validation/validateBlogInput");
 
-const Blog = require("../models/Blog");
-
 const multiPartyMiddleWare = multiparty({ uploadDir: "./temp/cover" });
+const Blog = require("../models/Blog");
 
 // Send Blog to confirmation
 
@@ -15,7 +14,7 @@ router.post(
   "/addblog",
   passport.authenticate("jwt", { session: false }),
   multiPartyMiddleWare,
-  async (req, res) => {
+  (req, res) => {
     if (
       req.user.role === "editor" ||
       req.user.role === "admin" ||
@@ -28,12 +27,6 @@ router.post(
         "../uploads/cover/" + tempPathFile.split("\\")[2]
       );
 
-      let coverImagePath;
-
-      const setCoverImagePath = (path) => {
-        coverImagePath = path;
-      };
-
       let { title, content, category, subtitle } = req.body;
       let { errors, isValid } = validateBlogInput(req.body);
       if (!isValid) return res.status(400).json({ errors, isValid });
@@ -43,7 +36,6 @@ router.post(
         subtitle,
         content,
         category,
-        coverImagePath,
       });
       newBlog.author = req.user._id;
 
@@ -62,8 +54,7 @@ router.post(
             });
           }
 
-          setCoverImagePath("/" + tempPathFile.split("\\")[2]);
-          newBlog.coverImagePath = coverImagePath;
+          newBlog.coverImagePath = `/${tempPathFile.split("\\")[2]}`;
 
           newBlog.save((err, blog) => {
             if (err)

@@ -293,7 +293,7 @@ router.put("/blogs/:blogID/views", (req, res) => {
     { _id: req.params.blogID },
     { $inc: { views: 1 } },
     { new: true },
-    (err, updatedBlog) => {
+    (err) => {
       if (err)
         return res.status(500).json({
           errors: {
