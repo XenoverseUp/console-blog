@@ -7,23 +7,24 @@ import App from "./App";
 import AuthProvider from "./contexts/AuthContext";
 import ThemeProvider from "./contexts/ThemeContext";
 import CategoryProvider from "./contexts/CategoryContext";
+import QueryProvider from "./contexts/QueryContext";
 
 import "./scss/index.scss";
 import "./scss/drawer.scss";
-
 
 render(
   <React.StrictMode>
     <ThemeProvider>
       <AuthProvider>
         <CategoryProvider>
-          <Router>
-            <App />
-          </Router>
+          <QueryProvider>
+            <Router>
+              <App />
+            </Router>
+          </QueryProvider>
         </CategoryProvider>
       </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
-

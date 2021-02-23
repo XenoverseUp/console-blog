@@ -205,7 +205,7 @@ const AdminDashboard = () => {
                 <motion.div
                   initial="initial"
                   animate="visible"
-                  variants={card(4)}
+                  variants={card(width > 1050 ? 4 : 2)}
                   whileTap={tapping}
                   onClick={() =>
                     history.push({
@@ -333,7 +333,10 @@ const AdminDashboard = () => {
                   </motion.div>
                 </Suspense>
               ) : (
-                <motion.div variants={card(6)} className="pending">
+                <motion.div
+                  variants={card(width > 1050 ? 6 : 4)}
+                  className="pending"
+                >
                   <header>
                     <h1>
                       Bekleyen Yazılar <span>{pendingBlogs.length}</span>

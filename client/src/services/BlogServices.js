@@ -1,8 +1,7 @@
-const getAllPublishedBlogs = async (num) => {
-  const res = await fetch(`/public/${num}`);
+const getAllPublishedBlogs = async (num = 5) => {
+  const res = await fetch(`/public/blogs?num=${num}`);
 
-  const jsonData = await res.json();
-  return jsonData;
+  return res.json();
 };
 
 const getBlogsByCategory = async (num, category) => {

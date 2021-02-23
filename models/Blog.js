@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 const BlogSchema = new Schema({
   title: {
@@ -49,4 +50,6 @@ const BlogSchema = new Schema({
   ],
 });
 
-module.exports = new model("Blog", BlogSchema);
+BlogSchema.plugin(aggregatePaginate);
+
+module.exports = model("Blog", BlogSchema);

@@ -13,65 +13,57 @@ import {
   PromptModal,
   BlogContainer,
   ConditionalSimpleBar,
+  Preloader,
 } from "../../components";
 import { motion } from "framer-motion";
 import TranslateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import tapping from "../../animations/tapping";
 
 import "./ConfirmBlog.scss";
-
-import fakeData from "../../fakeData2";
+import { useQuery } from "react-query";
 
 const ConfirmBlog = () => {
   const { theme } = useContext(ThemeContext);
   const location = useLocation();
   const history = useHistory();
-  const params = useParams();
+  const { id } = useParams();
 
-  const [blog, setBlog] = useState({});
+  const { data, isLoading } = useQuery(
+    ["confirm-blog", { id }],
+    AdminServices.getSingleUnpublishedBlog
+  );
+
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [error, setError] = useState(false);
-
-  const duration = blog.content ? Math.ceil(blog.content.length / 800) : 0;
 
   useScroll({});
 
   const blogActions = (id, type = "publish") => {
     switch (type) {
       case "publish":
-        AdminServices.confirmBlog(id)
-          .then(() =>
-            history.push({
-              pathname: "/admin",
-              state: { from: location.pathname },
-            })
-          )
-          .catch(() => setError(true));
+        AdminServices.confirmBlog(id).then(() =>
+          history.push({
+            pathname: "/admin",
+            state: { from: location.pathname },
+          })
+        );
+
         break;
       case "delete":
-        AdminServices.deleteBlog(id)
-          .then(() =>
-            history.push({
-              pathname: "/admin",
-              state: { from: location.pathname },
-            })
-          )
-          .catch(() => setError(true));
+        AdminServices.deleteBlog(id).then(() =>
+          history.push({
+            pathname: "/admin",
+            state: { from: location.pathname },
+          })
+        );
+
         break;
     }
   };
 
-  useEffect(() => {
-    AdminServices.getSingleUnpublishedBlog(params.id)
-      .then((res) => {
-        const { blog } = res.data;
-        setBlog(blog);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  return (
+  return isLoading ? (
+    <Preloader />
+  ) : (
     <ConditionalSimpleBar>
       <motion.div
         variants={TranslateDownAndFadeOut}
@@ -100,7 +92,7 @@ const ConfirmBlog = () => {
           severity="success"
           icon={<PublishRounded />}
           title="Yayınlamak istediğine emin misin?"
-          action={() => blogActions(blog._id)}
+          action={() => blogActions(data.blog._id)}
           choices={{ positive: "Yayınla", negative: "Vazgeç" }}
         >
           Yazıyı yayınladığında binlerce insana ulaşacaksın.
@@ -112,7 +104,7 @@ const ConfirmBlog = () => {
           severity="error"
           icon={<Delete />}
           title="Silmek istediğine emin misin?"
-          action={() => blogActions(blog._id, "delete")}
+          action={() => blogActions(data.blog._id, "delete")}
           choices={{ positive: "Sil" }}
         >
           Eğer bu yazıyı silersen, ona bir daha ulaşamayacaksın.
@@ -120,16 +112,16 @@ const ConfirmBlog = () => {
 
         <BlogContainer>
           <BlogHeader
-            title={blog.title}
-            subtitle={blog.subtitle}
-            authorName={blog.author?.userName}
-            duration={duration}
-            category={blog.category}
-            coverImagePath={blog.coverImagePath}
+            title={data.blog.title}
+            subtitle={data.blog.subtitle}
+            authorName={data.blog.author?.userName}
+            duration={Math.ceil(data.blog.content.length / 800)}
+            category={data.blog.category}
+            coverImagePath={data.blog.coverImagePath}
           />
           <ContentWrapper>
-            <Sidebar likes={blog.likes} date={new Date()} />
-            <SanitizedContent content={blog.content} />
+            <Sidebar likes={data.blog.likes} date={new Date()} />
+            <SanitizedContent content={data.blog.content} />
           </ContentWrapper>
         </BlogContainer>
 

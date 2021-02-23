@@ -6,10 +6,12 @@ const getAllUnpublishedBlogs = async () => {
   return res;
 };
 
-const getSingleUnpublishedBlog = async (blogID) => {
-  const res = await axios.get(`/admin/blogs/${blogID}`);
+const getSingleUnpublishedBlog = async ({ queryKey }) => {
+  const [_, { id }] = queryKey;
 
-  return res;
+  const res = await fetch(`/admin/blogs/${id}`);
+
+  return res.json();
 };
 
 const confirmBlog = async (blogID) => {

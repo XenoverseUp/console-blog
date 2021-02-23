@@ -8,31 +8,51 @@ const User = require("../models/User");
 
 // Get all blogs with limit parameter
 
-router.get("/:number", (req, res) => {
-  const param = parseInt(req.params.number);
+router.get("/blogs", (req, res) => {
+  const { page, limit } = req.query;
+  const options = {
+    page,
+    limit,
+    allowDiskUse: true,
+  };
 
-  Blog.find({ isPublished: true })
-    .populate("author", "name")
-    .populate("comments.postedBy")
-    .sort({ createdAt: -1 })
-    .limit(param)
-    .exec((err, blogs) => {
-      if (err)
-        return res.status(500).json({
-          errors: {
-            internalError: "Ooops! Something has happened...",
-            msgError: true,
-          },
-        });
+  const pipeline = [
+    {
+      $match: { isPublished: true },
+    },
+    {
+      $project: {
+        title: 1,
+        subtitle: 1,
+        category: 1,
+        coverImagePath: 1,
+        createdAt: 1,
+        likes: 1,
+        views: 1,
+        authorId: {
+          $toObjectId: "$author",
+        },
+      },
+    },
+    {
+      $lookup: {
+        localField: "authorId",
+        from: "users",
+        foreignField: "_id",
+        as: "author",
+      },
+    },
+    {
+      $unwind: "$author",
+    },
+  ];
 
-      if (!blogs)
-        return res.status(200).json({
-          message: "No blogs has been found.",
-          errors: { msgError: false },
-        });
-
-      return res.status(200).json({ blogs, errors: { msgError: false } });
-    });
+  const aggregate = Blog.aggregate(pipeline);
+  Blog.aggregatePaginate(aggregate, options)
+    .then((docs) => {
+      res.status(200).send(docs);
+    })
+    .catch((err) => console.log(err));
 });
 
 // Get a category with limit parameter
