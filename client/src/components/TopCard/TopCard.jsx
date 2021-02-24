@@ -19,6 +19,7 @@ const TopCard = ({
   id,
   views,
   setAuthModal,
+  intersectionRef,
 }) => {
   const { theme } = useContext(ThemeContext);
   const { isAuthenticated } = useContext(AuthContext);
@@ -33,6 +34,7 @@ const TopCard = ({
     <div
       className={`top-card ${theme}`}
       style={casual && { margin: ".7rem 0" }}
+      {...(intersectionRef && { ref: intersectionRef })}
     >
       <Link to={{ pathname: `/blog/${id}` }} className="top">
         <div

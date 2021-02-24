@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, lazy, Suspense } from "react";
+import { useContext, useEffect, useState, lazy, Suspense, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   Carousel,
@@ -16,7 +16,6 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { useInfiniteQuery, useQuery } from "react-query";
 import "./Home.scss";
 
-import fakeData from "../../fakeData";
 import { CategoryContext } from "../../contexts/CategoryContext";
 import { useCurrentWidth } from "../../hooks";
 import BlogServices from "../../services/BlogServices";
@@ -36,29 +35,46 @@ const Home = () => {
   const [width] = useCurrentWidth();
   const [authModal, setAuthModal] = useState(false);
 
+  const { data: topData, isLoading: isTopLoading } = useQuery(
+    "top-blogs",
+    BlogServices.getTopBlogs
+  );
+
   const {
     data,
     isLoading,
     isFetching,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
-    "home-blogs",
-    (_key, num) => BlogServices.getAllPublishedBlogs(num),
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.currentQuery === lastPage.queries) return undefined;
+  } = useInfiniteQuery(["home-blogs"], BlogServices.getAllPublishedBlogs, {
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.hasNextPage) return undefined;
+      return lastPage.nextPage;
+    },
+  });
 
-        return lastPage.currentQuery + 5;
+  const observer = useRef(
+    new IntersectionObserver(
+      (entries) => {
+        entries[0].isIntersecting && fetchNextPage();
       },
-    }
+      { threshold: 0.2 }
+    )
   );
+  const [element, setElement] = useState(null);
 
-  useEffect(() => console.log(data?.pages[0].blogs), [data]);
+  useEffect(() => {
+    const currentElement = element;
+    const currentObserver = observer.current;
 
-  useEffect(() => setTimeout(() => fetchNextPage(), 4000), []);
+    currentElement && currentObserver.observe(currentElement);
 
-  return isLoading ? (
+    return () => {
+      currentElement && currentObserver.unobserve(currentElement);
+    };
+  }, [element]);
+
+  return isLoading || isTopLoading ? (
     <Preloader />
   ) : (
     <ConditionalSimpleBar>
@@ -81,14 +97,14 @@ const Home = () => {
             <div className="grid-container">
               <div className="carousel-wrapper">
                 <Carousel swipeable>
-                  {data.pages[0].blogs.slice(0, 4).map((blog, i) => (
+                  {data.pages[0].docs.slice(0, 4).map((doc) => (
                     <Slide
-                      key={i}
-                      coverImagePath={blog.coverImagePath}
-                      category={blog.category}
-                      title={blog.title}
-                      subtitle={blog.subtitle}
-                      id={blog.id}
+                      key={doc.coverImagePath}
+                      coverImagePath={doc.coverImagePath}
+                      category={doc.category}
+                      title={doc.title}
+                      subtitle={doc.subtitle}
+                      id={doc._id}
                     />
                   ))}
                 </Carousel>
@@ -100,27 +116,27 @@ const Home = () => {
                   </h1>
                 </header>
                 <div className="top-blog-grid">
-                  {/* {topBlogs.map(
+                  {topData.map(
                     ({
                       title,
                       subtitle,
                       coverImagePath,
-                      author,
-                      id,
+                      author: { userName },
+                      _id,
                       views,
                     }) => (
                       <TopCard
                         title={title}
                         subtitle={subtitle}
                         coverImagePath={coverImagePath}
-                        author={author}
+                        author={userName}
                         views={views}
-                        id={id}
-                        key={id}
+                        id={_id}
+                        key={"top" + title}
                         setAuthModal={setAuthModal}
                       />
                     )
-                  )} */}
+                  )}
                 </div>
               </div>
               <div className="categories">
@@ -141,52 +157,70 @@ const Home = () => {
               <div className="casual-blogs">
                 <div className="blogs-container">
                   <Suspense fallback={"Loading..."}>
-                    {data.pages.map(({ blogs }) =>
-                      blogs.map(
-                        ({
-                          title,
-                          subtitle,
-                          coverImagePath,
-                          category,
-                          views,
-                          id,
-                          author: { _id },
-                          createdAt,
-                        }) =>
-                          width > 600 ? (
+                    {data.pages.map(({ docs }, i, pages) => {
+                      return docs.map(
+                        (
+                          {
+                            title,
+                            subtitle,
+                            coverImagePath,
+                            category,
+                            views,
+                            _id,
+                            author: { userName },
+                            createdAt,
+                          },
+                          j,
+                          blogs
+                        ) => {
+                          if (i === 0 && [0, 1, 2, 3].includes(j)) return;
+                          return width > 600 ? (
                             <HomeBlogCard
-                              key={id}
+                              key={"home-blog" + title}
                               title={title}
                               subtitle={subtitle}
                               coverImagePath={coverImagePath}
                               category={category}
                               views={views}
-                              id={id}
-                              author={_id}
+                              id={_id}
+                              author={userName}
                               createdAt={createdAt}
                               setAuthModal={setAuthModal}
+                              intersectionRef={
+                                hasNextPage &&
+                                i === pages.length - 1 &&
+                                j === blogs.length - 1 &&
+                                setElement
+                              }
                             />
                           ) : (
                             <TopCard
+                              key={"top-blog-home" + title}
                               casual
-                              key={id}
                               title={title}
                               subtitle={subtitle}
                               coverImagePath={coverImagePath}
                               views={views}
-                              id={id}
-                              author={_id}
+                              id={_id}
+                              author={userName}
                               setAuthModal={setAuthModal}
+                              intersectionRef={
+                                hasNextPage &&
+                                i === pages.length - 1 &&
+                                j === blogs.length - 1 &&
+                                setElement
+                              }
                             />
-                          )
-                      )
-                    )}
+                          );
+                        }
+                      );
+                    })}
                   </Suspense>
                 </div>
                 <div className="posibly-ads"></div>
               </div>
             </div>
-            <footer></footer>
+            {!hasNextPage && <footer>Bitti amk</footer>}
           </section>
         </div>
       </motion.div>

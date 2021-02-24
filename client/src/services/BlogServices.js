@@ -1,18 +1,28 @@
-const getAllPublishedBlogs = async (num = 5) => {
-  const res = await fetch(`/public/blogs?num=${num}`);
+const getAllPublishedBlogs = async ({ pageParam }) => {
+  pageParam = pageParam ?? 1;
+  const res = await fetch(`/public/blogs?page=${pageParam}`);
+
+  return res.json();
+};
+
+const getTopBlogs = async () => (await fetch("/public/blogs/top")).json();
+
+const getSinglePublishedBlog = async ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  const res = await fetch(`/public/blogs/${id}`);
+
+  return res.json();
+};
+
+const getMetadata = async ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  const res = await fetch(`/public/blog/metadata?id=${id}`);
 
   return res.json();
 };
 
 const getBlogsByCategory = async (num, category) => {
   const res = await fetch(`/public/${num}/${category}`);
-
-  const jsonData = await res.json();
-  return jsonData;
-};
-
-const getSinglePublishedBlog = async (blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}`);
 
   const jsonData = await res.json();
   return jsonData;
@@ -86,6 +96,8 @@ const updateBlogView = async (blogID) => {
 
 export default {
   getAllPublishedBlogs,
+  getTopBlogs,
+  getMetadata,
   getBlogsByCategory,
   getSinglePublishedBlog,
   getBookmarkedBlogs,

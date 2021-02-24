@@ -6,10 +6,12 @@ const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 
-// Get all blogs with limit parameter
+// Get paginated blogs with page, limit and category parameters.
 
 router.get("/blogs", (req, res) => {
-  const { page, limit } = req.query;
+  let { page, limit = 5, category } = req.query;
+  category = category || "all";
+
   const options = {
     page,
     limit,
@@ -18,7 +20,12 @@ router.get("/blogs", (req, res) => {
 
   const pipeline = [
     {
-      $match: { isPublished: true },
+      $match: { isPublished: true, ...(category !== "all" && { category }) },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
     },
     {
       $project: {
@@ -45,6 +52,21 @@ router.get("/blogs", (req, res) => {
     {
       $unwind: "$author",
     },
+    {
+      $project: {
+        authorId: 0,
+        author: {
+          _id: 0,
+          email: 0,
+          password: 0,
+          createdAt: 0,
+          role: 0,
+          bookmarkedBlogs: 0,
+          likedBlogs: 0,
+          __v: 0,
+        },
+      },
+    },
   ];
 
   const aggregate = Blog.aggregate(pipeline);
@@ -52,36 +74,28 @@ router.get("/blogs", (req, res) => {
     .then((docs) => {
       res.status(200).send(docs);
     })
-    .catch((err) => console.log(err));
+    .catch((err) =>
+      res.status(500).send({ err, msg: "Oopps, something happened!" })
+    );
 });
 
-// Get a category with limit parameter
+// Get top 3 blogs.
 
-router.get("/:number/:category", (req, res) => {
-  const param = parseInt(req.params.number);
+router.get("/blogs/top", (req, res) => {
+  Blog.find({ isPublished: true })
+    .populate("author", "userName")
+    .select({
+      title: 1,
+      subtitle: 1,
+      coverImagePath: 1,
+      createdAt: 1,
+      views: 1,
+    })
+    .limit(3)
+    .sort({ views: -1 })
 
-  Blog.find({ isPublished: true, category: req.params.category })
-    .populate("author", "name")
-    .populate("comments.postedBy")
-    .sort({ createdAt: -1 })
-    .limit(param)
-    .exec((err, blogs) => {
-      if (err)
-        return res.status(500).json({
-          errors: {
-            internalError: "Ooops! Something has happened...",
-            msgError: true,
-          },
-        });
-
-      if (!blogs)
-        return res.status(200).json({
-          message: "No blogs has been found.",
-          errors: { msgError: false },
-        });
-
-      return res.status(200).json({ blogs, errors: { msgError: false } });
-    });
+    .then((docs) => res.status(200).send(docs))
+    .catch((err) => res.status(500).send(err));
 });
 
 // Get a single Blog
@@ -100,7 +114,7 @@ router.get("/blogs/:blogID", (req, res) => {
         });
 
       if (!blog)
-        return res.status(200).json({
+        return res.status(404).json({
           message: "The blog cannot be found.",
           errors: { msgError: false },
         });
@@ -108,6 +122,28 @@ router.get("/blogs/:blogID", (req, res) => {
       return res.status(200).json({ blog, errors: { msgError: false } });
     });
 });
+
+router.get(
+  "/blog/metadata",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { id } = req.query;
+
+    const metadata = {
+      liked: false,
+      bookmarked: false,
+    };
+
+    try {
+      if (req.user.likedBlogs.includes(id)) metadata.liked = true;
+      if (req.user.bookmarkedBlogs.includes(id)) metadata.bookmarked = true;
+    } catch (error) {
+      return res.sendStatus(500);
+    }
+
+    return res.status(200).send(metadata);
+  }
+);
 
 // Get bookmarked blogs
 

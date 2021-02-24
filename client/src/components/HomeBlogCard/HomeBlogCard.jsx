@@ -24,6 +24,7 @@ const HomeBlogCard = ({
   author,
   createdAt,
   setAuthModal,
+  intersectionRef,
 }) => {
   const { theme } = useContext(ThemeContext);
   const { isAuthenticated } = useContext(AuthContext);
@@ -39,7 +40,10 @@ const HomeBlogCard = ({
   };
 
   return (
-    <div className={`home-blog-card ${theme}`}>
+    <div
+      className={`home-blog-card ${theme}`}
+      {...(intersectionRef && { ref: intersectionRef })}
+    >
       <div className="left">
         <div className="circle" style={{ background: categoryObj.gradient }}>
           {categoryObj.icon}
