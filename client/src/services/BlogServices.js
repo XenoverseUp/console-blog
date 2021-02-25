@@ -9,7 +9,7 @@ const getTopBlogs = async () => (await fetch("/public/blogs/top")).json();
 
 const getSinglePublishedBlog = async ({ queryKey }) => {
   const [, { id }] = queryKey;
-  const res = await fetch(`/public/blogs/${id}`);
+  const res = await fetch(`/public/blog?id=${id}`);
 
   return res.json();
 };
@@ -49,49 +49,43 @@ const addComment = async (data, blogID) => {
 };
 
 const likeBlog = async (blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}/like`, {
-    method: "PUT",
+  const res = await fetch(`/public/blog/like?id=${blogID}`, {
+    method: "PATCH",
   });
 
-  const jsonData = res.json();
-  return jsonData;
+  return res.json();
 };
 
 const dislikeBlog = async (blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}/dislike`, {
-    method: "PUT",
+  const res = await fetch(`/public/blog/dislike?id=${blogID}`, {
+    method: "PATCH",
   });
 
-  const jsonData = res.json();
-  return jsonData;
+  return res.json();
 };
 
 const bookmarkBlog = async (blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}/bookmark`, {
-    method: "PUT",
+  const res = await fetch(`/public/blog/bookmark?id=${blogID}`, {
+    method: "PATCH",
   });
 
-  const jsonData = res.json();
-  return jsonData;
+  return res.json();
 };
 
 const unBookmarkBlog = async (blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}/unbookmark`, {
+  const res = await fetch(`/public/blog/unbookmark?id=${blogID}`, {
     method: "DELETE",
   });
 
-  const jsonData = res.json();
-  console.log(jsonData);
-  return jsonData;
+  return res.json();
 };
 
 const updateBlogView = async (blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}/views`, {
-    method: "PUT",
+  const res = await fetch(`/public/blog/views?id=${blogID}`, {
+    method: "PATCH",
   });
 
-  const jsonData = res.json();
-  return jsonData;
+  return res.json();
 };
 
 export default {

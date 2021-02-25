@@ -21,7 +21,7 @@ import {
 import { AuthContext } from "../../contexts/AuthContext";
 
 import BlogServices from "../../services/BlogServices";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 
 const AuthModal = lazy(() => import("../../components/AuthModal/AuthModal"));
@@ -32,43 +32,76 @@ const Blog = () => {
   const [width] = useCurrentWidth();
   const { id } = useParams();
 
-  const [blog, setBlog] = useState({});
+  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(0);
   const [newComments, setNewComments] = useState([]);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [authModal, setAuthModal] = useState(false);
 
-  const { data: metadata, isLoading: isMetaLoading } = useQuery(
-    ["blog-meta", { id }],
-    BlogServices.getMetadata,
-    {
-      enabled: isAuthenticated,
-    }
-  );
-
-  // useEffect(() => console.log(metadata), [metadata]);
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery(
     ["single-blog", { id }],
-    BlogServices.getSinglePublishedBlog
+    BlogServices.getSinglePublishedBlog,
+    {
+      enabled: !!id,
+    }
+  );
+
+  useEffect(() => {
+    const liked = data?.[0].isLiked ?? false;
+    const likes = data?.[0].likes ?? 0;
+
+    setIsLiked(liked);
+    setLikes(likes);
+  }, [data]);
+
+  const { mutateAsync: dislike, isLoading: isDislikeLoading } = useMutation(
+    BlogServices.dislikeBlog,
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries("single-blog");
+        setIsLiked(false);
+        setLikes(likes - 1);
+      },
+
+      onSettled: () => queryClient.invalidateQueries("single-blog"),
+    }
+  );
+
+  const { mutateAsync: like, isLoading: isLikeLoading } = useMutation(
+    BlogServices.likeBlog,
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries("single-blog");
+        setIsLiked(true);
+        setLikes(likes + 1);
+      },
+
+      onSettled: () => queryClient.invalidateQueries("single-blog"),
+    }
   );
 
   const likeClick = async () => {
-    if (!metadata.liked) {
-      await BlogServices.likeBlog(id);
+    if (isLikeLoading || isDislikeLoading) return;
+    if (data[0]?.isLiked) {
+      await dislike(id);
     } else {
-      await BlogServices.dislikeBlog(id);
+      await like(id);
     }
   };
 
   const bookmarkClick = async () => {
-    if (!metadata.bookmarked) {
+    if (1) {
       await BlogServices.bookmarkBlog(id);
     } else {
       await BlogServices.unBookmarkBlog(id);
     }
   };
 
-  return isLoading || isMetaLoading ? (
+  useEffect(() => console.log(data), [data]);
+
+  return isLoading ? (
     <Preloader />
   ) : (
     <ConditionalSimpleBar>
@@ -80,8 +113,8 @@ const Blog = () => {
         exit="exit"
       >
         <ResponsiveNavBar
-          blogCover={data.blog.coverImagePath}
-          blogTitle={data.blog.title}
+          blogCover={data[0].coverImagePath}
+          blogTitle={data[0].title}
         />
 
         {!isAuthenticated && (
@@ -97,13 +130,13 @@ const Blog = () => {
         >
           <AnimateSharedLayout>
             <DrawerHeader
-              commentLength={data.blog.comments?.length + newComments.length}
+              commentLength={data[0].comments?.length + newComments.length}
             />
             <CommentPoster
               setNewComments={setNewComments}
               newComments={newComments}
               setDrawerState={setIsCommentOpen}
-              id={data.blog._id}
+              id={data[0]._id}
             />
             <motion.div>
               <motion.div
@@ -125,9 +158,9 @@ const Blog = () => {
                 layout
                 style={{ display: "flex", flexDirection: "column-reverse" }}
               >
-                {data.blog.comments.map((comment, i) => (
+                {data[0].comments.map((comment, i) => (
                   <DrawerItem
-                    key={blog.title + comment?.postedBy + i}
+                    key={comment?.postedBy + i}
                     postedBy={comment?.postedBy}
                     createdAt={comment?.createdAt}
                   >
@@ -141,21 +174,23 @@ const Blog = () => {
 
         <BlogContainer>
           <BlogHeader
-            title={data.blog.title}
-            subtitle={data.blog.subtitle}
-            authorName={data.blog.author.userName}
-            duration={getDuration(data.blog.content)}
-            category={data.blog.category}
-            coverImagePath={data.blog.coverImagePath}
+            title={data[0].title}
+            subtitle={data[0].subtitle}
+            authorName={data[0].author.userName}
+            duration={getDuration(data[0].content)}
+            category={data[0].category}
+            coverImagePath={data[0].coverImagePath}
           />
           <ContentWrapper>
             <Sidebar
-              comments={data.blog.comments?.length + newComments.length}
-              date={new Date(data.blog.createdAt)}
-              likes={data.blog.likes}
+              comments={data[0].comments?.length + newComments.length}
+              date={new Date(data[0].createdAt)}
+              likes={isLikeLoading || isDislikeLoading ? likes : data[0].likes}
               top={10}
-              isLiked={metadata.liked}
-              isBookmarked={metadata.bookmarked}
+              isLiked={
+                isLikeLoading || isDislikeLoading ? isLiked : data[0].isLiked
+              }
+              isBookmarked={data[0].isBookmarked}
               callbacks={{
                 onLikeClick: () =>
                   isAuthenticated ? likeClick() : setAuthModal(true),
@@ -164,7 +199,7 @@ const Blog = () => {
                   isAuthenticated ? bookmarkClick() : setAuthModal(true),
               }}
             />
-            <SanitizedContent content={data.blog.content} />
+            <SanitizedContent content={data[0].content} />
           </ContentWrapper>
         </BlogContainer>
       </motion.div>
