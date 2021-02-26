@@ -74,7 +74,7 @@ const bookmarkBlog = async (blogID) => {
 
 const unBookmarkBlog = async (blogID) => {
   const res = await fetch(`/public/blog/unbookmark?id=${blogID}`, {
-    method: "DELETE",
+    method: "PATCH",
   });
 
   return res.json();

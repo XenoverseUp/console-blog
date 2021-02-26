@@ -13,7 +13,12 @@ import {
 } from "../../components";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { useInfiniteQuery, useQuery } from "react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from "react-query";
 import "./Home.scss";
 
 import { CategoryContext } from "../../contexts/CategoryContext";
@@ -34,6 +39,7 @@ const Home = () => {
 
   const [width] = useCurrentWidth();
   const [authModal, setAuthModal] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: topData, isLoading: isTopLoading } = useQuery(
     "top-blogs",
@@ -124,6 +130,7 @@ const Home = () => {
                       author: { userName },
                       _id,
                       views,
+                      isBookmarked,
                     }) => (
                       <TopCard
                         title={title}
@@ -134,6 +141,8 @@ const Home = () => {
                         id={_id}
                         key={"top" + title}
                         setAuthModal={setAuthModal}
+                        isBookmarked={isBookmarked}
+                        queryClient={queryClient}
                       />
                     )
                   )}
@@ -169,6 +178,7 @@ const Home = () => {
                             _id,
                             author: { userName },
                             createdAt,
+                            isBookmarked,
                           },
                           j,
                           blogs
@@ -186,10 +196,12 @@ const Home = () => {
                               author={userName}
                               createdAt={createdAt}
                               setAuthModal={setAuthModal}
+                              isBookmarked={isBookmarked}
+                              queryClient={queryClient}
                               intersectionRef={
                                 hasNextPage &&
                                 i === pages.length - 1 &&
-                                j === blogs.length - 1 &&
+                                j === blogs.length - 2 &&
                                 setElement
                               }
                             />
@@ -204,10 +216,12 @@ const Home = () => {
                               id={_id}
                               author={userName}
                               setAuthModal={setAuthModal}
+                              isBookmarked={isBookmarked}
+                              queryClient={queryClient}
                               intersectionRef={
                                 hasNextPage &&
                                 i === pages.length - 1 &&
-                                j === blogs.length - 1 &&
+                                j === blogs.length - 2 &&
                                 setElement
                               }
                             />
@@ -220,7 +234,7 @@ const Home = () => {
                 <div className="posibly-ads"></div>
               </div>
             </div>
-            {!hasNextPage && <footer>Bitti amk</footer>}
+            {!hasNextPage && <footer>Bitti aq</footer>}
           </section>
         </div>
       </motion.div>

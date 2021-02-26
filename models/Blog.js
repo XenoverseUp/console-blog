@@ -34,14 +34,16 @@ const BlogSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  likes: {
-    type: Number,
-    default: 0,
-  },
   views: {
     type: Number,
     default: 0,
   },
+  likedBy: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   comments: [
     {
       type: Schema.Types.ObjectId,

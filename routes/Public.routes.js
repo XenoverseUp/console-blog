@@ -39,10 +39,15 @@ router.get(
           category: 1,
           coverImagePath: 1,
           createdAt: 1,
-          likes: 1,
           views: 1,
+          likes: {
+            $size: "$likedBy",
+          },
           isLiked: {
-            $in: ["$_id", { $ifNull: [req.user?.likedBlogs, []] }],
+            $in: [
+              { $ifNull: [{ $toObjectId: req.user?._id }, ""] },
+              "$likedBy",
+            ],
           },
           isBookmarked: {
             $in: ["$_id", { $ifNull: [req.user?.bookmarkedBlogs, []] }],
@@ -73,7 +78,6 @@ router.get(
             createdAt: 0,
             role: 0,
             bookmarkedBlogs: 0,
-            likedBlogs: 0,
             __v: 0,
           },
         },
@@ -116,10 +120,15 @@ router.get(
           category: 1,
           coverImagePath: 1,
           createdAt: 1,
-          likes: 1,
+          likes: {
+            $size: "$likedBy",
+          },
           views: 1,
           isLiked: {
-            $in: ["$_id", { $ifNull: [req.user?.likedBlogs, []] }],
+            $in: [
+              { $ifNull: [{ $toObjectId: req.user?._id }, ""] },
+              "$likedBy",
+            ],
           },
           isBookmarked: {
             $in: ["$_id", { $ifNull: [req.user?.bookmarkedBlogs, []] }],
@@ -188,12 +197,17 @@ router.get(
           category: 1,
           coverImagePath: 1,
           createdAt: 1,
-          likes: 1,
-          views: 1,
           content: 1,
           comments: 1,
+          likes: {
+            $size: "$likedBy",
+          },
+          views: 1,
           isLiked: {
-            $in: ["$_id", { $ifNull: [req.user?.likedBlogs, []] }],
+            $in: [
+              { $ifNull: [{ $toObjectId: req.user?._id }, ""] },
+              "$likedBy",
+            ],
           },
           isBookmarked: {
             $in: ["$_id", { $ifNull: [req.user?.bookmarkedBlogs, []] }],
@@ -239,24 +253,85 @@ router.get(
 
 router.get(
   "/blogs/bookmarked",
-  passport.authenticate("jwt", { session: false }, (req, res) => {
-    req.user.populate("bookmarkedBlogs").exec(err, (blogs) => {
-      if (err)
-        return res.status(500).json({
-          errors: {
-            internalError: "Ooops! Something has happened...",
-            msgError: true,
-          },
-        });
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const objIds = req.user.bookmarkedBlogs.map((id) => ObjectId(id));
 
-      return res.status(200).json({ blogs, errors: { msgError: false } });
-    });
-  })
+    User.aggregate([
+      {
+        $match: {
+          _id: ObjectId(req.user._id),
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          bookmarkedBlogs: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "blogs",
+          pipeline: [
+            {
+              $match: {
+                _id: {
+                  $in: objIds,
+                },
+              },
+            },
+            {
+              $project: {
+                title: 1,
+                subtitle: 1,
+                category: 1,
+                coverImagePath: 1,
+                createdAt: 1,
+                views: 1,
+                authorId: {
+                  $toObjectId: "$author",
+                },
+              },
+            },
+            {
+              $lookup: {
+                from: "users",
+                localField: "authorId",
+                foreignField: "_id",
+                as: "author",
+              },
+            },
+            {
+              $unwind: "$author",
+            },
+            {
+              $project: {
+                authorId: 0,
+                author: {
+                  _id: 0,
+                  email: 0,
+                  password: 0,
+                  createdAt: 0,
+                  role: 0,
+                  bookmarkedBlogs: 0,
+                  likedBlogs: 0,
+                  __v: 0,
+                },
+              },
+            },
+          ],
+          as: "bookmarkedBlogs",
+        },
+      },
+    ])
+      .then((docs) => res.status(200).send(docs))
+      .catch((err) => res.status(500).send(err));
+  }
 );
 
 // Post a comment about blog
 
-router.post(
+router.put(
   "/blogs/:blogID/addComment",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -312,8 +387,17 @@ router.patch(
   "/blog/like",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    req.user.likedBlogs.push(req.query.id);
-    req.user.save((err) => {
+    const { id } = req.query;
+
+    Blog.findOneAndUpdate(
+      { _id: id, likedBy: { $nin: req.user._id } },
+      {
+        $push: { likedBy: req.user._id },
+      },
+      {
+        new: true,
+      }
+    ).exec((err, blog) => {
       if (err)
         return res.status(500).json({
           errors: {
@@ -321,24 +405,18 @@ router.patch(
             msgError: true,
           },
         });
-      Blog.findOneAndUpdate(
-        { _id: req.query.id },
-        { $inc: { likes: 1 } },
-        { new: true }
-      ).exec((err) => {
-        if (err)
-          return res.status(500).json({
-            errors: {
-              internalError: "Ooops! Something has happened...",
-              msgError: true,
-            },
-          });
-        else
+      else {
+        if (!blog)
           return res.status(200).json({
-            message: "Like has been updated.",
+            message: "Like has already been updated.",
             errors: { msgError: false },
           });
-      });
+
+        return res.status(200).json({
+          message: "Like has been updated.",
+          errors: { msgError: false },
+        });
+      }
     });
   }
 );
@@ -349,8 +427,17 @@ router.patch(
   "/blog/dislike",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    req.user.likedBlogs.remove(req.query.id);
-    req.user.save((err) => {
+    const { id } = req.query;
+
+    Blog.findOneAndUpdate(
+      { _id: id, likedBy: { $in: req.user._id } },
+      {
+        $pull: { likedBy: req.user._id },
+      },
+      {
+        new: true,
+      }
+    ).exec((err, blog) => {
       if (err)
         return res.status(500).json({
           errors: {
@@ -358,25 +445,18 @@ router.patch(
             msgError: true,
           },
         });
-
-      Blog.findOneAndUpdate(
-        { _id: req.query.id },
-        { $inc: { likes: -1 } },
-        { new: true }
-      ).exec((err) => {
-        if (err)
-          return res.status(500).json({
-            errors: {
-              internalError: "Ooops! Something has happened...",
-              msgError: true,
-            },
-          });
-        else
+      else {
+        if (!blog)
           return res.status(200).json({
-            message: "Like has been updated.",
+            message: "Dislike has already been updated.",
             errors: { msgError: false },
           });
-      });
+
+        return res.status(200).json({
+          message: "Dislike has been updated.",
+          errors: { msgError: false },
+        });
+      }
     });
   }
 );
@@ -387,6 +467,12 @@ router.patch(
   "/blog/bookmark",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    if (req.user.bookmarkedBlogs.includes(req.query.id))
+      return res.status(200).json({
+        message: "Blog has already been bookmarked.",
+        errors: { msgError: false },
+      });
+
     req.user.bookmarkedBlogs.push(req.query.id);
     req.user.save((err) => {
       if (err)
@@ -411,16 +497,19 @@ router.patch(
   "/blog/unbookmark",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    User.findOneAndUpdate(
-      { _id: req.user._id },
-      { $pull: { bookmarkedBlogs: req.query.id } }
-    ).exec((err) => {
+    if (!req.user.bookmarkedBlogs.includes(req.query.id))
+      return res.status(200).json({
+        message: "Blog has already been unbookmarked.",
+        errors: { msgError: false },
+      });
+
+    req.user.bookmarkedBlogs.remove(req.query.id);
+    req.user.save((err) => {
       if (err)
         return res.status(500).json({
           errors: {
             internalError: "Ooops! Something has happened...",
             msgError: true,
-            err,
           },
         });
 

@@ -13,18 +13,18 @@ import "./scss/index.scss";
 import "./scss/drawer.scss";
 
 render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <CategoryProvider>
-          <QueryProvider>
-            <Router>
-              <App />
-            </Router>
-          </QueryProvider>
-        </CategoryProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <ThemeProvider>
+    <AuthProvider>
+      <CategoryProvider>
+        <QueryProvider>
+          <Router>
+            <App />
+          </Router>
+        </QueryProvider>
+      </CategoryProvider>
+    </AuthProvider>
+  </ThemeProvider>,
+  // </React.StrictMode>
   document.getElementById("root")
 );

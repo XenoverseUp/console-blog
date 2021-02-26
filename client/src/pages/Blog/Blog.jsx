@@ -33,6 +33,7 @@ const Blog = () => {
   const { id } = useParams();
 
   const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [newComments, setNewComments] = useState([]);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
@@ -48,13 +49,7 @@ const Blog = () => {
     }
   );
 
-  useEffect(() => {
-    const liked = data?.[0].isLiked ?? false;
-    const likes = data?.[0].likes ?? 0;
-
-    setIsLiked(liked);
-    setLikes(likes);
-  }, [data]);
+  const { mutateAsync: updateViews } = useMutation(BlogServices.updateBlogView);
 
   const { mutateAsync: dislike, isLoading: isDislikeLoading } = useMutation(
     BlogServices.dislikeBlog,
@@ -82,6 +77,30 @@ const Blog = () => {
     }
   );
 
+  const { mutateAsync: bookmark, isLoading: isBookmarkLoading } = useMutation(
+    BlogServices.bookmarkBlog,
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries("single-blog");
+        setIsBookmarked(true);
+      },
+
+      onSettled: () => queryClient.invalidateQueries("single-blog"),
+    }
+  );
+
+  const {
+    mutateAsync: unbookmark,
+    isLoading: isUnbookmarkLoading,
+  } = useMutation(BlogServices.unBookmarkBlog, {
+    onMutate: async () => {
+      await queryClient.cancelQueries("single-blog");
+      setIsBookmarked(false);
+    },
+
+    onSettled: () => queryClient.invalidateQueries("single-blog"),
+  });
+
   const likeClick = async () => {
     if (isLikeLoading || isDislikeLoading) return;
     if (data[0]?.isLiked) {
@@ -92,14 +111,25 @@ const Blog = () => {
   };
 
   const bookmarkClick = async () => {
-    if (1) {
-      await BlogServices.bookmarkBlog(id);
+    if (isBookmarkLoading || isUnbookmarkLoading) return;
+    if (data[0]?.isBookmarked) {
+      await unbookmark(id);
     } else {
-      await BlogServices.unBookmarkBlog(id);
+      await bookmark(id);
     }
   };
 
-  useEffect(() => console.log(data), [data]);
+  useEffect(() => {
+    const liked = data?.[0].isLiked ?? false;
+    const bookmarked = data?.[0].isBookmarked ?? false;
+    const likes = data?.[0].likes ?? 0;
+
+    setIsLiked(liked);
+    setIsBookmarked(bookmarked);
+    setLikes(likes);
+  }, [data]);
+
+  useEffect(() => updateViews(id), []);
 
   return isLoading ? (
     <Preloader />
@@ -190,7 +220,11 @@ const Blog = () => {
               isLiked={
                 isLikeLoading || isDislikeLoading ? isLiked : data[0].isLiked
               }
-              isBookmarked={data[0].isBookmarked}
+              isBookmarked={
+                isBookmarkLoading || isUnbookmarkLoading
+                  ? isBookmarked
+                  : data[0].isBookmarked
+              }
               callbacks={{
                 onLikeClick: () =>
                   isAuthenticated ? likeClick() : setAuthModal(true),

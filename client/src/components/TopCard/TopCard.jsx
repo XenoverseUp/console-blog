@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
@@ -9,6 +9,8 @@ import {
   FiberManualRecord,
 } from "@material-ui/icons";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useMutation } from "react-query";
+import BlogServices from "../../services/BlogServices";
 
 const TopCard = ({
   casual,
@@ -20,15 +22,55 @@ const TopCard = ({
   views,
   setAuthModal,
   intersectionRef,
+  isBookmarked,
+  queryClient,
 }) => {
   const { theme } = useContext(ThemeContext);
   const { isAuthenticated } = useContext(AuthContext);
+  const [isCurrentBookmarked, setIsCurrentBookmarked] = useState(false);
 
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { mutateAsync: bookmark, isLoading: isBookmarkLoading } = useMutation(
+    BlogServices.bookmarkBlog,
+    {
+      onMutate: async () => {
+        await queryClient.cancelQueries("home-blogs");
+        await queryClient.cancelQueries("top-blogs");
+        setIsCurrentBookmarked(true);
+      },
 
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
+      onSettled: () => {
+        queryClient.invalidateQueries("home-blogs");
+        queryClient.invalidateQueries("top-blogs");
+      },
+    }
+  );
+
+  const {
+    mutateAsync: unbookmark,
+    isLoading: isUnbookmarkLoading,
+  } = useMutation(BlogServices.unBookmarkBlog, {
+    onMutate: async () => {
+      await queryClient.cancelQueries("home-blogs");
+      await queryClient.invalidateQueries("top-blogs");
+      setIsCurrentBookmarked(false);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries("home-blogs");
+      queryClient.invalidateQueries("top-blogs");
+    },
+  });
+
+  const bookmarkClick = async () => {
+    if (isBookmarkLoading || isUnbookmarkLoading) return;
+    if (isBookmarked) {
+      await unbookmark(id);
+    } else {
+      await bookmark(id);
+    }
   };
+
+  useEffect(() => setIsCurrentBookmarked(isBookmarked), [isBookmarked]);
 
   return (
     <div
@@ -64,10 +106,14 @@ const TopCard = ({
         <div
           className="bookmark"
           onClick={() =>
-            !isAuthenticated ? setAuthModal(true) : handleBookmark()
+            isAuthenticated ? bookmarkClick() : setAuthModal(true)
           }
         >
-          {isBookmarked ? <BookmarkRounded /> : <BookmarkBorderRounded />}
+          {isCurrentBookmarked ? (
+            <BookmarkRounded />
+          ) : (
+            <BookmarkBorderRounded />
+          )}
         </div>
       </div>
     </div>
