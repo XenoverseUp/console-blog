@@ -181,7 +181,7 @@ const Home = () => {
                             isBookmarked,
                           },
                           j,
-                          blogs
+                          docs
                         ) => {
                           if (i === 0 && [0, 1, 2, 3].includes(j)) return;
                           return width > 600 ? (
@@ -201,7 +201,7 @@ const Home = () => {
                               intersectionRef={
                                 hasNextPage &&
                                 i === pages.length - 1 &&
-                                j === blogs.length - 2 &&
+                                j === docs.length - 2 &&
                                 setElement
                               }
                             />
@@ -221,7 +221,7 @@ const Home = () => {
                               intersectionRef={
                                 hasNextPage &&
                                 i === pages.length - 1 &&
-                                j === blogs.length - 2 &&
+                                j === docs.length - 2 &&
                                 setElement
                               }
                             />

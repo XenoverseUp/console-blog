@@ -7,6 +7,7 @@ const validateCommentInput = require("../validation/validateCommentInput");
 const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
+const { default: axios } = require("axios");
 
 // Get paginated blogs with page, limit and category parameters.
 
@@ -14,7 +15,7 @@ router.get(
   "/blogs",
   passport.authenticate(["jwt", "anonymous"], { session: false }),
   (req, res) => {
-    let { page, limit = 6, category } = req.query;
+    let { page, limit = 15, category } = req.query;
     category = category || "all";
 
     const options = {
@@ -255,77 +256,57 @@ router.get(
   "/blogs/bookmarked",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const objIds = req.user.bookmarkedBlogs.map((id) => ObjectId(id));
+    let { page, limit = 15 } = req.query;
 
-    User.aggregate([
+    const options = {
+      page,
+      limit,
+      allowDiskUse: true,
+    };
+
+    const pipeline = [
       {
-        $match: {
-          _id: ObjectId(req.user._id),
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          bookmarkedBlogs: 1,
-        },
+        $match: { _id: { $in: req.user.bookmarkedBlogs } },
       },
       {
         $lookup: {
-          from: "blogs",
-          pipeline: [
-            {
-              $match: {
-                _id: {
-                  $in: objIds,
-                },
-              },
-            },
-            {
-              $project: {
-                title: 1,
-                subtitle: 1,
-                category: 1,
-                coverImagePath: 1,
-                createdAt: 1,
-                views: 1,
-                authorId: {
-                  $toObjectId: "$author",
-                },
-              },
-            },
-            {
-              $lookup: {
-                from: "users",
-                localField: "authorId",
-                foreignField: "_id",
-                as: "author",
-              },
-            },
-            {
-              $unwind: "$author",
-            },
-            {
-              $project: {
-                authorId: 0,
-                author: {
-                  _id: 0,
-                  email: 0,
-                  password: 0,
-                  createdAt: 0,
-                  role: 0,
-                  bookmarkedBlogs: 0,
-                  likedBlogs: 0,
-                  __v: 0,
-                },
-              },
-            },
-          ],
-          as: "bookmarkedBlogs",
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
         },
       },
-    ])
-      .then((docs) => res.status(200).send(docs))
-      .catch((err) => res.status(500).send(err));
+      {
+        $unwind: "$author",
+      },
+      {
+        $project: {
+          index: { $indexOfArray: [req.user.bookmarkedBlogs, "$_id"] },
+          title: 1,
+          subtitle: 1,
+          category: 1,
+          coverImagePath: 1,
+          author: {
+            userName: 1,
+          },
+        },
+      },
+      {
+        $sort: { index: -1 },
+      },
+      {
+        $project: { index: 0 },
+      },
+    ];
+
+    const aggregate = Blog.aggregate(pipeline);
+    Blog.aggregatePaginate(aggregate, options)
+      .then((docs) => {
+        res.status(200).send(docs);
+      })
+      .catch((err) =>
+        res.status(500).send({ err, msg: "Oopps, something happened!" })
+      );
   }
 );
 
@@ -491,7 +472,7 @@ router.patch(
   }
 );
 
-// UnBookmark a Blog
+// Unbookmark a Blog
 
 router.patch(
   "/blog/unbookmark",

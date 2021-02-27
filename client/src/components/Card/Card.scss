@@ -15,10 +15,6 @@
   overflow: hidden;
   transition: ease-out 0.15s transform;
 
-  @include hover-supported() {
-    transform: scale(1.02);
-  }
-
   button {
     margin: 0.5rem;
   }
@@ -58,10 +54,6 @@
   border-radius: 0.5rem;
   overflow: hidden;
   transition: ease-out 0.15s transform;
-
-  @include hover-supported() {
-    transform: scale(1.02);
-  }
 
   button {
     margin: 0.5rem;

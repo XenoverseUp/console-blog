@@ -14,13 +14,6 @@ const getSinglePublishedBlog = async ({ queryKey }) => {
   return res.json();
 };
 
-const getMetadata = async ({ queryKey }) => {
-  const [, { id }] = queryKey;
-  const res = await fetch(`/public/blog/metadata?id=${id}`);
-
-  return res.json();
-};
-
 const getBlogsByCategory = async (num, category) => {
   const res = await fetch(`/public/${num}/${category}`);
 
@@ -28,11 +21,11 @@ const getBlogsByCategory = async (num, category) => {
   return jsonData;
 };
 
-const getBookmarkedBlogs = async () => {
-  const res = await fetch("/public/blogs/bookmarked");
+const getBookmarkedBlogs = async ({ pageParam }) => {
+  pageParam = pageParam ?? 1;
+  const res = await fetch(`/public/blogs/bookmarked?page=${pageParam}`);
 
-  const jsonData = await res.json();
-  return jsonData;
+  return res.json();
 };
 
 const addComment = async (data, blogID) => {
@@ -91,7 +84,6 @@ const updateBlogView = async (blogID) => {
 export default {
   getAllPublishedBlogs,
   getTopBlogs,
-  getMetadata,
   getBlogsByCategory,
   getSinglePublishedBlog,
   getBookmarkedBlogs,

@@ -1,41 +1,72 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import BlogServices from "../../services/BlogServices";
-import { Card, ConditionalSimpleBar } from "../../components";
+import { Card, ConditionalSimpleBar, Preloader } from "../../components";
 import { Bookmark, BookmarkBorder } from "@material-ui/icons";
 import { ResponsiveNavBar } from "../../components";
 import "./Bookmarked.scss";
 import isEmpty from "is-empty";
 import FakeData from "../../fakeData";
-import { motion } from "framer-motion";
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
+import { useInfiniteQuery, useQueryClient } from "react-query";
 
 const Bookmarked = () => {
   const { theme } = useContext(ThemeContext);
-  const [blogs, setBlogs] = useState([]);
+
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isIdle,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(["bookmarked-blogs"], BlogServices.getBookmarkedBlogs, {
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.hasNextPage) return undefined;
+      return lastPage.nextPage;
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const observer = useRef(
+    new IntersectionObserver(
+      (entries) => {
+        entries[0].isIntersecting && fetchNextPage();
+      },
+      {
+        threshold: 0.2,
+      }
+    )
+  );
+
+  const [element, setElement] = useState(null);
 
   useEffect(() => {
-    setBlogs(FakeData);
-    // const fetchApi = async () => {
-    //   const { blogs } = await BlogServices.getBookmarkedBlogs();
-    //   setBlogs(blogs);
-    // };
-    // fetchApi();
-  }, []);
+    const currentElement = element;
+    const currentObserver = observer.current;
 
-  return (
+    currentElement && currentObserver.observe(currentElement);
+
+    return () => {
+      currentElement && currentObserver.unobserve(currentElement);
+    };
+  }, [element]);
+
+  return isLoading || isIdle ? (
+    <Preloader />
+  ) : (
     <ConditionalSimpleBar>
       <motion.div
         variants={translateDownAndFadeOut}
         initial="initial"
         animate="visible"
         exit="exit"
-        onAnimationStart={() => (document.body.style.overflow = "hidden")}
-        onAnimationComplete={() => (document.body.style.overflow = "auto")}
       >
         <ResponsiveNavBar />
         <div className={`bookmarked ${theme}`}>
-          {isEmpty(blogs) ? (
+          {isEmpty(data.pages[0].docs) ? (
             <div className="void">
               <div className="icon">
                 <BookmarkBorder />
@@ -52,15 +83,28 @@ const Bookmarked = () => {
                 <h1>
                   <Bookmark /> Ayracım
                 </h1>
-                {blogs.map(({ title, _id, coverImagePath, author }) => (
-                  <Card
-                    title={title}
-                    id={_id}
-                    imgSrc={coverImagePath}
-                    author={author}
-                    key={title}
-                  />
-                ))}
+                <AnimateSharedLayout>
+                  {data.pages.map(({ docs }, i, pages) =>
+                    docs.map(
+                      ({ title, _id, coverImagePath, author }, j, docs) => (
+                        <Card
+                          title={title}
+                          id={_id}
+                          imgSrc={coverImagePath}
+                          author={author.userName}
+                          key={"bookmarked" + title}
+                          queryClient={queryClient}
+                          intersectionRef={
+                            hasNextPage &&
+                            i === pages.length - 1 &&
+                            j === docs.length - 2 &&
+                            setElement
+                          }
+                        />
+                      )
+                    )
+                  )}
+                </AnimateSharedLayout>
               </main>
             </div>
           )}

@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema({
@@ -53,5 +54,7 @@ UserSchema.methods.comparePassword = function (password, callback) {
     })
     .catch((err) => callback(err));
 };
+
+UserSchema.plugin(aggregatePaginate);
 
 module.exports = new model("User", UserSchema);
