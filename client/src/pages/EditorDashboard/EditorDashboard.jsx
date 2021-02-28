@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import AddImg from "../../assets/img/add.jpg";
+import EditorServices from "../../services/EditorServices";
 import { motion } from "framer-motion";
 import {
   FavoriteRounded,
@@ -18,16 +19,17 @@ import { Tooltip } from "@material-ui/core";
 
 import "./EditorDashboard.scss";
 
-import fakeData from "../../fakeData2";
 import {
   Button,
   ConditionalSimpleBar,
   ResponsiveNavBar,
   SplitText,
+  Preloader,
 } from "../../components";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { card } from "../../animations/cardVariants";
 import tapping from "../../animations/tapping";
+import { useQuery } from "react-query";
 
 const IMG0 = lazy(() => import("./Lazies/IMG0"));
 const IMG1 = lazy(() => import("./Lazies/IMG1"));
@@ -38,29 +40,29 @@ const IMG5 = lazy(() => import("./Lazies/IMG5"));
 const IMG6 = lazy(() => import("./Lazies/IMG6"));
 const IMG7 = lazy(() => import("./Lazies/IMG7"));
 
-const EditorDashboard = () => {
-  const [topBlog, setTopBlog] = useState({});
-  const [random] = useState(Math.floor(Math.random() * 8));
-
+const EditorDashboard = ({ random }) => {
   const history = useHistory();
-
-  useEffect(() => {
-    setTopBlog(fakeData); // fetch and set data
-  }, []);
 
   let location = useLocation();
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
 
-  return (
+  const { data, isLoading } = useQuery(
+    "editor-statistics",
+    EditorServices.getStatistics
+  );
+
+  useEffect(() => console.log(data), [data]);
+
+  return isLoading ? (
+    <Preloader />
+  ) : (
     <ConditionalSimpleBar>
       <motion.div
         variants={translateDownAndFadeOut}
         initial="initial"
         animate="visible"
         exit="exit"
-        onAnimationStart={() => (document.body.style.overflow = "hidden")}
-        onAnimationComplete={() => (document.body.style.overflow = "auto")}
       >
         <ResponsiveNavBar />
         <div className={`editor-dashboard ${theme}`}>
@@ -158,46 +160,49 @@ const EditorDashboard = () => {
                 <div
                   className="cover"
                   style={{
-                    background: `url(${topBlog?.coverImagePath}) no-repeat center / cover`,
+                    background: `url(${data.topBlog.coverImagePath}) no-repeat center / cover`,
                   }}
                 >
                   <div className="stats">
                     <div className="likes">
                       <FavoriteRounded />
                       <div className="separator"></div>
-                      <p>{topBlog?.likes}</p>
+                      <p>{data.topBlog.likes}</p>
                     </div>
                     <div className="comments">
                       <ChatBubbleRounded />
                       <div className="separator"></div>
-                      <p>{topBlog.comments?.length}</p>
+                      <p>{data.topBlog.comments}</p>
                     </div>
                     <div className="views">
                       <VisibilityRounded />
                       <div className="separator"></div>
-                      <p>{topBlog.views}</p>
+                      <p>{data.topBlog.views}</p>
                     </div>
                   </div>
                 </div>
                 <div className="info">
                   <h1>
-                    {topBlog.title?.split(" ").length > 5
-                      ? topBlog.title?.split(" ").slice(0, 5).join(" ") + "..."
-                      : topBlog.title}
+                    {data.topBlog.title.split(" ").length > 5
+                      ? data.topBlog.title.split(" ").slice(0, 5).join(" ") +
+                        "..."
+                      : data.topBlog.title}
                   </h1>
                   <p>
                     {" "}
-                    {topBlog.subtitle?.split(" ").length > 10
-                      ? topBlog.subtitle?.split(" ").slice(0, 10).join(" ") +
-                        "..."
-                      : topBlog.subtitle}
+                    {data.topBlog.subtitle.split(" ").length > 10
+                      ? data.topBlog.subtitle
+                          .split(" ")
+                          .slice(0, 10)
+                          .join(" ") + "..."
+                      : data.topBlog.subtitle}
                   </p>
                   <div className="separator"></div>
                   <footer>
                     <Button
                       type="button"
                       rightIcon={<KeyboardArrowRightRounded />}
-                      to={`/blog/${topBlog.id}`}
+                      to={`/blog/${data.topBlog._id}`}
                     >
                       Yazına git
                     </Button>
@@ -310,7 +315,7 @@ const EditorDashboard = () => {
               <div className="content">
                 <main>
                   <p>Toplam</p>
-                  <h1>47</h1>
+                  <h1>{data.blogs || 0} </h1>
                   <p>yazı yayınladın.</p>
                 </main>
               </div>
@@ -336,7 +341,7 @@ const EditorDashboard = () => {
               <div className="content">
                 <main>
                   <p>Yazılarından</p>
-                  <h1>5</h1>
+                  <h1>{data.pending || 0} </h1>
                   <p>tanesi beklemede.</p>
                 </main>
               </div>
@@ -353,7 +358,7 @@ const EditorDashboard = () => {
               <div className="content">
                 <main>
                   <p>Toplam</p>
-                  <h1>1542</h1>
+                  <h1>{data.likes || 0}</h1>
                   <p>beğeni aldın.</p>
                 </main>
               </div>
@@ -394,7 +399,7 @@ const EditorDashboard = () => {
               <div className="content">
                 <main>
                   <p>Yazıların</p>
-                  <h1>6239</h1>
+                  <h1>{data.views || 0}</h1>
                   <p>defa okundu.</p>
                 </main>
               </div>

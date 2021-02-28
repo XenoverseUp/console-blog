@@ -38,27 +38,25 @@
         flex-direction: column;
       }
 
-      &:not(.welcome) {
-        .content {
-          padding-bottom: 1rem;
+      .content {
+        padding-bottom: 1rem;
 
-          main {
-            padding: 0 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
+        main {
+          padding: 0 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          text-align: center;
 
-            p {
-              line-height: 1.3em;
-            }
+          p {
+            line-height: 1.3em;
+          }
 
-            h1 {
-              margin-top: 0.1em;
-              margin-bottom: 0.2em;
-              font-family: "Red Hat Display", sans-serif !important;
-            }
+          h1 {
+            margin-top: 0.1em;
+            margin-bottom: 0.2em;
+            font-family: "Red Hat Display", sans-serif !important;
           }
         }
       }

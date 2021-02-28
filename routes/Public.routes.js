@@ -6,8 +6,28 @@ const {
 const validateCommentInput = require("../validation/validateCommentInput");
 const Blog = require("../models/Blog");
 const Comment = require("../models/Comment");
-const User = require("../models/User");
-const { default: axios } = require("axios");
+
+// Bookmark all dev route
+
+router.patch(
+  "/bookmarkAll",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Blog.find({}, (err, docs) => {
+      const ids = [];
+
+      for (let i = 0; i < docs.length; i++) {
+        ids.push(docs[i]._id);
+      }
+
+      req.user.bookmarkedBlogs = ids;
+      req.user.save((err, user) => {
+        if (err) return res.sendStatus(500);
+        res.send({ message: "All of the blogs are bookmarked.", status: 200 });
+      });
+    });
+  }
+);
 
 // Get paginated blogs with page, limit and category parameters.
 

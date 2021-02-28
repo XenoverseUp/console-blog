@@ -2,8 +2,91 @@ const router = require("express").Router();
 const passport = require("passport");
 
 const Blog = require("../models/Blog");
+const User = require("../models/User");
 
-// Get all unpublished Blogs
+// Get blog statistics.
+
+router.get(
+  "/stats",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    if (["admin", "super-admin"].includes(req.user.role)) {
+      const [blogStats] = await Blog.aggregate([
+        {
+          $group: {
+            _id: "",
+            likes: {
+              $sum: {
+                $size: "$likedBy",
+              },
+            },
+            views: {
+              $sum: "$views",
+            },
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            likes: "$likes",
+            views: "$views",
+            blogs: "$count",
+          },
+        },
+      ]);
+
+      const [userStats] = await User.aggregate([
+        {
+          $group: {
+            _id: "",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            users: "$count",
+          },
+        },
+      ]);
+
+      const [editorStats] = await User.aggregate([
+        {
+          $match: {
+            role: {
+              $in: ["editor", "admin", "super-admin"],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            editors: "$count",
+          },
+        },
+      ]);
+
+      res.send({ ...blogStats, ...userStats, ...editorStats });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+);
+
+// Get all unpublished blogs.
 
 router.get(
   "/unconfirmed",
@@ -30,6 +113,8 @@ router.get(
 
           return res.status(200).json({ blogs, errors: { msgError: false } });
         });
+    } else {
+      res.sendStatus(401);
     }
   }
 );
@@ -63,6 +148,9 @@ router.get(
 
           return res.status(200).json({ blog, errors: { msgError: false } });
         });
+    else {
+      res.sendStatus(401);
+    }
   }
 );
 
@@ -92,6 +180,8 @@ router.put(
           },
         });
       });
+    } else {
+      res.sendStatus(401);
     }
   }
 );
@@ -127,6 +217,8 @@ router.delete(
           });
         });
       });
+    } else {
+      res.sendStatus(401);
     }
   }
 );

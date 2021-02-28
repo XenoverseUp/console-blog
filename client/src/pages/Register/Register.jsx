@@ -20,9 +20,11 @@ import {
   LockOutlined,
   KeyboardArrowLeft,
 } from "@material-ui/icons";
+import { CircularProgress } from "@material-ui/core";
 import RegistreImg from "../../assets/img/register.png";
 import "./Register.scss";
 import { motion } from "framer-motion";
+import { useMutation } from "react-query";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import tapping from "../../animations/tapping";
 import splitText from "../../animations/splitText";
@@ -52,16 +54,30 @@ const Register = () => {
     mode: "onSubmit",
   });
 
+  const {
+    mutateAsync: registerUser,
+    isLoading: isLoadingRegister,
+  } = useMutation(AuthServices.register);
+
+  const { mutateAsync: login, isLoading: isLoadingLogin } = useMutation(
+    AuthServices.login
+  );
+
+  const {
+    mutateAsync: authenticate,
+    isLoading: isLoadingAuthenticate,
+  } = useMutation(AuthServices.isAuthenticated);
+
   const onSubmit = async (data) => {
-    let res = await AuthServices.register(data);
+    let res = await registerUser(data);
     if (res.errors.alreadyRegistered && res.errors.msgError) {
       setAlreadyRegistered(true);
       return;
     }
 
-    await AuthServices.login(data);
+    await login(data);
 
-    const { user, isAuthenticated } = await AuthServices.isAuthenticated();
+    const { user, isAuthenticated } = await authenticate();
 
     setUser(user);
     setIsAuthenticated(isAuthenticated);
@@ -179,7 +195,25 @@ const Register = () => {
                 alreadyRegistered={alreadyRegistered}
               />
 
-              <Button type="submit">Hesap Oluştur</Button>
+              <Button type="submit">
+                {isLoadingLogin ||
+                isLoadingAuthenticate ||
+                isLoadingRegister ? (
+                  <>
+                    <CircularProgress
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginRight: ".5rem",
+                        color: "#ff9900",
+                      }}
+                    />
+                    Yükleniyor...
+                  </>
+                ) : (
+                  "Hesap Oluştur"
+                )}
+              </Button>
             </form>
             <footer>
               Zaten bir hesabın var mı? O zaman{" "}

@@ -229,7 +229,7 @@
   }
 
   .error {
-    color: rgb(145, 0, 0);
+    color: $dark-error-color;
     font-size: 0.7rem;
     display: flex;
     justify-content: center;

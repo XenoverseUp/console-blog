@@ -133,7 +133,6 @@
             border-top-left-radius: 1rem;
             border-top-right-radius: 1rem;
             position: relative;
-            transition: ease 0.25s all;
 
             &::after {
               content: "";
@@ -143,7 +142,6 @@
               bottom: 0;
               right: 0;
               transform: translateX(98%);
-              transition: ease 0.25s all;
             }
 
             &::before {

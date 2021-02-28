@@ -35,12 +35,16 @@ router.post(
           }
 
           return res.status(200).json({
-            message: `${user.email} is now a ${role}.`,
             errors: { msgError: false },
-            user,
+            user: {
+              userName: user.userName,
+              role: user.role,
+            },
           });
         }
       );
+    } else {
+      res.sendStatus(401);
     }
   }
 );

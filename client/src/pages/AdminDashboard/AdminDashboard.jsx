@@ -10,6 +10,7 @@ import {
   AdminCard,
   SplitText,
   ConditionalSimpleBar,
+  Preloader,
 } from "../../components";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { card } from "../../animations/cardVariants.js";
@@ -22,6 +23,7 @@ import { ReactComponent as MenuBookRounded } from "../../assets/img/open-book.sv
 import { ReactComponent as Views } from "../../assets/img/views.svg";
 import tapping from "../../animations/tapping";
 import avatar from "../../assets/img/admin0.png";
+import { useQuery } from "react-query";
 
 const EmptyLight = lazy(() => import("./Lazies/EmptyLight"));
 const EmptyDark = lazy(() => import("./Lazies/EmptyDark"));
@@ -41,7 +43,14 @@ const AdminDashboard = () => {
 
   const [pendingBlogs, setPendingBlogs] = useState([]);
 
+  const { data: stats, isLoading: isStatsLoading } = useQuery(
+    "admin-statistics",
+    AdminServices.getStatistics
+  );
+
   useScroll({});
+
+  useEffect(() => console.log(stats), [stats]);
 
   useEffect(() => {
     AdminServices.getAllUnpublishedBlogs()
@@ -52,7 +61,9 @@ const AdminDashboard = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  return (
+  return isStatsLoading ? (
+    <Preloader />
+  ) : (
     <ConditionalSimpleBar>
       <motion.div
         variants={translateDownAndFadeOut}
@@ -75,7 +86,7 @@ const AdminDashboard = () => {
                 >
                   <article>
                     <p>Yazı</p>
-                    <h1>103</h1>
+                    <h1> {stats.blogs || 0} </h1>
                   </article>
                   <div className="icon-container">
                     <div className="outer">
@@ -91,7 +102,7 @@ const AdminDashboard = () => {
                 >
                   <article>
                     <p>Görüntülenme</p>
-                    <h1>6025</h1>
+                    <h1> {stats.views || 0} </h1>
                   </article>
                   <div className="icon-container">
                     <div className="outer">
@@ -107,7 +118,7 @@ const AdminDashboard = () => {
                 >
                   <article>
                     <p>Beğeni</p>
-                    <h1>1523</h1>
+                    <h1> {stats.likes || 0} </h1>
                   </article>
                   <div className="icon-container">
                     <div className="outer">
@@ -123,7 +134,7 @@ const AdminDashboard = () => {
                 >
                   <article>
                     <p>Editör</p>
-                    <h1>773</h1>
+                    <h1> {stats.editors || 0} </h1>
                   </article>
                   <div className="icon-container">
                     <div className="outer">
@@ -139,7 +150,7 @@ const AdminDashboard = () => {
                 >
                   <article>
                     <p>Kullanıcı</p>
-                    <h1>602</h1>
+                    <h1> {stats.users || 0} </h1>
                   </article>
                   <div className="icon-container">
                     <div className="outer">

@@ -1,18 +1,6 @@
 import axios from "axios";
 
-const getEditorsAllWritings = async () => {
-  const res = await fetch("/editor/myBlogs");
-
-  const jsonData = await res.json();
-  return jsonData;
-};
-
-const getSingleUnpublishedWriting = async (blogID) => {
-  const res = await fetch(`/editor/blogs/${blogID}`);
-
-  const jsonData = await res.json();
-  return jsonData;
-};
+const getStatistics = async () => await (await fetch("/editor/stats")).json();
 
 const addBlog = async (blogData) => {
   const res = await axios.post("/editor/addBlog", blogData);
@@ -21,7 +9,6 @@ const addBlog = async (blogData) => {
 };
 
 export default {
-  getEditorsAllWritings,
-  getSingleUnpublishedWriting,
+  getStatistics,
   addBlog,
 };

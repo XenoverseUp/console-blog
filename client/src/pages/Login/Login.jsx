@@ -23,6 +23,9 @@ import "./Login.scss";
 import { motion } from "framer-motion";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import tapping from "../../animations/tapping";
+import { useMutation } from "react-query";
+import BlogServices from "../../services/BlogServices";
+import { CircularProgress } from "@material-ui/core";
 
 const Login = () => {
   const { theme } = useContext(ThemeContext);
@@ -49,10 +52,20 @@ const Login = () => {
     };
   }, []);
 
-  const onSubmit = async (data) => {
-    await AuthServices.login(data);
+  const {
+    mutateAsync: login,
+    isLoading: isLoadingLogin,
+    isError,
+  } = useMutation(AuthServices.login);
+  const {
+    mutateAsync: authenticate,
+    isLoading: isLoadingAuthenticate,
+  } = useMutation(AuthServices.isAuthenticated);
 
-    const { user, isAuthenticated } = await AuthServices.isAuthenticated();
+  const onSubmit = async (data) => {
+    await login(data);
+
+    const { user, isAuthenticated } = await authenticate();
 
     if (!isAuthenticated) return setCannotFound(true);
 
@@ -160,11 +173,28 @@ const Login = () => {
                 cannotFound={cannotFound}
               />
 
-              <Button type="submit">Giriş Yap</Button>
+              <Button type="submit">
+                {isLoadingLogin || isLoadingAuthenticate ? (
+                  <>
+                    <CircularProgress
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        marginRight: ".5rem",
+                        color: "#ff9900",
+                      }}
+                    />
+                    Yükleniyor...
+                  </>
+                ) : (
+                  "Giriş Yap"
+                )}
+              </Button>
             </form>
             <footer>
-              Henüz bir hesabın yok mu? O zaman{" "}
+              Henüz bir hesabın yok mu? O zaman
               <Link to="/register" className="link">
+                {" "}
                 Hesap Oluştur
               </Link>
               .

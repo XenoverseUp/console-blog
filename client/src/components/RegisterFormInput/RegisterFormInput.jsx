@@ -58,7 +58,7 @@ const FormInput = ({
                 "scale(0.8) translate(-2rem, -1.87rem)";
               labelRef.current.style.opacity = "1";
               labelRef.current.style.background =
-                "linear-gradient(0deg, #353535 50%, #252525 50%)";
+                "linear-gradient(0deg, #1f1f1f 50%, #2c2c2c 50%)";
               labelRef.current.style.boxSizing = "content-box";
               labelRef.current.style.padding = "0 0.7rem";
               labelRef.current.style.fontWeight = "600";

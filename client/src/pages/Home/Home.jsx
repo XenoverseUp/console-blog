@@ -13,12 +13,7 @@ import {
 } from "../../components";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import {
-  useInfiniteQuery,
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "react-query";
 import "./Home.scss";
 
 import { CategoryContext } from "../../contexts/CategoryContext";
@@ -183,7 +178,7 @@ const Home = () => {
                           j,
                           docs
                         ) => {
-                          if (i === 0 && [0, 1, 2, 3].includes(j)) return;
+                          if (i === 0 && [0, 1, 2, 3].includes(j) && 0) return;
                           return width > 600 ? (
                             <HomeBlogCard
                               key={"home-blog" + title}

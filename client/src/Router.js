@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { PrivateRoute, PublicRoute } from "./hooks";
 import { Login, Register, Bookmarked, Contact, Home } from "./pages";
 import { Preloader } from "./components";
@@ -18,6 +18,7 @@ const AdminDashboard = lazy(() =>
 
 const Router = () => {
   let location = useLocation();
+  const [random] = useState(Math.floor(Math.random() * 8));
 
   return (
     <Suspense fallback={<Preloader />}>
@@ -66,6 +67,7 @@ const Router = () => {
             exact
             roles={["editor", "admin", "super-admin"]}
             component={EditorDashboard}
+            random={random}
           />
           <PrivateRoute
             key="route 8"

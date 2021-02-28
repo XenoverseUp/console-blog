@@ -21,7 +21,7 @@ nav.light {
   user-select: none;
   position: sticky;
   top: 0;
-  transition: ease 0.25s all;
+
   background-color: $light-primary-bg;
   z-index: 50 !important;
 
@@ -251,7 +251,6 @@ nav.dark {
   user-select: none;
   position: sticky;
   top: 0;
-  transition: ease 0.25s all;
   background-color: $dark-primary-bg;
   z-index: 50 !important;
 

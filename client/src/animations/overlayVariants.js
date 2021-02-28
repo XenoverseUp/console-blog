@@ -5,11 +5,14 @@ export const visibleOverlay = {
   visible: {
     opacity: 0.7,
     transition: {
-      duration: 0.5,
+      duration: 0.2,
     },
   },
   exit: {
     opacity: 0,
+    transition: {
+      duration: 0.2,
+    },
   },
 };
 

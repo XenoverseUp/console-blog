@@ -6,8 +6,7 @@ import { Bookmark, BookmarkBorder } from "@material-ui/icons";
 import { ResponsiveNavBar } from "../../components";
 import "./Bookmarked.scss";
 import isEmpty from "is-empty";
-import FakeData from "../../fakeData";
-import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { AnimateSharedLayout, motion } from "framer-motion";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 

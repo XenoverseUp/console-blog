@@ -6,6 +6,8 @@ const getAllUnpublishedBlogs = async () => {
   return res;
 };
 
+const getStatistics = async () => await (await fetch("/admin/stats")).json();
+
 const getSingleUnpublishedBlog = async ({ queryKey }) => {
   const [_, { id }] = queryKey;
 
@@ -29,6 +31,7 @@ const deleteBlog = async (blogID) => {
 export default {
   getAllUnpublishedBlogs,
   getSingleUnpublishedBlog,
+  getStatistics,
   confirmBlog,
   deleteBlog,
 };
