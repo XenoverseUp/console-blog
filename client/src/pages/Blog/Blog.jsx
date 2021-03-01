@@ -21,7 +21,12 @@ import {
 import { AuthContext } from "../../contexts/AuthContext";
 
 import BlogServices from "../../services/BlogServices";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { useParams } from "react-router-dom";
 
 const AuthModal = lazy(() => import("../../components/AuthModal/AuthModal"));
@@ -32,10 +37,12 @@ const Blog = () => {
   const [width] = useCurrentWidth();
   const { id } = useParams();
 
+  //Optimistic Update states
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [newComments, setNewComments] = useState([]);
+
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [authModal, setAuthModal] = useState(false);
 
@@ -48,6 +55,26 @@ const Blog = () => {
       enabled: !!id,
     }
   );
+
+  const {
+    data: commentData,
+    isLoading: isLoadingComment,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    ["blog-comments"],
+    ({ pageParam }) => BlogServices.getComments({ pageParam, id }),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.hasNextPage) return undefined;
+        return lastPage.nextPage;
+      },
+      enabled: !!id && isCommentOpen,
+    }
+  );
+
+  useEffect(() => console.log(commentData), [commentData]);
 
   const { mutateAsync: updateViews } = useMutation(BlogServices.updateBlogView);
 
@@ -160,7 +187,7 @@ const Blog = () => {
         >
           <AnimateSharedLayout>
             <DrawerHeader
-              commentLength={data[0].comments?.length + newComments.length}
+              commentLength={data[0].comments + newComments.length}
             />
             <CommentPoster
               setNewComments={setNewComments}
@@ -174,7 +201,6 @@ const Blog = () => {
               >
                 {newComments.map((comment, i) => (
                   <DrawerItem
-                    animated
                     key={i + "new-comment"}
                     postedBy={comment?.postedBy}
                     createdAt={comment?.createdAt}
@@ -184,19 +210,18 @@ const Blog = () => {
                 ))}
               </motion.div>
 
-              <motion.div
-                layout
-                style={{ display: "flex", flexDirection: "column-reverse" }}
-              >
-                {data[0].comments.map((comment, i) => (
-                  <DrawerItem
-                    key={comment?.postedBy + i}
-                    postedBy={comment?.postedBy}
-                    createdAt={comment?.createdAt}
-                  >
-                    {comment?.content}
-                  </DrawerItem>
-                ))}
+              <motion.div style={{ display: "flex", flexDirection: "column" }}>
+                {commentData?.pages.map((page) =>
+                  page.docs.map((comment, i) => (
+                    <DrawerItem
+                      key={"blog-comment" + `${i}`}
+                      postedBy={comment?.postedBy}
+                      createdAt={comment?.createdAt}
+                    >
+                      {comment?.content}
+                    </DrawerItem>
+                  ))
+                )}
               </motion.div>
             </motion.div>
           </AnimateSharedLayout>
@@ -213,7 +238,7 @@ const Blog = () => {
           />
           <ContentWrapper>
             <Sidebar
-              comments={data[0].comments?.length + newComments.length}
+              comments={data[0].comments + newComments.length}
               date={new Date(data[0].createdAt)}
               likes={isLikeLoading || isDislikeLoading ? likes : data[0].likes}
               top={10}

@@ -35,7 +35,7 @@ router.get(
   "/blogs",
   passport.authenticate(["jwt", "anonymous"], { session: false }),
   (req, res) => {
-    let { page, limit = 15, category } = req.query;
+    let { page, limit = 6, category } = req.query;
     category = category || "all";
 
     const options = {
@@ -219,7 +219,9 @@ router.get(
           coverImagePath: 1,
           createdAt: 1,
           content: 1,
-          comments: 1,
+          comments: {
+            $size: "$comments",
+          },
           likes: {
             $size: "$likedBy",
           },
@@ -269,6 +271,55 @@ router.get(
       .catch((err) => res.status(500).send(err));
   }
 );
+
+// Get a single blog's comments with page and limit parameters.
+
+router.get("/blog/comment", async (req, res) => {
+  let { page, limit = 20, id } = req.query;
+
+  const options = {
+    page,
+    limit,
+    allowDiskUse: true,
+  };
+
+  const blog = await Blog.findById(id);
+
+  const pipeline = [
+    {
+      $match: {
+        _id: { $in: blog.comments },
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "postedBy",
+        foreignField: "_id",
+        as: "postedBy",
+      },
+    },
+    { $unwind: "$postedBy" },
+    {
+      $project: {
+        _id: 0,
+        content: 1,
+        createdAt: 1,
+        postedBy: "$postedBy.userName",
+      },
+    },
+  ];
+
+  const aggregate = Comment.aggregate(pipeline);
+  Comment.aggregatePaginate(aggregate, options)
+    .then((docs) => res.send(docs))
+    .catch((err) => res.sendStatus(500));
+});
 
 // Get bookmarked blogs
 
@@ -333,7 +384,7 @@ router.get(
 // Post a comment about blog
 
 router.put(
-  "/blogs/:blogID/addComment",
+  "/blog/addComment",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { content } = req.body;
@@ -341,9 +392,8 @@ router.put(
 
     if (!isValid) return res.status(400).json(errors, isValid);
 
-    let newComment = new Comment({ content });
+    let newComment = new Comment({ content, postedBy: req.user._id });
 
-    newComment.postedBy = req.user._id;
     newComment.save((err, comment) => {
       if (err)
         return res.status(500).json({
@@ -353,7 +403,7 @@ router.put(
           },
         });
 
-      Blog.findOne({ _id: req.params.blogID }, (err, blog) => {
+      Blog.findOne({ _id: req.query.id }, (err, blog) => {
         if (err)
           return res.status(500).json({
             errors: {

@@ -28,17 +28,23 @@ const getBookmarkedBlogs = async ({ pageParam }) => {
   return res.json();
 };
 
+const getComments = async ({ pageParam, id }) => {
+  pageParam = pageParam ?? 1;
+  const res = await fetch(`/public/blog/comment?page=${pageParam}&id=${id}`);
+
+  return res.json();
+};
+
 const addComment = async (data, blogID) => {
-  const res = await fetch(`/public/blogs/${blogID}/addComment`, {
-    method: "POST",
+  const res = await fetch(`/public/blog/addComment?id=${blogID}`, {
+    method: "PUT",
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  const jsonData = await res.json();
-  return jsonData;
+  return await res.json();
 };
 
 const likeBlog = async (blogID) => {
@@ -86,6 +92,7 @@ export default {
   getTopBlogs,
   getBlogsByCategory,
   getSinglePublishedBlog,
+  getComments,
   getBookmarkedBlogs,
   addComment,
   likeBlog,

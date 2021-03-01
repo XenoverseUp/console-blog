@@ -7,3 +7,5 @@
 4. Day.js implementation
 
 5. "onWheel" event for creating carousel
+
+6. Add an easter egg (konami code) (roles: premier, seconder)

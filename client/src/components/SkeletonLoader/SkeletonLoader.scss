@@ -1,0 +1,67 @@
+@import "../../scss/Variables.scss";
+
+.skeleton-wrapper {
+  height: 13rem;
+  margin-bottom: 0.7rem;
+  display: grid;
+  grid-template-columns: 20% 80%;
+
+  &.light {
+    .main-content {
+      background-color: white;
+    }
+  }
+
+  &.dark {
+    span {
+      background-color: rgba($color: $dark-primary-bg, $alpha: 0.8);
+
+      &::after {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.02),
+          transparent
+        );
+      }
+    }
+
+    .left {
+      span {
+        background-color: $dark-secondary-bg;
+      }
+    }
+
+    .main-content {
+      background-color: $dark-secondary-bg;
+    }
+  }
+
+  .left {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .right {
+    display: flex;
+
+    .main-content {
+      border-radius: 1rem;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 30% 70%;
+
+      .cover {
+        padding: 0.7rem;
+      }
+
+      .content {
+        padding: 0.7rem;
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ import {
   Schedule,
 } from "@material-ui/icons";
 import { ReactComponent as MenuBookRounded } from "../../assets/img/views.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useMutation } from "react-query";
 import BlogServices from "../../services/BlogServices";
 
@@ -35,6 +35,7 @@ const HomeBlogCard = ({
   const categories = useContext(CategoryContext);
   const [, categoryObj] = getCategory(category, categories);
   const [isCurrentBookmarked, setIsCurrentBookmarked] = useState(false);
+  const location = useLocation();
 
   const timeDifferenceString = getTimeDifferenceString(createdAt);
 
@@ -95,16 +96,28 @@ const HomeBlogCard = ({
       <div className="right">
         <div className="main-content">
           <div className="cover">
-            <div
-              className="img"
-              style={{
-                background: `url("${coverImagePath}") no-repeat center / cover`,
+            <Link
+              to={{
+                pathname: `/blog/${id}`,
+                state: { from: location.pathname },
               }}
-            ></div>
+            >
+              <div
+                className="img"
+                style={{
+                  background: `url("${coverImagePath}") no-repeat center / cover`,
+                }}
+              ></div>
+            </Link>
           </div>
           <div className="content">
             <section>
-              <Link to={{ pathname: `/blog/${id}` }}>
+              <Link
+                to={{
+                  pathname: `/blog/${id}`,
+                  state: { from: location.pathname },
+                }}
+              >
                 <header>
                   <h4>{title}</h4>
 

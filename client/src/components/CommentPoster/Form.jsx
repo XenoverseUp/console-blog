@@ -8,8 +8,9 @@ import tapping from "../../animations/tapping";
 import buttonVariants from "../../animations/buttonVariants";
 import { CommentOutlined, SendRounded } from "@material-ui/icons";
 import { TextareaAutosize } from "@material-ui/core";
-// import BlogServices from "../../services/BlogServices.js";
+import BlogServices from "../../services/BlogServices.js";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useMutation } from "react-query";
 
 const Form = ({ id, setNewComments, newComments }) => {
   const { theme } = useContext(ThemeContext);
@@ -23,6 +24,8 @@ const Form = ({ id, setNewComments, newComments }) => {
     mode: "all",
     reValidateMode: "onChange",
   });
+
+  const { mutateAsync } = useMutation(BlogServices.addComment, {});
 
   const onSubmit = async (data) => {
     setNewComments([

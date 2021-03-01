@@ -10,15 +10,15 @@ import {
   ConditionalSimpleBar,
   Preloader,
   ResponsiveNavBar,
+  SkeletonLoader,
 } from "../../components";
 import translateDownAndFadeOut from "../../animations/translateDownAndFadeOut";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { useInfiniteQuery, useQuery, useQueryClient } from "react-query";
-import "./Home.scss";
-
 import { CategoryContext } from "../../contexts/CategoryContext";
 import { useCurrentWidth } from "../../hooks";
 import BlogServices from "../../services/BlogServices";
+import "./Home.scss";
 
 const MobileSearch = lazy(() =>
   import("../../components/MobileSearch/MobileSearch")
@@ -44,7 +44,7 @@ const Home = () => {
   const {
     data,
     isLoading,
-    isFetching,
+    isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(["home-blogs"], BlogServices.getAllPublishedBlogs, {
@@ -178,7 +178,7 @@ const Home = () => {
                           j,
                           docs
                         ) => {
-                          if (i === 0 && [0, 1, 2, 3].includes(j) && 0) return;
+                          if (i === 0 && [0, 1, 2, 3].includes(j)) return;
                           return width > 600 ? (
                             <HomeBlogCard
                               key={"home-blog" + title}
@@ -225,6 +225,13 @@ const Home = () => {
                       );
                     })}
                   </Suspense>
+                  {isFetchingNextPage && (
+                    <>
+                      <SkeletonLoader />
+                      <SkeletonLoader />
+                      {/* <SkeletonLoader /> */}
+                    </>
+                  )}
                 </div>
                 <div className="posibly-ads"></div>
               </div>
