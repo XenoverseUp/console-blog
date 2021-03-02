@@ -35,8 +35,8 @@ const getComments = async ({ pageParam, id }) => {
   return res.json();
 };
 
-const addComment = async (data, blogID) => {
-  const res = await fetch(`/public/blog/addComment?id=${blogID}`, {
+const addComment = async ({ data, id }) => {
+  const res = await fetch(`/public/blog/addComment?id=${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
@@ -44,7 +44,7 @@ const addComment = async (data, blogID) => {
     },
   });
 
-  return await res.json();
+  return res.json();
 };
 
 const likeBlog = async (blogID) => {

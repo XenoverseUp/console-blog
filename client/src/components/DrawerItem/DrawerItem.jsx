@@ -5,13 +5,17 @@ import { getTimeDifferenceString } from "../../hooks";
 import { motion } from "framer-motion";
 import "./DrawerItem.scss";
 
-const DrawerItem = ({ postedBy, createdAt, children }) => {
+const DrawerItem = ({ postedBy, createdAt, children, intersectionRef }) => {
   const { theme } = useContext(ThemeContext);
 
   const timeString = getTimeDifferenceString(createdAt);
 
   return (
-    <motion.div layout className={`drawer-item ${theme}`}>
+    <motion.div
+      layout
+      className={`drawer-item ${theme}`}
+      {...(intersectionRef && { ref: intersectionRef })}
+    >
       <header>
         <Face />
         <div className="comment-info">

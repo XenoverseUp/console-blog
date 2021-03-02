@@ -1,4 +1,12 @@
-import { useContext, useEffect, useState, lazy, Suspense } from "react";
+import {
+  useContext,
+  useEffect,
+  useState,
+  lazy,
+  Suspense,
+  useMemo,
+  useRef,
+} from "react";
 import { getDuration, useCurrentWidth } from "../../hooks";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AnimateSharedLayout, motion } from "framer-motion";
@@ -45,10 +53,11 @@ const Blog = () => {
 
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [authModal, setAuthModal] = useState(false);
+  const [element, setElement] = useState(null);
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading: isLoadingContent } = useQuery(
     ["single-blog", { id }],
     BlogServices.getSinglePublishedBlog,
     {
@@ -70,11 +79,18 @@ const Blog = () => {
         if (!lastPage.hasNextPage) return undefined;
         return lastPage.nextPage;
       },
-      enabled: !!id && isCommentOpen,
+      enabled: !!id,
     }
   );
 
-  useEffect(() => console.log(commentData), [commentData]);
+  const observer = useRef(
+    new IntersectionObserver(
+      (entries) => {
+        entries[0].isIntersecting && fetchNextPage();
+      },
+      { threshold: 0.2 }
+    )
+  );
 
   const { mutateAsync: updateViews } = useMutation(BlogServices.updateBlogView);
 
@@ -156,7 +172,23 @@ const Blog = () => {
     setLikes(likes);
   }, [data]);
 
+  useEffect(() => {
+    const currentElement = element;
+    const currentObserver = observer.current;
+
+    currentElement && currentObserver.observe(currentElement);
+
+    return () => {
+      currentElement && currentObserver.unobserve(currentElement);
+    };
+  }, [element]);
+
   useEffect(() => updateViews(id), []);
+
+  const isLoading = useMemo(() => isLoadingContent || isLoadingComment, [
+    isLoadingComment,
+    isLoadingContent,
+  ]);
 
   return isLoading ? (
     <Preloader />
@@ -193,7 +225,7 @@ const Blog = () => {
               setNewComments={setNewComments}
               newComments={newComments}
               setDrawerState={setIsCommentOpen}
-              id={data[0]._id}
+              id={id}
             />
             <motion.div>
               <motion.div
@@ -211,12 +243,18 @@ const Blog = () => {
               </motion.div>
 
               <motion.div style={{ display: "flex", flexDirection: "column" }}>
-                {commentData?.pages.map((page) =>
-                  page.docs.map((comment, i) => (
+                {commentData?.pages.map((page, i, pages) =>
+                  page.docs.map((comment, j, comments) => (
                     <DrawerItem
-                      key={"blog-comment" + `${i}`}
+                      key={"blog-comment" + `${j}`}
                       postedBy={comment?.postedBy}
                       createdAt={comment?.createdAt}
+                      intersectionRef={
+                        hasNextPage &&
+                        i === pages.length - 1 &&
+                        j === comments.length - 2 &&
+                        setElement
+                      }
                     >
                       {comment?.content}
                     </DrawerItem>

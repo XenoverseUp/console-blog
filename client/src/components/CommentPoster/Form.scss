@@ -1,0 +1,88 @@
+@import "../../scss/Variables.scss";
+@import "../../scss/Shared.scss";
+
+.comment-poster.authenticated {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 1.5rem 0;
+
+  form {
+    width: 100%;
+    display: flex;
+
+    .avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 2.4rem;
+    }
+
+    .content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 1rem;
+
+      textarea {
+        resize: none;
+        outline: none;
+        border: none;
+        border: 1px dashed $light-color;
+        border-radius: 0.8rem;
+        font-family: "Red Hat Display", sans-serif;
+        padding: 0.7rem;
+        position: relative;
+        font-size: 0.9rem;
+
+        &:focus::-webkit-input-placeholder {
+          overflow: hidden;
+          transition: all 0.4s 0.5s ease;
+          text-indent: -50%;
+          opacity: 0;
+        }
+      }
+
+      .controllers {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+
+        button {
+          margin-top: 1rem;
+          margin-right: 0.3rem;
+          padding: 0.7rem;
+
+          background-color: $light-primary-bg;
+          box-shadow: none;
+          border: none;
+          font-size: 0.9rem;
+
+          svg {
+            font-size: 1rem;
+            margin-left: 0.3em;
+          }
+
+          @include hover-supported() {
+            color: unset;
+            transform: scale(1.05);
+          }
+        }
+      }
+
+      &.dark {
+        textarea {
+          background-color: $dark-primary-bg;
+          color: $dark-primary-typo;
+        }
+
+        .controllers {
+          button {
+            background-color: $dark-secondary-bg;
+          }
+        }
+      }
+    }
+  }
+}

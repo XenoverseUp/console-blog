@@ -19,7 +19,7 @@ const StyledSelect = ({ children, register, ...rest }) => {
   };
 
   return (
-    <React.Fragment>
+    <div className="styled-select">
       <React.Suspense fallback={<>Loading</>}>
         {theme === "light" && <LightTheme />}
         {theme === "dark" && <DarkTheme />}
@@ -32,7 +32,7 @@ const StyledSelect = ({ children, register, ...rest }) => {
       >
         {children}
       </Select>
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { commentValidationSchema } from "../../validation";
@@ -10,7 +10,9 @@ import { CommentOutlined, SendRounded } from "@material-ui/icons";
 import { TextareaAutosize } from "@material-ui/core";
 import BlogServices from "../../services/BlogServices.js";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+
+import "./Form.scss";
 
 const Form = ({ id, setNewComments, newComments }) => {
   const { theme } = useContext(ThemeContext);
@@ -25,6 +27,19 @@ const Form = ({ id, setNewComments, newComments }) => {
     reValidateMode: "onChange",
   });
 
+  const queryClient = useQueryClient();
+
+  const cleanUp = () => {
+    setNewComments([]);
+    queryClient.invalidateQueries("single-blog");
+    queryClient.invalidateQueries("blog-comments");
+  };
+
+  useEffect(() => {
+    cleanUp();
+    return () => cleanUp();
+  }, []);
+
   const { mutateAsync } = useMutation(BlogServices.addComment, {});
 
   const onSubmit = async (data) => {
@@ -33,10 +48,10 @@ const Form = ({ id, setNewComments, newComments }) => {
       { postedBy: user.userName, createdAt: new Date(), content: data.content },
     ]);
 
+    mutateAsync({ data, id });
+
     setContent("");
     reset();
-
-    // await BlogServices.addComment(data, id);
   };
 
   return (
