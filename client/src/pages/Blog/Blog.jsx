@@ -25,6 +25,9 @@ import {
   CommentPoster,
   ConditionalSimpleBar,
   Preloader,
+  Recommendeds,
+  RecommendedCard,
+  Footer,
 } from "../../components";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -299,6 +302,15 @@ const Blog = () => {
             <SanitizedContent content={data[0].content} />
           </ContentWrapper>
         </BlogContainer>
+        <Recommendeds>
+          <RecommendedCard />
+          <RecommendedCard />
+          <RecommendedCard />
+          <RecommendedCard />
+          <RecommendedCard />
+          <RecommendedCard />
+        </Recommendeds>
+        <Footer />
       </motion.div>
     </ConditionalSimpleBar>
   );

@@ -321,6 +321,77 @@ router.get("/blog/comment", async (req, res) => {
     .catch((err) => res.sendStatus(500));
 });
 
+// Get recommended blogs for a blog
+
+router.get("/blog/recommendeds", async (req, res) => {
+  let { id, category } = req.query;
+
+  const projection = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "author",
+        foreignField: "_id",
+        as: "author",
+      },
+    },
+    {
+      $unwind: "$author",
+    },
+    {
+      $project: {
+        title: 1,
+        coverImagePath: 1,
+        author: {
+          userName: 1,
+        },
+      },
+    },
+  ];
+
+  try {
+    const categoriedRecommendations = await Blog.aggregate([
+      {
+        $match: {
+          _id: { $nin: [ObjectId(id)] },
+          category,
+        },
+      },
+      {
+        $sample: {
+          size: 4,
+        },
+      },
+      ...projection,
+    ]);
+
+    nextSize = 6 - categoriedRecommendations.length;
+
+    randomRecommendations = await Blog.aggregate([
+      {
+        $match: {
+          _id: {
+            $nin: [
+              ...categoriedRecommendations.map((doc) => doc._id),
+              ObjectId(id),
+            ],
+          },
+        },
+      },
+      {
+        $sample: {
+          size: nextSize,
+        },
+      },
+      ...projection,
+    ]);
+
+    res.send([...categoriedRecommendations, ...randomRecommendations]);
+  } catch {
+    res.sendStatus(500);
+  }
+});
+
 // Get bookmarked blogs
 
 router.get(

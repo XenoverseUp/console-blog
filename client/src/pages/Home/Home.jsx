@@ -28,6 +28,8 @@ const HomeBlogCard = lazy(() =>
   import("../../components/HomeBlogCard/HomeBlogCard")
 );
 
+const Footer = lazy(() => import("../../components/Footer/Footer"));
+
 const Home = () => {
   const { theme } = useContext(ThemeContext);
   const categories = useContext(CategoryContext);
@@ -236,8 +238,8 @@ const Home = () => {
                 <div className="posibly-ads"></div>
               </div>
             </div>
-            {!hasNextPage && <footer>Bitti aq</footer>}
           </section>
+          {1 && <Footer />}
         </div>
       </motion.div>
     </ConditionalSimpleBar>

@@ -38,3 +38,6 @@ export { default as ConditionalSimpleBar } from "./ConditionalSimpleBar/Conditio
 export { default as MobileSearch } from "./MobileSearch/MobileSearch";
 export { default as ThemeToggle } from "./ThemeToggle/ThemeToggle";
 export { default as SkeletonLoader } from "./SkeletonLoader/SkeletonLoader";
+export { default as Footer } from "./Footer/Footer";
+export { default as Recommendeds } from "./Recommendeds/Recommendeds";
+export { default as RecommendedCard } from "./RecommendedCard/RecommendedCard";
