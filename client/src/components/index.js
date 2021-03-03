@@ -41,3 +41,4 @@ export { default as SkeletonLoader } from "./SkeletonLoader/SkeletonLoader";
 export { default as Footer } from "./Footer/Footer";
 export { default as Recommendeds } from "./Recommendeds/Recommendeds";
 export { default as RecommendedCard } from "./RecommendedCard/RecommendedCard";
+export { default as DownloadAppButton } from "./DownloadAppButton/DownloadAppButton";

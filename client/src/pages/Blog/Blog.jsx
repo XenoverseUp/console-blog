@@ -25,7 +25,7 @@ import {
   CommentPoster,
   ConditionalSimpleBar,
   Preloader,
-  Recommendeds,
+  Recommendeds as Recommendations,
   RecommendedCard,
   Footer,
 } from "../../components";
@@ -302,14 +302,14 @@ const Blog = () => {
             <SanitizedContent content={data[0].content} />
           </ContentWrapper>
         </BlogContainer>
-        <Recommendeds>
+        {/* <Recommendations>
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
-        </Recommendeds>
+        </Recommendations> */}
         <Footer />
       </motion.div>
     </ConditionalSimpleBar>
