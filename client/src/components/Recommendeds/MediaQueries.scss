@@ -1,0 +1,17 @@
+@media screen and (max-width: 1000px) {
+  .recommendeds {
+    max-width: 900px;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: auto auto auto;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .recommendeds {
+    max-width: 600px;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(6, auto);
+    padding: 2rem 0.65rem;
+    padding-top: 0;
+  }
+}

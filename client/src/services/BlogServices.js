@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const getAllPublishedBlogs = async ({ pageParam }) => {
   pageParam = pageParam ?? 1;
   const res = await fetch(`/public/blogs?page=${pageParam}`);
@@ -12,6 +14,13 @@ const getSinglePublishedBlog = async ({ queryKey }) => {
   const res = await fetch(`/public/blog?id=${id}`);
 
   return res.json();
+};
+
+const getRecommendations = async ({ queryKey }) => {
+  const [, { id, category }] = queryKey;
+  return await (
+    await fetch(`/public/blog/recommendeds?category=${category}&id=${id}`)
+  ).json();
 };
 
 const getBlogsByCategory = async (num, category) => {
@@ -92,6 +101,7 @@ export default {
   getTopBlogs,
   getBlogsByCategory,
   getSinglePublishedBlog,
+  getRecommendations,
   getComments,
   getBookmarkedBlogs,
   addComment,

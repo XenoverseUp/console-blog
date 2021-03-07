@@ -48,7 +48,7 @@ const Blog = () => {
   const [width] = useCurrentWidth();
   const { id } = useParams();
 
-  //Optimistic Update states
+  // Optimistic Update states
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [likes, setLikes] = useState(0);
@@ -56,7 +56,10 @@ const Blog = () => {
 
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [authModal, setAuthModal] = useState(false);
+  const [recommendationsFetch, setRecommendationsFetch] = useState(false);
   const [element, setElement] = useState(null);
+  const [recommendationsRef, setRecommendationsRef] = useState(null);
+  const [isCached, setIsCached] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -65,6 +68,15 @@ const Blog = () => {
     BlogServices.getSinglePublishedBlog,
     {
       enabled: !!id,
+    }
+  );
+
+  const { data: recommendations } = useQuery(
+    [`recommendations-${id}`, { id, category: data?.[0].category }],
+    BlogServices.getRecommendations,
+    {
+      enabled: recommendationsFetch && !!data?.[0].category && !isCached,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -90,6 +102,15 @@ const Blog = () => {
     new IntersectionObserver(
       (entries) => {
         entries[0].isIntersecting && fetchNextPage();
+      },
+      { threshold: 0.2 }
+    )
+  );
+
+  const recommendationsObserver = useRef(
+    new IntersectionObserver(
+      (entries) => {
+        entries[0].isIntersecting && setRecommendationsFetch(true);
       },
       { threshold: 0.2 }
     )
@@ -176,6 +197,18 @@ const Blog = () => {
   }, [data]);
 
   useEffect(() => {
+    setIsCached(
+      queryClient
+        .getQueryCache()
+        .queries.filter(
+          (query) =>
+            query.queryHash ===
+            `["recommendations-${id}",{"category":"${data?.[0].category}","id":"${id}"}]`
+        ).length > 0
+    );
+  }, []);
+
+  useEffect(() => {
     const currentElement = element;
     const currentObserver = observer.current;
 
@@ -185,6 +218,17 @@ const Blog = () => {
       currentElement && currentObserver.unobserve(currentElement);
     };
   }, [element]);
+
+  useEffect(() => {
+    const currentElement = recommendationsRef;
+    const currentObserver = recommendationsObserver.current;
+
+    currentElement && currentObserver.observe(currentElement);
+
+    return () => {
+      currentElement && currentObserver.unobserve(currentElement);
+    };
+  }, [recommendationsRef]);
 
   useEffect(() => updateViews(id), []);
 
@@ -302,7 +346,10 @@ const Blog = () => {
             <SanitizedContent content={data[0].content} />
           </ContentWrapper>
         </BlogContainer>
-        <Recommendations>
+        <Recommendations
+          intersectionRef={setRecommendationsRef}
+          recommendations={recommendations}
+        >
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />

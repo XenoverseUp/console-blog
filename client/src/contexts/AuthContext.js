@@ -10,7 +10,10 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const { data, isLoading } = useQuery("auth", AuthServices.isAuthenticated);
+  const { data, isLoading } = useQuery("auth", AuthServices.isAuthenticated, {
+    retry: 2,
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     setUser(data?.user);

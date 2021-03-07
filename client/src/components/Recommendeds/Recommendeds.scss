@@ -4,8 +4,10 @@
 .recommendeds {
   width: 100%;
   max-width: 1200px;
-  padding: 2rem;
+  padding: 2rem 1.65rem;
   display: grid;
   grid-template-columns: repeat(3, 33.3%);
   grid-template-rows: auto auto;
 }
+
+@import "./MediaQueries.scss";
