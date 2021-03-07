@@ -302,14 +302,14 @@ const Blog = () => {
             <SanitizedContent content={data[0].content} />
           </ContentWrapper>
         </BlogContainer>
-        {/* <Recommendations>
+        <Recommendations>
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
           <RecommendedCard />
-        </Recommendations> */}
+        </Recommendations>
         <Footer />
       </motion.div>
     </ConditionalSimpleBar>

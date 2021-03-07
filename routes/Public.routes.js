@@ -318,7 +318,7 @@ router.get("/blog/comment", async (req, res) => {
   const aggregate = Comment.aggregate(pipeline);
   Comment.aggregatePaginate(aggregate, options)
     .then((docs) => res.send(docs))
-    .catch((err) => res.sendStatus(500));
+    .catch(() => res.sendStatus(500));
 });
 
 // Get recommended blogs for a blog
@@ -666,5 +666,6 @@ router.patch("/blog/views", (req, res) => {
     }
   );
 });
+
 
 module.exports = router;

@@ -153,4 +153,38 @@ router.get(
   }
 );
 
+router.patch(
+  "/apply",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user.role === "reader") {
+      req.user.role = "editor";
+      req.user.save((err, user) => {
+        if (err) return res.sendStatus(500);
+        return res.send({ msg: `${user.userName} is an editor, now.` });
+      });
+    } else
+      res
+        .status(401)
+        .send({ msg: "You should be a reader to send this request." });
+  }
+);
+
+router.patch(
+  "/unapply",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user.role === "editor") {
+      req.user.role = "reader";
+      req.user.save((err, user) => {
+        if (err) return res.sendStatus(500);
+        return res.send({ msg: `${user.userName} is a reader, now.` });
+      });
+    } else
+      res
+        .status(401)
+        .send({ msg: "You should be an editor to send this request." });
+  }
+);
+
 module.exports = router;

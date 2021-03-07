@@ -15,15 +15,15 @@ import "./scss/drawer.scss";
 render(
   // <React.StrictMode>
   <ThemeProvider>
-    <AuthProvider>
-      <CategoryProvider>
-        <QueryProvider>
+    <QueryProvider>
+      <AuthProvider>
+        <CategoryProvider>
           <Router>
             <App />
           </Router>
-        </QueryProvider>
-      </CategoryProvider>
-    </AuthProvider>
+        </CategoryProvider>
+      </AuthProvider>
+    </QueryProvider>
   </ThemeProvider>,
   // </React.StrictMode>
   document.getElementById("root")

@@ -8,7 +8,10 @@ const addBlog = async (blogData) => {
   return res;
 };
 
+const promoteToEditor = async () => await axios.patch("/editor/apply");
+
 export default {
   getStatistics,
   addBlog,
+  promoteToEditor,
 };

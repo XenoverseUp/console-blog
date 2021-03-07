@@ -61,7 +61,7 @@ const HomeBlogCard = ({
   } = useMutation(BlogServices.unBookmarkBlog, {
     onMutate: async () => {
       await queryClient.cancelQueries("home-blogs");
-      await queryClient.invalidateQueries("top-blogs");
+      await queryClient.cancelQueries("top-blogs");
       setIsCurrentBookmarked(false);
     },
 
