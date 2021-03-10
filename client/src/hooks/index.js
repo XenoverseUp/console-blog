@@ -8,3 +8,4 @@ export { default as getCategory } from "./getCategory";
 export { default as useScroll } from "./useScroll";
 export { default as getDuration } from "./getDuration";
 export { default as getTimeDifferenceString } from "./getTimeDifferenceString";
+export { default as useScrollMemory } from "./useScrollMemory";

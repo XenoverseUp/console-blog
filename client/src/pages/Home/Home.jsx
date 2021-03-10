@@ -80,7 +80,7 @@ const Home = () => {
   return isLoading || isTopLoading ? (
     <Preloader />
   ) : (
-    <ConditionalSimpleBar>
+    <ConditionalSimpleBar identity="home">
       <motion.div
         variants={translateDownAndFadeOut}
         initial="initial"

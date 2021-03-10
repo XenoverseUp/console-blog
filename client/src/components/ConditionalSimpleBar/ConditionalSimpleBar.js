@@ -1,27 +1,46 @@
-import { lazy, Suspense } from "react";
-import { useCurrentWidth } from "../../hooks";
-
+import { lazy, Suspense, useContext, useEffect } from "react";
+import useCleanupCallback from "use-cleanup-callback";
+import { ScrollContext } from "../../contexts/ScrollContext";
 const SimpleBar = lazy(() => import("simplebar-react"));
 const ConditionalStyle = lazy(() => import("./ConditionalStyle"));
 const Preloader = lazy(() => import("../Preloader/Preloader"));
 
 const ConditionalSimpleBar = ({
-  scrollToTop,
   height = "100vh",
   children,
   overflowY = "auto",
+  identity,
 }) => {
-  const [width] = useCurrentWidth();
+  const mediaQuery = matchMedia("(max-width: 600px)");
+  const { state, setState } = useContext(ScrollContext);
 
-  return width > 600 ? (
+  let tempRef;
+
+  const ref = useCleanupCallback((node) => {
+    tempRef = node;
+    return () => {
+      if (node && identity) setState({ ...state, [identity]: node.scrollTop });
+    };
+  }, []);
+
+  useEffect(() => {
+    tempRef?.scrollTo(0, state[identity] || 0);
+  }, [tempRef]);
+
+  return !mediaQuery.matches ? (
     <Suspense fallback={<Preloader />}>
       <ConditionalStyle />
-      <SimpleBar style={{ height, overflowX: "hidden", overflowY }}>
+      <SimpleBar
+        scrollableNodeProps={{ ref }}
+        style={{ height, overflowX: "hidden", overflowY }}
+      >
         {children}
       </SimpleBar>
     </Suspense>
   ) : (
-    <div style={{ height, overflowX: "hidden", overflowY }}>{children}</div>
+    <div ref={ref} style={{ height, overflowX: "hidden", overflowY }}>
+      {children}
+    </div>
   );
 };
 

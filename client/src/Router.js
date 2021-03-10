@@ -25,6 +25,7 @@ const Router = () => {
       <AnimatePresence exitBeforeEnter>
         <Switch location={location} key={location.key}>
           {/* PublicRoutes */}
+
           <PublicRoute key="route 0" path="/" exact component={Home} />
           <PublicRoute
             key="route 1"

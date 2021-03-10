@@ -8,6 +8,7 @@ import AuthProvider from "./contexts/AuthContext";
 import ThemeProvider from "./contexts/ThemeContext";
 import CategoryProvider from "./contexts/CategoryContext";
 import QueryProvider from "./contexts/QueryContext";
+import ScrollProvider from "./contexts/ScrollContext";
 
 import "./scss/index.scss";
 import "./scss/drawer.scss";
@@ -18,9 +19,11 @@ render(
     <QueryProvider>
       <AuthProvider>
         <CategoryProvider>
-          <Router>
-            <App />
-          </Router>
+          <ScrollProvider>
+            <Router>
+              <App />
+            </Router>
+          </ScrollProvider>
         </CategoryProvider>
       </AuthProvider>
     </QueryProvider>
